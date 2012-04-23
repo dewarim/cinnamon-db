@@ -1,0 +1,6 @@
+API changes
+
+Group.is_user => Group.groupOfOne
+User => UserAccount ("user" is a reserved word in several database dialects)
+Group => CmnGroup ("group" is a reserved word in SQL, and always having to escape table names gets old very quickly,
+    to say nothing about automatically generated code which sometimes cannot do this properly.)

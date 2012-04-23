@@ -1,0 +1,51 @@
+Design decisions
+
+This document holds a collection of design decisions made on the way
+from Cinnamon 2 to Cinnamon 3
+
+The old way:
+1. CinnamonBase
+    constants,
+    reading and writing content to the file system,
+    ContentReader, ParamParser, exceptions, some interfaces
+     - a base library that every Cinnamon application needs.
+2. CinnamonUtils
+    Setting up a thread local db connection per repository and keeping it around
+    some more interfaces,
+    security stuff (jBcrypt, HashMaker)
+    Response classes (that collect output until it's time to render it to the client)
+
+3. Entitylib
+    DAO classes (many)
+    DAO classes for the Hibernate framework (implementing the DAO interface)
+    domain classes (many)
+    implementations of dynamically loaded structures
+        RelationResolver
+        Indexer
+        ChangeTrigger
+        Lifecycle
+        Transformer
+    other helper classes.
+
+4. Humulus (Grails plugin)
+    collects libs 1, 2 and 3
+    adds safran (client lib, because without Grails the Dandelion & Illicium app
+     have to talk via the Java-Client to Cinnamon)
+    adds security (login/logout)
+    userService
+    repositoryService
+
+Basically no Cinnamon server side application can get away without the first three libs.
+And implementing them in Grails will render some classes obsolete (for example,
+the security stuff will be handled by the spring security plugin)
+
+The new way:
+cinnamonBase will collect all 4 libraries in a Grails plugin.
+All further Cinnamon plugins and applications can then depend on this
+basic building block, which will provide:
+    + database / domain classes
+    + basic services (for example, repositoryService, userService)
+    + security (web login or connect() via ticket mechanism)
+Some functionality should move to separate plugins, for example
+ChangeTriggers and Lucene integration. It remains to be seen if those
+ should depend on cinnamonBase or the other way round.

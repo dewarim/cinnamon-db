@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="hibernate" name="Hibernate">
+      <configuration>
+        <datasource-map />
+      </configuration>
+    </facet>
+    <facet type="web" name="GrailsWeb">
+      <configuration>
+        <webroots />
+        <sourceRoots />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$USER_HOME$/.grails/2.0.3/projects/cinnamonDb/plugins/hibernate-2.0.3">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.3/projects/cinnamonDb/plugins/hibernate-2.0.3/grails-app/i18n" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.0.3/projects/cinnamonDb/plugins/tomcat-2.0.3" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="grails-2.0.1" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="grails-2.0.3" level="application" />
+    <orderEntry type="module-library" exported="">
+      <library name="Grails User Library (cinnamonBase-grailsPlugins)">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-core/jars/spring-security-core-3.0.7.RELEASE.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-web/jars/spring-security-web-3.0.7.RELEASE.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.lucene/lucene-core/jars/lucene-core-3.5.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+  </component>
+</module>
+
