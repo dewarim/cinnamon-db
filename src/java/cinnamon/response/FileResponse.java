@@ -1,4 +1,4 @@
-package temp.server.response;
+package cinnamon.response;
 
 import server.interfaces.Response;
 

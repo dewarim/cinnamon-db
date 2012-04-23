@@ -1,4 +1,4 @@
-package temp.server.response;
+package cinnamon.response;
 
 import server.interfaces.Response;
 
@@ -6,25 +6,25 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class TextResponse implements Response {
+public class HtmlResponse implements Response {
 
 	HttpServletResponse res;
 	StringBuilder content = new StringBuilder();
 	
-	public TextResponse(){		
+	public HtmlResponse(){		
 
 	}
 	
-	public TextResponse(HttpServletResponse res){
+	public HtmlResponse(HttpServletResponse res){
 		this.res = res;
 	}
 	
-	public TextResponse(HttpServletResponse res, String content){
+	public HtmlResponse(HttpServletResponse res, String content){
 		this.res = res;
 		this.content.append(content);
 	}
 	
-	public TextResponse(HttpServletResponse res, StringBuilder content){
+	public HtmlResponse(HttpServletResponse res, StringBuilder content){
 		this.res = res;
 		this.content = content;
 	}
@@ -41,10 +41,10 @@ public class TextResponse implements Response {
 
 	@Override
 	public void write() throws IOException{
-		res.setContentType("text/plain; charset=utf-8");
-		PrintWriter toClient= res.getWriter();
+		res.setContentType("text/html; charset=utf-8");
         String c = content.toString();
         res.setContentLength(c.getBytes("UTF8").length);
+        PrintWriter toClient= res.getWriter();
 		toClient.print(c);
 		toClient.close();
 	}

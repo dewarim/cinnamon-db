@@ -1,4 +1,4 @@
-package temp.server.response;
+package cinnamon.response;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
