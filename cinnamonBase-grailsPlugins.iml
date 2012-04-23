@@ -6,12 +6,6 @@
         <datasource-map />
       </configuration>
     </facet>
-    <facet type="web" name="GrailsWeb">
-      <configuration>
-        <webroots />
-        <sourceRoots />
-      </configuration>
-    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />

@@ -57,8 +57,8 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="grails-2.0.1" level="application" />
-    <orderEntry type="module" module-name="cinnamonBase-grailsPlugins" />
     <orderEntry type="library" name="grails-2.0.3" level="application" />
+    <orderEntry type="module" module-name="cinnamonBase-grailsPlugins" />
   </component>
 </module>
 
