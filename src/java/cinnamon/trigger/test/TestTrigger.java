@@ -1,4 +1,4 @@
-package temp.trigger.test;
+package cinnamon.trigger.test;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

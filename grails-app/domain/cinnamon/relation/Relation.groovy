@@ -86,29 +86,28 @@ class Relation {
         toXmlElement(root, false);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Relation)) return false;
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof Relation)) return false
 
-        Relation relation = (Relation) o;
+        Relation relation = (Relation) o
 
-        if (leftOSD != null ? !leftOSD.equals(relation.leftOSD) : relation.leftOSD != null) return false;
-        if (rightOSD != null ? !rightOSD.equals(relation.rightOSD) : relation.rightOSD != null) return false;
-        if (type != null ? !type.equals(relation.type) : relation.type != null) return false;
+        if (leftOSD != relation.leftOSD) return false
+        if (metadata != relation.metadata) return false
+        if (rightOSD != relation.rightOSD) return false
+        if (type != relation.type) return false
 
-        return true;
+        return true
     }
 
-    @Override
-    public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + (leftOSD != null ? leftOSD.hashCode() : 0);
-        result = 31 * result + (rightOSD != null ? rightOSD.hashCode() : 0);
-        return result;
+    int hashCode() {
+        int result
+        result = (type != null ? type.hashCode() : 0)
+        result = 31 * result + (leftOSD != null ? leftOSD.hashCode() : 0)
+        result = 31 * result + (rightOSD != null ? rightOSD.hashCode() : 0)
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0)
+        return result
     }
-
-
 //    // get/set leftOSD/rightOSD added as Grails/Hibernate seems to need this.
 //    public ObjectSystemData getLeftOSD() {
 //        return leftOSD;

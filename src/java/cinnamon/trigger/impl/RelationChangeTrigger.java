@@ -1,27 +1,17 @@
-package temp.trigger.impl;
+package cinnamon.trigger.impl;
 
+import cinnamon.ObjectSystemData;
+import cinnamon.PoBox;
+import cinnamon.relation.Relation;
+import cinnamon.trigger.ITrigger;
+import cinnamon.utils.ParamParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.Relation;
-import server.User;
-import server.dao.DAOFactory;
-import server.dao.HibernateDAOFactory;
-import server.dao.ObjectSystemDataDAO;
-import server.data.ObjectSystemData;
-import server.helpers.PoBox;
-import server.interfaces.Repository;
-import server.interfaces.Response;
-import server.trigger.ITrigger;
-import server.trigger.TriggerResult;
-import utils.HibernateSession;
-import utils.ParamParser;
 
-import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RelationChangeTrigger implements ITrigger {
-    static DAOFactory daoFactory = DAOFactory.instance(HibernateDAOFactory.class);
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -35,10 +25,8 @@ public class RelationChangeTrigger implements ITrigger {
              * refers to a lonely version one without descendants (in that case there will be no
              * relations left after deletion).
              */
-            EntityManager em = HibernateSession.getLocalEntityManager();
-            ObjectSystemDataDAO oDao = daoFactory.getObjectSystemDataDAO(em);
             try{
-                ObjectSystemData osd = oDao.get((String) poBox.params.get("id"));
+                ObjectSystemData osd = ObjectSystemData.get(Long.parseLong((String) poBox.params.get("id")));
                 if(osd.getRoot().equals(osd) && osd.getLatestBranch() && osd.getLatestHead()){
                     // There is only this one object, so we got nothing to do here.
                 }
@@ -56,24 +44,22 @@ public class RelationChangeTrigger implements ITrigger {
     @Override
     public PoBox executePostCommand(PoBox poBox, String config) {
         log.debug("postCommand RelationChangeTrigger");
-        EntityManager em = HibernateSession.getLocalEntityManager();
-        ObjectSystemDataDAO oDao = daoFactory.getObjectSystemDataDAO(em);
         Map<String,Object> params = poBox.params;
         String command = poBox.command;
 
         ObjectSystemData osd = null;
         if(commandIdMap.containsKey(command) && params.containsKey(commandIdMap.get( command))){
-            osd = oDao.get((String) params.get(commandIdMap.get(command)));
+            osd = ObjectSystemData.get(Long.parseLong((String) params.get(commandIdMap.get(command))));
         }
         else if(params.containsKey("_RelationChangeTrigger_delete_id_")){
             // latestHead / latestBranch may have changed, among others
-            osd = oDao.get((String) params.get("_RelationChangeTrigger_delete_id_"));
+            osd = ObjectSystemData.get(Long.parseLong((String) params.get("_RelationChangeTrigger_delete_id_"))));
         }
         else if(command.equals("create")){
             // latestHead / latestBranch may have changed, among others
             String responseContent = poBox.response.getContent();
             String id = ParamParser.parseXmlToDocument(responseContent).selectSingleNode("objectId").getText();
-            osd = oDao.get(id);
+            osd = ObjectSystemData.get(Long.parseLong((String)params.get(id));
         }
 
         if(osd == null){

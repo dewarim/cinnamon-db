@@ -1,6 +1,6 @@
-package temp.trigger;
+package cinnamon.trigger;
 
-import server.interfaces.Response;
+import cinnamon.interfaces.Response;
 
 /**
  * 

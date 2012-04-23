@@ -1,4 +1,4 @@
-package temp.trigger;
+package cinnamon.trigger;
 
 import server.User;
 import server.helpers.PoBox;
