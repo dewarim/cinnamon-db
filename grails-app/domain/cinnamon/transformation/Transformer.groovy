@@ -1,10 +1,10 @@
 package cinnamon.transformation
 
-import temp.transformation.ITransformer
+import cinnamon.transformer.ITransformer
 import cinnamon.Format
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import javax.persistence.EntityManager
+
 import cinnamon.exceptions.CinnamonException
 import org.dom4j.Element
 import org.dom4j.DocumentHelper
