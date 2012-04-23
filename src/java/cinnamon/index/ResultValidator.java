@@ -2,8 +2,7 @@ package cinnamon.index;
 
 import cinnamon.index.Indexable;
 import org.apache.lucene.document.Document;
-import server.interfaces.XmlConvertable;
-import server.index.Indexable;
+import cinnamon.interfaces.XmlConvertable;
 
 /**
  * A ResultValidator checks if the results are correct and access may be granted to
