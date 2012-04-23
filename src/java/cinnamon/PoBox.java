@@ -1,8 +1,7 @@
 package cinnamon;
 
-import server.User;
-import server.interfaces.Repository;
-import server.interfaces.Response;
+import cinnamon.interfaces.Repository;
+import cinnamon.interfaces.Response;
 
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import java.util.Map;
 public class PoBox {
     
     public Response response;
-    public User user;
+    public UserAccount user;
     public Repository repository;
     public Map<String, Object> params;
     public String command;
@@ -22,7 +21,7 @@ public class PoBox {
     public PoBox() {
     }
 
-    public PoBox(Response response, User user, Repository repository, Map<String, Object> params, String command) {
+    public PoBox(Response response, UserAccount user, Repository repository, Map<String, Object> params, String command) {
         this.response = response;
         this.user = user;
         this.repository = repository;
