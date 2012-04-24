@@ -18,11 +18,10 @@
 
 package cinnamon;
 
+import cinnamon.exceptions.CinnamonConfigurationException;
+import cinnamon.exceptions.CinnamonException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.Acl;
-import server.exceptions.CinnamonConfigurationException;
-import server.exceptions.CinnamonException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

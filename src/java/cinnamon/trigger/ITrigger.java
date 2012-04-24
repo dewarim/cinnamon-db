@@ -1,9 +1,6 @@
 package cinnamon.trigger;
 
-import server.User;
-import server.helpers.PoBox;
-import server.interfaces.Repository;
-import server.interfaces.Response;
+import cinnamon.PoBox;
 
 public interface ITrigger {
 

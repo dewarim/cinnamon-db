@@ -1,20 +1,11 @@
 package cinnamon.trigger.test;
 
+import cinnamon.ObjectSystemData;
+import cinnamon.PoBox;
+import cinnamon.response.XmlResponse;
+import cinnamon.trigger.ITrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.User;
-import server.dao.DAOFactory;
-import server.dao.HibernateDAOFactory;
-import server.dao.ObjectSystemDataDAO;
-import server.data.ObjectSystemData;
-import server.helpers.PoBox;
-import server.interfaces.Repository;
-import server.interfaces.Response;
-import server.response.XmlResponse;
-import server.trigger.ChangeTrigger;
-import server.trigger.ITrigger;
-import server.trigger.TriggerResult;
-import utils.HibernateSession;
 
 /**
  * Test class for testing the ChangeTrigger implementation of CinnamonServer.

@@ -1,17 +1,14 @@
 package cinnamon.lifecycle.state;
 
+import cinnamon.Acl;
+import cinnamon.ObjectSystemData;
+import cinnamon.exceptions.CinnamonException;
+import cinnamon.lifecycle.BaseLifeCycleState;
+import cinnamon.lifecycle.IState;
+import cinnamon.utils.ParamParser;
 import org.dom4j.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.Acl;
-import server.dao.AclDAO;
-import server.dao.DAOFactory;
-import server.data.ObjectSystemData;
-import server.exceptions.CinnamonException;
-import server.lifecycle.BaseLifeCycleState;
-import server.lifecycle.IState;
-import utils.HibernateSession;
-import utils.ParamParser;
 
 import java.util.List;
 

@@ -1,13 +1,8 @@
 package cinnamon.interfaces;
 
-import server.dao.CustomTableDAO;
-import server.data.SqlConn;
-import server.data.SqlCustomConn;
-import server.index.LuceneBridge;
-import server.interfaces.CommandRegistry;
-import utils.HibernateSession;
+import cinnamon.SqlCustomConn;
+import cinnamon.index.LuceneBridge;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 

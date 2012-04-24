@@ -2,14 +2,6 @@ package cinnamon;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.*;
-import server.dao.ConfigEntryDAO;
-import server.dao.DAOFactory;
-import server.dao.ObjectSystemDataDAO;
-import server.data.ObjectSystemData;
-import server.data.Validator;
-import temp.Validator;
-import utils.HibernateSession;
 
 import javax.persistence.EntityManager;
 import java.util.Calendar;

@@ -1,5 +1,7 @@
 package cinnamon.index.indexer;
 
+import cinnamon.Folder;
+import cinnamon.index.ContentContainer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
@@ -7,12 +9,6 @@ import org.apache.lucene.document.Field.Store;
 import org.dom4j.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.Folder;
-import server.dao.DAOFactory;
-import server.dao.FolderDAO;
-import server.index.ContentContainer;
-import utils.HibernateSession;
-import utils.ParamParser;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;

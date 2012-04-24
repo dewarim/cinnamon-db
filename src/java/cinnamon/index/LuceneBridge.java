@@ -21,13 +21,10 @@ import org.apache.lucene.xmlparser.CoreParser;
 import org.apache.lucene.xmlparser.ParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.dao.DAOFactory;
-import server.dao.IndexItemDAO;
-import server.exceptions.CinnamonException;
-import server.global.ConfThreadLocal;
-import server.index.queryBuilder.RegexQueryBuilder;
-import server.index.queryBuilder.WildcardQueryBuilder;
-import utils.ParamParser;
+import cinnamon.global.ConfThreadLocal;
+import cinnamon.index.queryBuilder.RegexQueryBuilder;
+import cinnamon.index.queryBuilder.WildcardQueryBuilder;
+import cinnamon.utils.ParamParser;
 
 import javax.persistence.EntityManager;
 import java.io.*;

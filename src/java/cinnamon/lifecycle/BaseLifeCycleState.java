@@ -1,7 +1,5 @@
 package cinnamon.lifecycle;
 
-import server.lifecycle.IState;
-
 import java.util.ArrayList;
 import java.util.List;
 

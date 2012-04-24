@@ -1,5 +1,7 @@
 package cinnamon.response;
 
+import cinnamon.interfaces.Response;
+import cinnamon.utils.ParamParser;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -7,8 +9,6 @@ import org.dom4j.Node;
 import org.dom4j.io.XMLWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.interfaces.Response;
-import utils.ParamParser;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class XmlResponse implements Response {
 	
 	public XmlResponse(HttpServletResponse res, String xml){
 		this.res = res;		
-		this.doc = ParamParser.parseXmlToDocument(xml, "failed to parse XmlResponse:\n"+xml);
+		this.doc = ParamParser.parseXmlToDocument(xml, "failed to parse XmlResponse:\n" + xml);
 	}
 	
 	@Override

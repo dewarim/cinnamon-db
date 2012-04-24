@@ -20,8 +20,8 @@ package cinnamon.global;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.exceptions.CinnamonConfigurationException;
-import server.global.Conf;
+import cinnamon.exceptions.CinnamonConfigurationException;
+import cinnamon.global.Conf;;
 
 /**
  * The Conf class loads the configuration from the XML file "config/config.xml". It follows a Singleton pattern by
@@ -33,7 +33,7 @@ public class ConfThreadLocal extends Conf {
     static long sessionExpirationTime = 0;
 
 	@SuppressWarnings("unused")
-	private transient Logger log = LoggerFactory.getLogger("server.global.ConfThreadLocal");
+	private transient Logger log = LoggerFactory.getLogger("cinnamon.global.ConfThreadLocal");
 
 	static ThreadLocal<ConfThreadLocal> config = new ThreadLocal<ConfThreadLocal>(){
 		@Override

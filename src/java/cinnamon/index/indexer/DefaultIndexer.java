@@ -1,5 +1,7 @@
 package cinnamon.index.indexer;
 
+import cinnamon.index.ContentContainer;
+import cinnamon.index.Indexer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
@@ -7,9 +9,6 @@ import org.apache.lucene.document.Field.Store;
 import org.dom4j.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.index.ContentContainer;
-import server.index.Indexer;
-import utils.ParamParser;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -18,9 +18,6 @@
 
 package cinnamon;
 
-import server.exceptions.CinnamonConfigurationException;
-import server.exceptions.CinnamonException;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 

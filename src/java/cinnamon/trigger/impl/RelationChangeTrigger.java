@@ -26,7 +26,7 @@ public class RelationChangeTrigger implements ITrigger {
              * relations left after deletion).
              */
             try{
-                ObjectSystemData osd = ObjectSystemData.get(Long.parseLong((String) poBox.params.get("id")));
+                ObjectSystemData osd = ObjectSystemData.get((String) poBox.params.get("id"));
                 if(osd.getRoot().equals(osd) && osd.getLatestBranch() && osd.getLatestHead()){
                     // There is only this one object, so we got nothing to do here.
                 }
@@ -49,17 +49,17 @@ public class RelationChangeTrigger implements ITrigger {
 
         ObjectSystemData osd = null;
         if(commandIdMap.containsKey(command) && params.containsKey(commandIdMap.get( command))){
-            osd = ObjectSystemData.get(Long.parseLong((String) params.get(commandIdMap.get(command))));
+            osd = ObjectSystemData.get((String) params.get(commandIdMap.get(command)));
         }
         else if(params.containsKey("_RelationChangeTrigger_delete_id_")){
             // latestHead / latestBranch may have changed, among others
-            osd = ObjectSystemData.get(Long.parseLong((String) params.get("_RelationChangeTrigger_delete_id_"))));
+            osd = ObjectSystemData.get((String) params.get("_RelationChangeTrigger_delete_id_"));
         }
         else if(command.equals("create")){
             // latestHead / latestBranch may have changed, among others
             String responseContent = poBox.response.getContent();
             String id = ParamParser.parseXmlToDocument(responseContent).selectSingleNode("objectId").getText();
-            osd = ObjectSystemData.get(Long.parseLong((String)params.get(id));
+            osd = ObjectSystemData.get((String) params.get(id));
         }
 
         if(osd == null){

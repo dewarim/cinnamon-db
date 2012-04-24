@@ -1,6 +1,7 @@
 package cinnamon.transformer;
 
-import server.data.ObjectSystemData;
+import cinnamon.ObjectSystemData;
+import cinnamon.transformation.Transformer;
 
 import java.io.File;
 

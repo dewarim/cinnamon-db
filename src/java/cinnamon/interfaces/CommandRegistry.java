@@ -1,7 +1,7 @@
 package cinnamon.interfaces;
 
-import server.User;
-import server.interfaces.Repository;
+
+import cinnamon.UserAccount;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -14,6 +14,6 @@ public interface CommandRegistry {
 
 	void registerAPI(Map<String, MethodContainer> commands);
 	Response invoke(String command, Map<String, Object> params,
-                    HttpServletResponse res, User user, Repository repository);
+                    HttpServletResponse res, UserAccount user, Repository repository);
 	
 }

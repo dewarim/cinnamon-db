@@ -1,6 +1,6 @@
 package cinnamon.lifecycle;
 
-import server.data.ObjectSystemData;
+import cinnamon.ObjectSystemData;
 
 import java.util.List;
 

@@ -748,4 +748,14 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         result = 31 * result + (state != null ? state.hashCode() : 0)
         return result
     }
+
+    ObjectSystemData findLatestBranch(){
+        return ObjectSystemData.find("from ObjectSystemData o WHERE o.latestBranch = true and o.root=:root order by o.modified desc",
+        [root:this.root])
+    }
+
+    ObjectSystemData findLatestHead(){
+        return ObjectSystemData.find("from ObjectSystemData o WHERE o.latestHead = true and o.root=:root",
+        [root:this.root])
+    }
 }

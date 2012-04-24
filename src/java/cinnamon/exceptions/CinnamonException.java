@@ -18,8 +18,8 @@
 
 package cinnamon.exceptions;
 
+import cinnamon.interfaces.ILocalizer;
 import org.dom4j.Element;
-import server.interfaces.ILocalizer;
 
 public class CinnamonException extends RuntimeException {
 

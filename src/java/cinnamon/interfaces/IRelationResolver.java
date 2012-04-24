@@ -1,8 +1,9 @@
 package cinnamon.interfaces;
 
-import server.Relation;
-import server.data.ObjectSystemData;
-import server.resolver.RelationSide;
+
+import cinnamon.ObjectSystemData;
+import cinnamon.relation.Relation;
+import cinnamon.relation.resolver.RelationSide;
 
 /**
  *

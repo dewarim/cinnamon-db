@@ -3,8 +3,7 @@ package cinnamon.utils.security;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.exceptions.CinnamonException;
-import server.global.ConfThreadLocal;
+import cinnamon.global.ConfThreadLocal;
 
 /**
  * Create hash digests of a string, salted with a salt value from the config.  

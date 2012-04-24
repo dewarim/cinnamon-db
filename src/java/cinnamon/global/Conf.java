@@ -18,18 +18,18 @@
 
 package cinnamon.global;
 
+import cinnamon.exceptions.CinnamonConfigurationException;
 import org.dom4j.Document;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.exceptions.CinnamonConfigurationException;
 
 import java.io.*;
 import java.security.AccessControlException;
 import java.util.*;
 
-public class Conf implements utils.DatabaseConfig{
+public class Conf{
 
 	private transient Logger log = LoggerFactory.getLogger(getClass());
 	private Document xml;

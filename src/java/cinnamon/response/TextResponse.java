@@ -1,6 +1,6 @@
 package cinnamon.response;
 
-import server.interfaces.Response;
+import cinnamon.interfaces.Response;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

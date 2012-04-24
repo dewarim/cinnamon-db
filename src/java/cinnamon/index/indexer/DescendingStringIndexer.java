@@ -3,7 +3,6 @@ package cinnamon.index.indexer;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
 import org.dom4j.Node;
-import server.index.indexer.DefaultIndexer;
 
 /**
  * <p>The TreeStringIndexer expects an XPath parameter as searchString and will search for

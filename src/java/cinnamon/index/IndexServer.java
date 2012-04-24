@@ -3,22 +3,8 @@ package cinnamon.index;
 import cinnamon.interfaces.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.Folder;
-import server.dao.*;
-import server.dao.DAOFactory;
-import server.dao.FolderDAO;
-import server.dao.LanguageDAO;
-import server.dao.MessageDAO;
-import server.dao.ObjectSystemDataDAO;
-import server.dao.UiLanguageDAO;
-import server.data.ObjectSystemData;
-import server.global.ConfThreadLocal;
-import server.i18n.Language;
-import server.i18n.LocalMessage;
-import server.i18n.UiLanguage;
-import server.index.LuceneBridge;
-import server.interfaces.Repository;
-import utils.HibernateSession;
+
+import cinnamon.global.ConfThreadLocal;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;

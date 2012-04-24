@@ -1,11 +1,10 @@
 package cinnamon.relation.resolver;
 
-import server.interfaces.IRelationResolver;
-import server.Relation;
-import server.data.ObjectSystemData;
-import server.resolver.RelationSide;
+import cinnamon.ObjectSystemData;
+import cinnamon.interfaces.IRelationResolver;
+import cinnamon.relation.Relation;
 
-public class FixedRelationResolver implements IRelationResolver{
+public class FixedRelationResolver implements IRelationResolver {
 
     public ObjectSystemData resolveVersion(Relation relation, ObjectSystemData changedOsd, String params, RelationSide relationSide){
 	    return changedOsd;

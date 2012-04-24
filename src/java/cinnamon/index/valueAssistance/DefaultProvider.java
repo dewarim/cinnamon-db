@@ -1,6 +1,6 @@
 package cinnamon.index.valueAssistance;
 
-import server.index.ValueAssistanceProvider;
+import cinnamon.index.ValueAssistanceProvider;
 
 /**
  * The DefaultProvider simply allows any value.
