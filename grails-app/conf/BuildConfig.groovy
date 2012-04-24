@@ -26,7 +26,7 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.5'
-        runtime('org.apache.commons:commons-compress:1.3')
+        runtime('org.apache.commons:commons-compress:1.4')
         runtime('org.apache.lucene:lucene-core:3.5.0')
         runtime('org.apache.lucene:lucene-xml-query-parser:3.5.0')
         runtime('org.apache.lucene:lucene-queries:3.5.0')
