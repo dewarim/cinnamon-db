@@ -52,4 +52,21 @@ class UiLanguage implements Serializable{
         }
         return lang;
     }
+
+    /**
+     * Set fields of a language object via a Map.
+     * Currently accepted fields:
+     * <ul>
+     * 		<li>[iso_code]= new ISO-code</li>
+     * </ul>
+     *
+     * @param id	the id of the language (Long)
+     * @param fields map of the fields to be set
+     */
+    public void update(Map<String, String> fields){
+        if (fields.containsKey("iso_code")) {
+            String isoCode = fields.get("iso_code");
+            setIsoCode(isoCode);
+        }
+    }
 }

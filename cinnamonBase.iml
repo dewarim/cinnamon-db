@@ -50,6 +50,11 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-core/jars/spring-security-core-3.0.7.RELEASE.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-web/jars/spring-security-web-3.0.7.RELEASE.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.lucene/lucene-core/jars/lucene-core-3.5.0.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/jakarta-regexp/jakarta-regexp/jars/jakarta-regexp-1.4.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.lucene/lucene-queries/jars/lucene-queries-3.5.0.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.lucene/lucene-xml-query-parser/jars/lucene-xml-query-parser-3.5.0.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.tukaani/xz/jars/xz-1.0.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.commons/commons-compress/jars/commons-compress-1.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

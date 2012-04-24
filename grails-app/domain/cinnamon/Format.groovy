@@ -53,6 +53,32 @@ class Format {
         return e;
     }
 
+    /**
+     * Utility method: update Format data via map params (for example, from HTTP requests)
+     * @param cmd
+     */
+    public void update(Map<String, String> cmd) {
+        String name = cmd.get("name");
+        if(name != null){
+            setName(name);
+        }
+
+        String extension = cmd.get("extension");
+        if(extension != null){
+            setExtension(extension);
+        }
+
+        String contenttype = cmd.get("contenttype");
+        if(contenttype != null){
+            setContenttype(contenttype);
+        }
+
+        String description = cmd.get("description");
+        if(description != null){
+            setDescription(description);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

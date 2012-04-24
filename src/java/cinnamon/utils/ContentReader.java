@@ -1,9 +1,9 @@
-package temp.utils;
+package cinnamon.utils;
 
+import cinnamon.exceptions.CinnamonException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.exceptions.CinnamonException;
 
 import java.io.File;
 import java.io.FileNotFoundException;

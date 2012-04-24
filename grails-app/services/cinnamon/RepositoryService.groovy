@@ -179,7 +179,7 @@ class RepositoryService {
      */
     Set<Long> getFoldersInside(UserAccount user, Folder parentFolder, String repositoryName) {
         Client client = getClient(user.name, repositoryName)
-        def subFolders = client.getSubfolders(parentFolder.id)
+        def subFolders = client.fetchSubfolders(parentFolder.id)
         def folders = new XmlParser().parseText(subFolders).folder
         HashSet<Long> hs = new HashSet<Long>()
         hs.addAll(folders.collect {Long.parseLong(it.id.text())})

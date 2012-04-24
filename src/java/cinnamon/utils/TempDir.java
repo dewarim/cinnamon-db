@@ -1,4 +1,4 @@
-package temp.utils;
+package cinnamon.utils;
 
 import org.slf4j.LoggerFactory;
 

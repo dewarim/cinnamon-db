@@ -14,6 +14,7 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import org.apache.commons.compress.archivers.ArchiveStreamFactory
 import org.apache.commons.compress.utils.IOUtils
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
+import cinnamon.exceptions.CinnamonConfigurationException
 
 class Folder implements Ownable, Indexable, XmlConvertable {
 
@@ -346,28 +347,220 @@ class Folder implements Ownable, Indexable, XmlConvertable {
         return getParent().getId() == getId();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Folder)) return false;
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof Folder)) return false
 
-        Folder folder = (Folder) o;
+        Folder folder = (Folder) o
 
-        if (acl != null ? !acl.equals(folder.acl) : folder.acl != null) return false;
-        if (metadata != null ? !metadata.equals(folder.metadata) : folder.metadata != null) return false;
-        if (name != null ? !name.equals(folder.name) : folder.name != null) return false;
-        if (owner != null ? !owner.equals(folder.owner) : folder.owner != null) return false;
-        if (parent != null ? !parent.equals(folder.parent) : folder.parent != null) return false;
-        if (type != null ? !type.equals(folder.type) : folder.type != null) return false;
+        if (acl != folder.acl) return false
+        if (indexOk != folder.indexOk) return false
+        if (indexed != folder.indexed) return false
+        if (metadata != folder.metadata) return false
+        if (name != folder.name) return false
+        if (owner != folder.owner) return false
+        if (parent != folder.parent) return false
+        if (type != folder.type) return false
 
-        return true;
+        return true
     }
 
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
-        return result;
+    int hashCode() {
+        int result
+        result = (name != null ? name.hashCode() : 0)
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0)
+        result = 31 * result + (owner != null ? owner.hashCode() : 0)
+        result = 31 * result + (parent != null ? parent.hashCode() : 0)
+        result = 31 * result + (indexOk != null ? indexOk.hashCode() : 0)
+        result = 31 * result + (type != null ? type.hashCode() : 0)
+        result = 31 * result + (acl != null ? acl.hashCode() : 0)
+        result = 31 * result + (indexed != null ? indexed.hashCode() : 0)
+        return result
+    }
+
+
+
+    /**
+     * Update the fields of this folder objects from a parameter map (from HTTP requests)
+     * @param fields map of the fields to be set
+     * @return the updated folder object
+     */
+    public Folder update(Map<String,String> fields){
+        if (fields.containsKey("parentid")) {
+            Long folderId = ParamParser.parseLong(fields.get("parentid"), "error.param.parent_id");
+            Folder newParentFolder = get(folderId);
+            if(newParentFolder == null){
+                throw new CinnamonException("error.param.parent_id");
+            }
+            else if(newParentFolder.equals(this)){
+                // prevent a folder from being its own parent.
+                throw new CinnamonException("error.illegal_parent_id");
+            }
+            else if(getParentFolders(newParentFolder).contains(this)){
+                // prevent a folder from being moved into one of its child folders.
+                throw new CinnamonException("error.illegal_parent_id");
+            }
+            else{
+                setParent(newParentFolder);
+                resetIndexOnFolderContent();
+            }
+        }
+        if(fields.containsKey("ownerid")){
+            Long ownerId = ParamParser.parseLong(fields.get("ownerid"), "error.param.owner_id");
+            UserAccount owner = UserAccount.get(ownerId);
+            if(owner == null){
+                throw new CinnamonException("error.user.not_found");
+            }
+            setOwner(owner);
+        }
+        if( fields.containsKey("name")) {
+            setName(fields.get("name"));
+            resetIndexOnFolderContent();
+        }
+        if( fields.containsKey("metadata")){
+            setMetadata(fields.get("metadata"));
+        }
+        if( fields.containsKey("aclid")){
+            Long aclId = ParamParser.parseLong(fields.get("aclid"), "error.param.acl_id");
+            Acl acl = Acl.get(aclId);
+            if(acl == null){
+                throw new CinnamonException("error.param.acl_id");
+            }
+            setAcl(acl);
+
+        }
+        if(fields.containsKey("typeid")){
+            Long typeId = ParamParser.parseLong(fields.get("typeid"), "error.param.type_id");
+            FolderType ft = FolderType.get(typeId);
+            if(ft == null){
+                throw new CinnamonException("error.param.type_id");
+            }
+            setType(ft);
+        }
+        return this;
+    }
+
+    /**
+     * After a folder was moved, the folderPath index is invalid for all its content.
+     * To correct this, the index_ok column is set to null so the IndexServer will
+     * index each object anew.
+     * @param folder a folder who will be re-indexed along with its content (recursively).
+     */
+    void resetIndexOnFolderContent(){
+        setIndexOk(null);
+        for(ObjectSystemData osd : fetchFolderContent(false)){
+            osd.setIndexOk(null);
+        }
+        for(Folder childFolder : fetchSubfolders(true)){
+            childFolder.resetIndexOnFolderContent();
+        }
+    }
+
+    /**
+     * Returns the subfolders of this folder
+     * @return List of folders
+     */
+    public List<Folder> getSubfolders(){
+        return Folder.findAllByParent(this);
+    }
+
+    /**
+     * Returns the subfolders of this folder.
+     * @param recursive if true, descend into sub folders
+     * @return List of folders or an empty list.
+     */
+    public List<Folder> fetchSubfolders(Boolean recursive){
+        def folders = Folder.findAllByParent(this)
+        List<Folder> newFolders = new ArrayList<Folder>();
+        if(recursive){
+            for(Folder folder : folders){
+                newFolders.addAll(folder.fetchSubfolders(true));
+            }
+        }
+        folders.addAll(newFolders);
+        return folders;
+    }
+
+    /**
+     * Return all ancestor-Folders
+     * up to but not including the root folder.
+     * @param folder the folder whose parent folders you want.
+     * @return List of parent folders excluding root folder.
+     */
+    public List<Folder> getParentFolders(Folder folder){
+        List<Folder> folders = new ArrayList<Folder>();
+        Folder root = findRootFolder();
+        folder = folder.getParent();
+        while(folder != null && folder !=  root ){
+            folders.add(folder);
+            folder = folder.getParent();
+        }
+        return folders;
+    }
+
+    /**
+     * Find all objects in a folder. This method can descend into sub folders and also
+     * select only the newest versions of the objects it finds.
+     * @param folder the folder whose content you need.
+     * @param recursive if true, descend into sub folders recursively and get their content, too.
+     * @param latestHead if true, return objects which have latestHead=true. If both latestHead and latestBranch are null,
+     *                   return all objects. If latestHead and latestBranch are both set, return objects which satisfy one
+     *                   of the criteria (where latestHead _or_ latestBranch matches the parameter).
+     * @param latestBranch if true, return objects which have latestBranch=true. If both latestHead and latestBranch are null,
+     *                     return all objects. If latestHead and latestBranch are both set, return objects which satisfy one
+     *                     of the criteria (where latestHead _or_ latestBranch matches the parameter).
+     * @return a List of the objects found in this folder, as filtered by the parameters set.
+     */
+    public List<ObjectSystemData> fetchFolderContent(Boolean recursive, Boolean latestHead, Boolean latestBranch){
+        def osds
+        if(latestHead != null && latestBranch != null){
+            osds = ObjectSystemData.findAll("select o from ObjectSystemData o where o.parent=:parent and (o.latestHead=:latestHead or o.latestBranch=:latestBranch)",
+                    [parent:this, latestHead:true,latestBranch:true])
+        }
+        else if(latestHead != null){
+            osds = ObjectSystemData.findAll("select o from ObjectSystemData o where o.parent=:parent and o.latestHead=:latestHead",
+                    [parent:this, latestHead: true]
+            )
+        }
+        else if(latestBranch != null){
+            osds = ObjectSystemData.findAll("select o from ObjectSystemData o where o.parent=:parent and o.latestBranch=:latestBranch",
+                    [parent:this, latestBranch: true]
+            )
+        }
+        else{
+            osds = ObjectSystemData.findAllByParent(this)
+        }
+        if(recursive){
+            List<Folder> subFolders = getSubfolders();
+            for(Folder f : subFolders){
+                osds.addAll(f.fetchFolderContent(true, latestHead, latestBranch));
+            }
+        }
+        return osds;
+    }
+
+
+    public List<ObjectSystemData> fetchFolderContent(Boolean recursive){
+        return fetchFolderContent(recursive, null, null);
+    }
+
+    /**
+     * Installation-Hint<br>
+     * Create a Folder whose parent equals it's own id and whose name is equals the ROOT_FOLDER_NAME.
+     * This is the default folder in which objects and folders are created if no parent_id is given.
+     *
+     * @return	Folder rootFolder
+     */
+    public Folder findRootFolder(){
+        def rootFolder = Folder.find("select f from Folder f where f.name=:name and f.parent.id=f.id",
+            [name:Constants.ROOT_FOLDER_NAME]
+        )
+        if(! rootFolder){
+            log.error("RootFolder is missing!");
+            throw new CinnamonConfigurationException("Could not find the root folder. Please create a folder called "+Constants.ROOT_FOLDER_NAME
+                    + " with parent_id == its own id.");
+        }
+
+        return rootFolder;
     }
 }

@@ -2,6 +2,7 @@ package cinnamon.trigger
 
 import cinnamon.global.Constants
 import cinnamon.utils.ParamParser
+import javax.persistence.Query
 
 /**
  * A ChangeTrigger is a class which decouples a CinnamonMethod and a Trigger-class. Every time an API-method
@@ -81,29 +82,20 @@ class ChangeTrigger {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ChangeTrigger)) return false;
-
-        ChangeTrigger that = (ChangeTrigger) o;
-
-        if (active != null ? !active.equals(that.active) : that.active != null) return false;
-        if (command != null ? !command.equals(that.command) : that.command != null) return false;
-        if (postTrigger != null ? !postTrigger.equals(that.postTrigger) : that.postTrigger != null) return false;
-        if (preTrigger != null ? !preTrigger.equals(that.preTrigger) : that.preTrigger != null) return false;
-        if (ranking != null ? !ranking.equals(that.ranking) : that.ranking != null) return false;
-        if (config != null ? !config.equals(that.config) : that.config != null) return false;
-        if (triggerType != null ? !triggerType.equals(that.triggerType) : that.triggerType != null) return false;
-
-        return true;
+    // TODO implement and rename
+    public static List<ChangeTrigger> findAllByCommandAndPostAndActiveOrderByRanking(String command) {
+//        Query q = getSession().createNamedQuery("findAllChangeTriggersByCommandAndPostAndActiveOrderByRanking");
+//        q.setParameter("command", command);
+//        return q.getResultList();
+        return null
     }
 
-    @Override
-    public int hashCode() {
-        int result = triggerType != null ? triggerType.hashCode() : 0;
-        result = 31 * result + (ranking != null ? ranking.hashCode() : 0);
-        result = 31 * result + (command != null ? command.hashCode() : 0);
-        return result;
+    // TODO: implement and rename
+    public static List<ChangeTrigger> findAllByCommandAndPreAndActiveOrderByRanking(String command) {
+//        Query q = getSession().createNamedQuery("findAllChangeTriggersByCommandAndPreAndActiveOrderByRanking");
+//        q.setParameter("command", command);
+//        return q.getResultList();
+        return null
     }
+
 }

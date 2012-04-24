@@ -54,12 +54,26 @@ class Acl {
      */
     public List<AclEntry> getUserEntries(UserAccount user){
         if(! userEntries.containsKey(user)){
-            def entries = AclEntry.findAll("from AclEntry ae where ae.acl=:acl and ae.group in (select g.group from CmnGroupUser g where g.user=:user)",
+            def entries = AclEntry.findAll("from AclEntry ae where ae.acl=:acl and ae.group in (select g.cmnGroup from CmnGroupUser g where g.userAccount=:user)",
                     [aclEntries: this, user:user]);
             userEntries.put(user,entries);
         }
         return userEntries.get(user);
     }
+
+    /**
+     * Update Acl via map params (from HTTP requests etc)
+     * @param cmd
+     */
+    public void update(Map<String, String> cmd) {
+        if (cmd.containsKey("name")) {
+            setName(cmd.get("name"));
+        }
+        if (cmd.containsKey("description")) {
+            setDescription(cmd.get("description"));
+        }
+    }
+
 
     public String toString(){
         return "Acl #"+id+": "+name+" ("+description+")";

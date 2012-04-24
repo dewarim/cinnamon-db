@@ -7,6 +7,7 @@ import org.dom4j.Element
 import cinnamon.exceptions.CinnamonException
 
 import java.util.concurrent.ConcurrentLinkedQueue
+import javax.persistence.Query
 
 class FolderService {
 
@@ -37,6 +38,11 @@ class FolderService {
         }
     }
 
+    /**
+     * Returns the subfolders of the folder with the given id.
+     * @param parentFolder - the folder whose sub-folders will be returned.
+     * @return List of folders or an empty list.
+     */
     public List<Folder> getSubfolders(Folder parentFolder, Boolean recursive){
         List<Folder> folders = Folder.findAll("select f from Folder f where f.parent=:parent and f.parent != f order by f.name",[parent:parentFolder])
         List<Folder> newFolders = new ArrayList<Folder>();
@@ -300,6 +306,99 @@ class FolderService {
         return folderExists(folder.id)
     }
 
+    public void deleteFolder(Long id ) {
+        log.debug("before loading folder");
+        Folder folder;
+        if (id == 0L) {
+            folder = findRootFolder();
+        } else {
+            folder = Folder.get(id);
+        }
 
+        if (folder == null) {
+            throw new CinnamonException("error.folder.not_found");
+        }
+
+        // check for subfolders:
+        def subFolderCount = Folder.countByParent(folder);
+        if ( subFolderCount > 0) {
+            throw new CinnamonException("error.subfolders.exist");
+        }
+
+        // check for objects inside folder
+        def contents = ObjectSystemData.countByParent(folder);
+        if ( contents > 0) {
+            throw new CinnamonException("error.folder.has_content");
+        }
+
+        folder.delete();
+    }
+
+    public List<Folder> findAllByPath(String path){
+        return findAllByPath(path, false, null);
+    }
+
+    public List<Folder> findAllByPath(String path, Boolean autoCreate, Validator validator){
+        def segs = path.split("/");
+
+        Folder parent = findRootFolder();
+
+        List<Folder> ret = new ArrayList<Folder>();
+        ret.add(parent);
+        for (String seg : segs) {
+            if (seg.length() > 0) {
+                List<Folder> results = Folder.findAllByParentAndName(parent, seg)
+                if (results.isEmpty()) {
+                    if(autoCreate){
+                        if(validator != null){
+                            validator.validateCreateFolder(parent);
+                        }
+                        Folder newFolder = new Folder(seg,"<meta />", parent.getAcl(), parent, parent.getOwner(), parent.getType() );
+                        newFolder.setIndexOk(null); // so the IndexServer will index it.
+                        newFolder.save()
+                        ret.add(newFolder);
+                        parent = newFolder;
+                    }
+                    else{
+                        throw new CinnamonException("error.path.invalid", path);
+                    }
+                }
+                else {
+                    Folder folder = results.get(0);
+                    parent = folder;
+                    ret.add(folder);
+                }
+            }
+        }
+        return ret;
+    }
+
+    public Folder findByPath(String path){
+        List<Folder> folders = findAllByPath(path);
+        if(folders.isEmpty()){
+            return null;
+        }
+        else{
+            return folders.get(folders.size()-1);
+        }
+    }
+
+    /**
+     * Find all Folders where index_ok is NULL. Those are the ones
+     * whose index is not current.
+     * @param maxResults maximum number of results
+     * @return List of Folders to index (limited by maxResults).
+     */
+    public List<Folder> findIndexTargets(Integer maxResults){
+        return Folder.findAll("from Folder f where f.indexOk is NULL",[:] [max:maxResults])
+    }
+
+    /**
+     * Set the indexed-column to 0 and trigger a re-indexing by the IndexServer.
+     * @return the number of affected rows.
+     */
+    public Integer prepareReIndex() {
+        return Folder.executeUpdate("UPDATE Folder f SET f.indexOk=NULL")
+    }
 }
 
