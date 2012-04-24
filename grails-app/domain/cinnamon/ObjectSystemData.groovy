@@ -16,6 +16,7 @@ import cinnamon.global.Conf
 import cinnamon.global.ConfThreadLocal
 import cinnamon.utils.FileKeeper
 import javax.persistence.NoResultException
+import cinnamon.utils.ContentReader
 
 class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConvertable{
 
@@ -40,6 +41,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
 
     static mapping = {
         table('objects')
+        version 'obj_version'
     }
 
     String name
@@ -488,7 +490,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
     }
 
     /**
-     * @see temp.data.ObjectSystemData#getContent(String)
+     * @see ObjectSystemData#getContent(String)
      * @param repository the name of the repository where this object is stored.
      * @param encoding the encoding of the content. May be null.
      * @return a string containing the content, in XML format if possible. If the contentSize is null,
@@ -517,7 +519,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
                 return "<empty />".getBytes();
             }
             log.debug("path to file: "+path);
-            fileContent = utils.ContentReader.readFileAsBytes(path);
+            fileContent = ContentReader.readFileAsBytes(path);
         } catch (Exception e) {
             throw new CinnamonException(e);
         }
@@ -627,48 +629,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ObjectSystemData)) return false;
 
-        ObjectSystemData that = (ObjectSystemData) o;
-
-        if (acl != null ? !acl.equals(that.acl) : that.acl != null) return false;
-        if (appName != null ? !appName.equals(that.appName) : that.appName != null) return false;
-        if (contentPath != null ? !contentPath.equals(that.contentPath) : that.contentPath != null) return false;
-        if (contentSize != null ? !contentSize.equals(that.contentSize) : that.contentSize != null) return false;
-        if (created != null ? !created.equals(that.created) : that.created != null) return false;
-        if (creator != null ? !creator.equals(that.creator) : that.creator != null) return false;
-        if (format != null ? !format.equals(that.format) : that.format != null) return false;
-        if (language != null ? !language.equals(that.language) : that.language != null) return false;
-        if (latestBranch != null ? !latestBranch.equals(that.latestBranch) : that.latestBranch != null)
-            return false;
-        if (latestHead != null ? !latestHead.equals(that.latestHead) : that.latestHead != null) return false;
-        if (locker != null ? !locker.equals(that.locker) : that.locker != null) return false;
-        if (metadata != null ? !metadata.equals(that.metadata) : that.metadata != null) return false;
-        if (modified != null ? !modified.equals(that.modified) : that.modified != null) return false;
-        if (modifier != null ? !modifier.equals(that.modifier) : that.modifier != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (owner != null ? !owner.equals(that.owner) : that.owner != null) return false;
-        if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
-        if (predecessor != null ? !predecessor.equals(that.predecessor) : that.predecessor != null) return false;
-        if (procstate != null ? !procstate.equals(that.procstate) : that.procstate != null) return false;
-        if (root != null ? !root.equals(that.root) : that.root != null) return false;
-        if (state != null ? !state.equals(that.state) : that.state != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (version != null ? !version.equals(that.version) : that.version != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (created != null ? created.hashCode() : 0);
-        result = 31 * result + (version != null ? version.hashCode() : 0);
-        return result;
-    }
 
     /**
      * Get a new filename for the given osd.
@@ -723,4 +684,68 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         return versionPred;
     }
 
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof ObjectSystemData)) return false
+
+        ObjectSystemData that = (ObjectSystemData) o
+
+        if (acl != that.acl) return false
+        if (appName != that.appName) return false
+        if (contentPath != that.contentPath) return false
+        if (contentSize != that.contentSize) return false
+        if (created != that.created) return false
+        if (creator != that.creator) return false
+        if (format != that.format) return false
+        if (indexOk != that.indexOk) return false
+        if (indexed != that.indexed) return false
+        if (language != that.language) return false
+        if (latestBranch != that.latestBranch) return false
+        if (latestHead != that.latestHead) return false
+        if (locker != that.locker) return false
+        if (metadata != that.metadata) return false
+        if (modified != that.modified) return false
+        if (modifier != that.modifier) return false
+        if (name != that.name) return false
+        if (owner != that.owner) return false
+        if (parent != that.parent) return false
+        if (predecessor != that.predecessor) return false
+        if (procstate != that.procstate) return false
+        if (root != that.root) return false
+        if (state != that.state) return false
+        if (type != that.type) return false
+        if (version != that.version) return false
+
+        return true
+    }
+
+    int hashCode() {
+        int result
+        result = (name != null ? name.hashCode() : 0)
+        result = 31 * result + (contentPath != null ? contentPath.hashCode() : 0)
+        result = 31 * result + (contentSize != null ? contentSize.hashCode() : 0)
+        result = 31 * result + (indexOk != null ? indexOk.hashCode() : 0)
+        result = 31 * result + (predecessor != null ? predecessor.hashCode() : 0)
+        result = 31 * result + (root != null ? root.hashCode() : 0)
+        result = 31 * result + (creator != null ? creator.hashCode() : 0)
+        result = 31 * result + (modifier != null ? modifier.hashCode() : 0)
+        result = 31 * result + (owner != null ? owner.hashCode() : 0)
+        result = 31 * result + (locker != null ? locker.hashCode() : 0)
+        result = 31 * result + (created != null ? created.hashCode() : 0)
+        result = 31 * result + (indexed != null ? indexed.hashCode() : 0)
+        result = 31 * result + (modified != null ? modified.hashCode() : 0)
+        result = 31 * result + (language != null ? language.hashCode() : 0)
+        result = 31 * result + (acl != null ? acl.hashCode() : 0)
+        result = 31 * result + (parent != null ? parent.hashCode() : 0)
+        result = 31 * result + (format != null ? format.hashCode() : 0)
+        result = 31 * result + (type != null ? type.hashCode() : 0)
+        result = 31 * result + (appName != null ? appName.hashCode() : 0)
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0)
+        result = 31 * result + (procstate != null ? procstate.hashCode() : 0)
+        result = 31 * result + (latestHead != null ? latestHead.hashCode() : 0)
+        result = 31 * result + (latestBranch != null ? latestBranch.hashCode() : 0)
+        result = 31 * result + (version != null ? version.hashCode() : 0)
+        result = 31 * result + (state != null ? state.hashCode() : 0)
+        return result
+    }
 }

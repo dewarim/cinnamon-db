@@ -81,11 +81,6 @@ class OsdService {
         }
     }
 
-    public void copyContent(session, ObjectSystemData copy) {
-        String repositoryName = session.repositoryName;
-        copyContent(repositoryName, copy);
-    }
-
     /**
      * Copy a root object and all of its descendants.
      *

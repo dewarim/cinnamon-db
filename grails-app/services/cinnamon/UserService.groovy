@@ -77,17 +77,17 @@ class UserService {
     }
 
     void transferGroupMembership(UserAccount source, UserAccount target){
-        def groupUsers = CmnGroupUser.findAllByUser(source)
+        def groupUsers = CmnGroupUser.findAllByUserAccount(source)
         groupUsers.each{gu ->
-            if(CmnGroupUser.findByUserAndGroup(target, gu.group)){
+            if(CmnGroupUser.findByUserAccountAndCmnGroup(target, gu.cmnGroup)){
                 // simply delete old user's CmnGroupUser object as both
                 // old and new are in the same group
                 gu.delete()
             }
             else{
                 // take over groupUser from other user.
-                log.debug("transfer group ${gu.group.name} to user ${target.name}")
-                gu.user = target
+                log.debug("transfer group ${gu.cmnGroup.name} to user ${target.name}")
+                gu.userAccount = target
             }
         }
     }
@@ -110,7 +110,7 @@ class UserService {
         if(Folder.findByOwner(user)){
             return true
         }
-        if(CmnGroupUser.findByUser(user)){
+        if(CmnGroupUser.findByUserAccount(user)){
             return true
         }
         return false

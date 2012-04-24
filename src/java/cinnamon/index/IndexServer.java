@@ -1,5 +1,6 @@
-package temp.index;
+package cinnamon.index;
 
+import cinnamon.interfaces.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.Folder;

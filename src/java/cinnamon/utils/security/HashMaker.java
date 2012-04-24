@@ -1,4 +1,4 @@
-package temp.utils.security;
+package cinnamon.utils.security;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;

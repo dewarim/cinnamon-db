@@ -1,4 +1,4 @@
-package temp.index;
+package cinnamon.index;
 
 import cinnamon.index.Indexable;
 import cinnamon.index.ResultCollector;
