@@ -1,13 +1,12 @@
 package cinnamon
 
 import org.dom4j.Element
-import temp.i18n.UiLanguage
 import cinnamon.global.Constants
-import temp.GroupUser
+import cinnamon.i18n.UiLanguage
 
 class UserAccount {
 
-    static hasMany = [groupUsers:GroupUser]
+    static hasMany = [groupUsers:CmnGroupUser]
     static mapping = {
         table 'users'
     }
@@ -77,7 +76,7 @@ class UserAccount {
             log.debug("Superuser-CmnGroup was not found.");
             return false;
         }
-        Set<GroupUser> adminGroupUsers = new HashSet<GroupUser>();
+        Set<CmnGroupUser> adminGroupUsers = new HashSet<CmnGroupUser>();
         adminGroupUsers.addAll(adminGroup.getGroupUsers());
         // debug code:
 //		log.debug("groupUsers for admin-group: "+adminGroupUsers);
@@ -100,9 +99,9 @@ class UserAccount {
 
     Set<CmnGroup> findAllGroups(){
         Set<CmnGroup> groups = new HashSet<CmnGroup>();
-        for (GroupUser gu : getGroupUsers()) {
-            groups.add(gu.getGroup());
-            groups.addAll(gu.getGroup().findAncestors());
+        for (CmnGroupUser gu : getGroupUsers()) {
+            groups.add(gu.cmnGroup);
+            groups.addAll(gu.cmnGroup.findAncestors());
 
         }
         return groups;
@@ -164,6 +163,4 @@ class UserAccount {
         result = 31 * result + (id != null ? id.hashCode() : 0)
         return result
     }
-
-
 }

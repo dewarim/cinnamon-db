@@ -1,8 +1,6 @@
 package cinnamon
 
 import cinnamon.global.Constants
-import temp.GroupUser
-import temp.AclEntry
 
 class CmnGroup {
 
@@ -10,7 +8,7 @@ class CmnGroup {
         table 'groups'
     }
 
-    static hasMany = [groupUsers:GroupUser, aclEntries:AclEntry]
+    static hasMany = [groupUsers:CmnGroupUser, aclEntries:AclEntry]
 
     static constraints = {
         name unique: true , size: 1..Constants.NAME_LENGTH

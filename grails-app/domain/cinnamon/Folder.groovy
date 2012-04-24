@@ -563,4 +563,8 @@ class Folder implements Ownable, Indexable, XmlConvertable {
 
         return rootFolder;
     }
+
+    long getId(){
+        return id
+    }
 }

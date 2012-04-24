@@ -758,4 +758,8 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         return ObjectSystemData.find("from ObjectSystemData o WHERE o.latestHead = true and o.root=:root",
         [root:this.root])
     }
+
+    long getId(){
+        return id
+    }
 }
