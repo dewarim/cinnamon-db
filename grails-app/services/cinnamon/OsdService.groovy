@@ -8,6 +8,7 @@ import cinnamon.utils.ParamParser
 import javax.persistence.EntityManager
 import cinnamon.relation.Relation
 import cinnamon.relation.RelationType
+import humulus.EnvironmentHolder
 
 class OsdService {
 
@@ -61,6 +62,10 @@ class OsdService {
         return doc;
     }
 
+    void copyContent(ObjectSystemData source,ObjectSystemData copy){
+        copyContent(EnvironmentHolder.getEnvironment().dbName, source,copy)
+    }
+
     void copyContent(String repositoryName, ObjectSystemData source, ObjectSystemData copy) {
         String conPath = source.getContentPath();
         if (conPath != null && conPath.length() > 0) {
@@ -81,53 +86,6 @@ class OsdService {
         }
     }
 
-    /**
-     * Copy a root object and all of its descendants.
-     *
-     * @param source       the source object
-     * @param targetFolder the folder in which the copy will be created.
-     * @param activeUser   the user who will be owner / modifier of the copied objects.
-     * @return the root object of the new objectTree
-     */
-    CopyResult copyObjectTree(session, ObjectSystemData source, Folder targetFolder, UserAccount activeUser) {
-        CopyResult cr = new CopyResult();
-
-        List<ObjectSystemData> allVersions = findAllVersions(source);
-//		List<ObjectSystemData> newTree = new ArrayList<ObjectSystemData>();
-
-        // create copies of all versions:
-        ObjectTreeCopier objectTreeCopier = new ObjectTreeCopier(activeUser, targetFolder);
-        ObjectSystemData currentOsd = null;
-        try {
-            log.debug("create  full copies of all versions");
-
-            for (ObjectSystemData osd : allVersions) {
-                currentOsd = osd;
-                log.debug("create full copy of: " + osd.getId());
-                ObjectSystemData copy = objectTreeCopier.createFullCopy(osd);
-                objectTreeCopier.getCopyCache().put(osd, copy);
-                log.debug("copy relations");
-                copyRelations(copy);
-                log.debug("copy content");
-                copyContent(copy);
-                cr.addObject(copy);
-            }
-        } catch (Exception ex) {
-            /*
-             * If an exception occurs, we must terminate the whole tree,
-             * as in most cases we could only get a stunted version (with missing branches or
-             * missing content etc.)
-             */
-            for (ObjectSystemData osd : objectTreeCopier.getCopyCache().keySet()) {
-                osd.deleteContent(session.getLocalRepositoryName());
-                osdDao.delete(osd);
-            }
-            cr = new CopyResult();
-            cr.addFailure(currentOsd, new CinnamonException("Failed to copy tree of OSD.", ex));
-        }
-
-        return cr;
-    }
 
     public List<ObjectSystemData> findAllVersions(ObjectSystemData osd) {
         if(! osd.getVersion().equals("1")){
@@ -232,7 +190,6 @@ class OsdService {
         osd.delete(flush: true)
     }
 
-    @Override
     public void delete(Long id) {
         log.debug("before loading osd");
         ObjectSystemData osd = get(id);

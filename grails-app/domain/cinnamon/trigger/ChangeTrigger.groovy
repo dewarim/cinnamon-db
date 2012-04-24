@@ -2,7 +2,6 @@ package cinnamon.trigger
 
 import cinnamon.global.Constants
 import cinnamon.utils.ParamParser
-import javax.persistence.Query
 
 /**
  * A ChangeTrigger is a class which decouples a CinnamonMethod and a Trigger-class. Every time an API-method

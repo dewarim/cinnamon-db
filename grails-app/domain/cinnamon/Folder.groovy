@@ -22,7 +22,7 @@ class Folder implements Ownable, Indexable, XmlConvertable {
     transient def userService
 
     static constraints = {
-        name unique:['parent'], size: Constants.NAME_LENGTH
+        name unique:['parent'], size: 1..Constants.NAME_LENGTH
         metadata( size: 1..Constants.METADATA_SIZE)
         parent nullable: true
     }
@@ -564,7 +564,7 @@ class Folder implements Ownable, Indexable, XmlConvertable {
         return rootFolder;
     }
 
-    long getId(){
-        return id
-    }
+//    Long getId(){
+//        return id
+//    }
 }

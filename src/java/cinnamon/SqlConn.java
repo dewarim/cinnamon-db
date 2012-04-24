@@ -18,6 +18,9 @@
 
 package cinnamon;
 
+import cinnamon.exceptions.CinnamonConfigurationException;
+import cinnamon.exceptions.CinnamonException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -25,7 +28,7 @@ public class SqlConn {
 
 	private Connection conn_;
 	
-	public SqlConn(String connectionString, String jdbcdriver) throws CinnamonException{
+	public SqlConn(String connectionString, String jdbcdriver) throws CinnamonException {
 		try {
 			Class.forName(jdbcdriver).newInstance();
 			conn_ = 

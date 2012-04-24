@@ -12,7 +12,9 @@ grails.project.dependency.resolution = {
         // uncomment to disable ehcache
         // excludes 'ehcache'
     }
+
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+
     repositories {
         grailsRepo "http://grails.org/plugins"
         grailsCentral()
@@ -25,6 +27,7 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
     }
+
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
@@ -33,6 +36,7 @@ grails.project.dependency.resolution = {
         runtime('org.apache.lucene:lucene-core:3.5.0')
         runtime('org.apache.lucene:lucene-xml-query-parser:3.5.0')
         runtime('org.apache.lucene:lucene-queries:3.5.0')
+        runtime 'postgresql:postgresql:9.1-901.jdbc4'
     }
 
     plugins {

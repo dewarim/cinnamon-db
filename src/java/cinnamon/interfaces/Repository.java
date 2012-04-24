@@ -1,7 +1,6 @@
 package cinnamon.interfaces;
 
 import cinnamon.SqlCustomConn;
-import cinnamon.index.LuceneBridge;
 
 import java.util.List;
 import java.util.Map;
@@ -19,33 +18,13 @@ public interface Repository {
 	String getName();
 	void setName(String name);
 	
-	HibernateSession getHibernateSession();
-	void setHibernateSession(HibernateSession session);
-
-    HibernateSession getCustomHibernateSession();
-    void setCustomHibernateSession(HibernateSession hs);
-
-	/**
-	 * Note: This is a shortcut to this Repository's HibernateSession.getEntityManager.
-	 * It returns a new EntityManager, which is probably not what you need, unless you
-	 * want to initialize the HibernateSessions' localEntityManager.
-	 * @return a new EntityManager.
-	 */
-	EntityManager getEntityManager();
-
 	Map<String, SqlCustomConn> getSqlCustomConns();
 	void setSqlCustomConns(Map<String, SqlCustomConn> connections);
-	
-//	SqlConn getSqlConn();
-//	void setSqlConn(SqlConn sqlConn);
 	
 	CommandRegistry getCommandRegistry();
 	void setCommandRegistry(CommandRegistry cmdReg);
 	
-	void reloadSqlCustomConnections(CustomTableDAO ctDao);
 	void loadApiClasses(List<String> apiClasses);
-	
-	LuceneBridge getLuceneBridge();
 	
 	void startIndexServer();
 	void startWorkflowServer();

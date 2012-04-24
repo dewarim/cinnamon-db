@@ -21,7 +21,6 @@ package cinnamon.global;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cinnamon.exceptions.CinnamonConfigurationException;
-import cinnamon.global.Conf;;
 
 /**
  * The Conf class loads the configuration from the XML file "config/config.xml". It follows a Singleton pattern by

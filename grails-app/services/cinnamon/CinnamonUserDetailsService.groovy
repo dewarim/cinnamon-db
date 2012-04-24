@@ -16,6 +16,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SecurityRequestHolder a
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.codehaus.groovy.grails.plugins.springsecurity.SecurityRequestHolder
+import humulus.EnvironmentHolder
 
 /*
  This class is based upon UserDetailsService from the Grails security plugin. 
@@ -93,8 +94,8 @@ class CinnamonUserDetailsService implements GrailsUserDetailsService{
 
         // gain access to unencrypted password which we need to login remotely to the server:
         def params = SecurityRequestHolder.request.parameterMap
-        Client client = new Client(url, username, (String) params.get('j_password')[0], repositoryName)
-        repositoryService.addClient(client)
+//        Client client = new Client(url, username, (String) params.get('j_password')[0], repositoryName)
+//        repositoryService.addClient(client)
 
 		boolean enabled = user.activated
 		boolean accountExpired = user.accountExpired

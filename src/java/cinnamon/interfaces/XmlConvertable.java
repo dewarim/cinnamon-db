@@ -10,6 +10,6 @@ import org.dom4j.Element;
 public interface XmlConvertable extends Comparable<XmlConvertable> {
 
 	void toXmlElement(Element root);
-	long getId();
+//	Long getId();
 
 }

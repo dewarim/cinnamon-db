@@ -6,9 +6,6 @@ import org.dom4j.DocumentHelper
 import org.dom4j.Element
 import cinnamon.exceptions.CinnamonException
 
-import java.util.concurrent.ConcurrentLinkedQueue
-import javax.persistence.Query
-
 class FolderService {
 
     def osdService
@@ -124,174 +121,8 @@ class FolderService {
     }
 
 
-    /**
-     * Copy a source folder to a target folder. Copies recursively.
-     * @param target the target folder in which the copy is created
-     * @param croakOnError if true, do not continue past an error.
-     * @param versions must be one of 'all', 'branch', 'head' - determines which OSDs inside the folder tree to copy.
-     * @param user the user who issued the copyFolder command. This user is the new owner of the copy and he is also
-     * used for permission checks.
-     * @return a CopyResult object containing information about new folders and objects as well as error messages.
-     */
-    public CopyResult copyFolder(Folder source, Folder target,
-                                 Boolean croakOnError, String versions,
-                                 UserAccount user) {
-        /*
-         * validate read permissions on source folder
-         * validate write permissions on target folder
-         * create folder in target folder
-         * create a CopyResult object
-         * this folder has sub folders? Copy them. Add their CopyResult to the existing one.
-         * this folder has OSDs? Copy them.
-         *
-         *
-         */
-        CopyResult copyResult = new CopyResult();
-        Validator validator = new Validator(user);
-        try{
-            // we need permission to browse this folder.
-            validator.validateGetFolder(source);
-        }
-        catch (CinnamonException ce){
-            return copyResult.addFailure(source, ce);
-        }
 
-        try{
-            // we need the permission to create a folder inside the target folder.
-            validator.validateCreateFolder(target);
 
-        }
-        catch (CinnamonException ce){
-            return copyResult.addFailure(target, ce);
-        }
-
-        Folder copy = new Folder(source);
-        copy.owner = user;
-        copy.parent = target;
-        copy.save()
-        copyResult.addFolder(copy);
-
-        // copy child folders
-        List<Folder> children = getSubfolders(source);
-        for(Folder child : children){
-            CopyResult cr = copyFolder(child, copy, croakOnError, versions, user);
-            copyResult.addCopyResult(cr);
-            if(copyResult.foundFailure() && croakOnError){
-                return copyResult;
-            }
-        }
-
-        // copy content
-        Collection<ObjectSystemData> folderContent = ObjectSystemData.findAllByParent(source);
-        log.debug("folderContent contains "+folderContent.size()+" objects.");
-
-        if(versions.equals("all")){
-            log.debug("copy all versions");
-            // copy all versions
-            ObjectTreeCopier otc = new ObjectTreeCopier( user, copy, validator, true);
-            copyResult.addCopyResult( copyAllVersions(folderContent, otc, croakOnError));
-        }
-        else if(versions.equals("branch")){
-            log.debug("copy newest branch objects");
-            Set<ObjectSystemData> branches = new HashSet<ObjectSystemData>();
-            for(ObjectSystemData osd: folderContent){
-                branches.add( oDao.findLatestBranch(osd) );
-            }
-            copyResult.addCopyResult( createNewVersionCopies(branches, copy, validator, user, croakOnError));
-        }
-        else{
-            log.debug("copy head of object tree");
-            // the default: copy head
-            Set<ObjectSystemData> headSet = new HashSet<ObjectSystemData>();
-            for(ObjectSystemData head : folderContent){
-                ObjectSystemData latestHead = oDao.findLatestHead(head);
-                log.debug("latestHead found for "+head.getId());
-                headSet.add( latestHead );
-            }
-            copyResult.addCopyResult( createNewVersionCopies(headSet, copy, validator, user, croakOnError));
-        }
-        log.debug("new folders: "+copyResult.newFolderCount());
-        log.debug("new objects: "+copyResult.newObjectCount());
-        return copyResult;
-    }
-
-    /**
-     * Copy all versions of the objects found in a folder. This will create the complete object tree of
-     * the objects, so if an object has ancestors or descendants in other folders, those will be copied, too.
-     * @param folderContent the content of the folder which should be copied completely.
-     * @param otc a ObjectTreeCopier which is configured with a validator and correct activeUser.
-     * @param croakOnError if true, stop in case of an error and return a CopyResult which contains the events so far.
-     * @return a copyResult containing a collection of all failed and successful attempts at copying the
-     * folder's contents.
-     */
-    CopyResult copyAllVersions(Collection<ObjectSystemData> folderContent, ObjectTreeCopier otc, Boolean croakOnError){
-        CopyResult copyResult = new CopyResult();
-
-        ConcurrentLinkedQueue<ObjectSystemData> conQueue = new ConcurrentLinkedQueue<ObjectSystemData>();
-        conQueue.addAll(folderContent);
-        log.debug("starting to copy "+conQueue.size()+" objects");
-
-        for (ObjectSystemData source : conQueue) {
-//            otc.resetCopyResult();
-            try {
-                // create a full copy of the whole object tree:
-                otc.createFullCopy(source);
-                copyResult.addCopyResult(otc.getCopyResult());
-            }
-            catch (Exception ex) {
-                log.debug("objectTreeCopy failed for id " + source.getId(), ex);
-                // copy failed - now we have to cleanup and remove the already created copies:
-                ObjectSystemData brokenCopy = otc.getCopyCache().get(source);
-                if (brokenCopy != null) {
-                    // we should nuke all other objects with the same root,
-                    // as they won't be amendable to a copy operation either.
-                    for (ObjectSystemData osd : conQueue) {
-                        if (osd.getRoot().equals(brokenCopy.getRoot())) {
-                            conQueue.remove(osd);
-                        }
-                    }
-
-                    // recursively delete the broken object tree.
-                    osdService.delete(brokenCopy.getRoot(), true, true);
-                }
-
-                log.debug("cleanup complete.");
-                copyResult.addFailure(source, new CinnamonException(ex));
-                if(croakOnError){
-                    return copyResult;
-                }
-            }
-        }
-        return copyResult;
-    }
-
-    CopyResult createNewVersionCopies(Collection<ObjectSystemData> sources, Folder target, Validator validator,
-                                      UserAccount user, Boolean croakOnError) {
-        CopyResult copyResult = new CopyResult();
-
-        for (ObjectSystemData osd : sources) {
-            log.debug("trying to copy "+osd.getId());
-            // check permissions:
-            try {
-                validator.validateCopy(osd, target);
-            }
-            catch (Exception ex) {
-                copyResult.addFailure(osd, new CinnamonException(ex));
-                if(croakOnError){
-                    return copyResult;
-                }
-            }
-
-            ObjectSystemData newCopy = new ObjectSystemData(osd, user);
-            newCopy.setVersion("1");
-            newCopy.setRoot(newCopy);
-            newCopy.setParent(target);
-            newCopy.save()
-            osdService.copyContent(osd,newCopy);
-            copyResult.addObject(newCopy);
-        }
-        return copyResult;
-    }
 
      boolean folderExists(long id){
 		Folder f = Folder.get(id);
@@ -390,7 +221,7 @@ class FolderService {
      * @return List of Folders to index (limited by maxResults).
      */
     public List<Folder> findIndexTargets(Integer maxResults){
-        return Folder.findAll("from Folder f where f.indexOk is NULL",[:] [max:maxResults])
+        return Folder.findAll("from Folder f where f.indexOk is NULL",[:], [max:maxResults])
     }
 
     /**
