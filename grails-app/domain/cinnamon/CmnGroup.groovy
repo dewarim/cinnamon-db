@@ -2,7 +2,7 @@ package cinnamon
 
 import cinnamon.global.Constants
 
-class CmnGroup {
+class CmnGroup implements Serializable  {
 
     static mapping = {
         table 'groups'

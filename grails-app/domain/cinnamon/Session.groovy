@@ -5,7 +5,7 @@ import cinnamon.global.ConfThreadLocal
 import cinnamon.exceptions.CinnamonException
 import cinnamon.global.Constants
 
-class Session {
+class Session  implements Serializable {
 
     static constraints = {
         ticket(size: 1..255)

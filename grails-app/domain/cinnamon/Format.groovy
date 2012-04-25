@@ -6,7 +6,7 @@ import org.dom4j.DocumentHelper
 import cinnamon.utils.ParamParser
 import cinnamon.i18n.LocalMessage
 
-class Format {
+class Format implements Serializable  {
 
     static constraints = {
         description( size: 0..Constants.DESCRIPTION_SIZE, blank: true)

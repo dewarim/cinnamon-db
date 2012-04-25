@@ -4,7 +4,7 @@ import cinnamon.global.Constants
 import org.dom4j.Element
 import cinnamon.i18n.LocalMessage
 
-class LifeCycle {
+class LifeCycle implements Serializable  {
 
     static constraints = {
         name unique: true, size: 1..Constants.NAME_LENGTH

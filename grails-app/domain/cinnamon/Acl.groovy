@@ -4,7 +4,7 @@ import cinnamon.global.Constants
 import org.dom4j.Element
 import cinnamon.i18n.LocalMessage
 
-class Acl {
+class Acl  implements Serializable {
 
     static mapping = {
         table 'acls'

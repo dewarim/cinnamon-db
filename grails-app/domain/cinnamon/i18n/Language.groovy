@@ -4,7 +4,7 @@ import cinnamon.global.Constants
 import cinnamon.utils.ParamParser
 import org.dom4j.Element
 
-class Language {
+class Language implements Serializable {
 
 
 

@@ -7,7 +7,7 @@ import org.dom4j.Element
 import org.dom4j.DocumentHelper
 import cinnamon.i18n.LocalMessage
 
-class ConfigEntry {
+class ConfigEntry  implements Serializable {
 
     static constraints = {
         name size: 1..Constants.NAME_LENGTH, unique: true

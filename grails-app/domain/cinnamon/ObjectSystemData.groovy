@@ -17,8 +17,13 @@ import cinnamon.global.ConfThreadLocal
 import cinnamon.utils.FileKeeper
 import javax.persistence.NoResultException
 import cinnamon.utils.ContentReader
+import org.dom4j.Node
+import javax.persistence.Query
+import cinnamon.interfaces.IMetasetJoin
+import cinnamon.exceptions.CinnamonConfigurationException
+import cinnamon.interfaces.IMetasetOwner
 
-class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConvertable{
+class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner{
 
     def folderService
     def userService
@@ -43,6 +48,8 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         table('objects')
         version 'obj_version'
     }
+
+    static hasMany = [metasets:OsdMetaset]
 
     String name
     String contentPath
@@ -304,21 +311,8 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         }
     }
 
-    /**
-     * Set the Metadata on this object. Tries to parse the submitted string
-     * and throws an exception if it is not valid XML.
-     *
-     * @param metadata the custom metadata
-     */
-    public void setMetadata(String metadata) {
-        if (metadata == null || metadata.trim().length() == 0) {
-            metadata = "<meta/>";
-        }
-        else {
-            ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
-        }
-        this.metadata = metadata;
-    }
+
+
     /**
      * createClone: create a copy with created and modified set to current date, <br>
      * and without an Id (which should be set by the persistence layer when inserting into  the db).
@@ -628,9 +622,6 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         return 0;
     }
 
-
-
-
     /**
      * Get a new filename for the given osd.
      * First, it filters potentially harmful characters from the object's name. Then,
@@ -762,4 +753,155 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
 //    Long getId(){
 //        return id
 //    }
+
+    /**
+     * @return the compiled metadata of this element (all metasets collected under one meta root element).
+     */
+    public String getMetadata() {
+        // for compatibility: return non-empty metadata, otherwise try to compile metasets
+        if(metadata.length() > 8 && getOsdMetasets().size() == 0){
+            return metadata;
+        }
+        Document doc = DocumentHelper.createDocument();
+        Element root = doc.addElement("meta");
+        for(Metaset m : fetchMetasets()){
+            root.add(Metaset.asElement("metaset", m));
+        }
+        return doc.asXML();
+    }
+
+    /**
+     * @return the compiled metadata of this element (all metasets collected under one meta root element).
+     */
+    public String getMetadata(List<String> metasetNames) {
+        // for compatibility: return non-empty metadata, otherwise try to compile metasets
+//        if(metadata.length() > 8 && getOsdMetasets().size() == 0){
+//            return metadata;
+//        }
+        Document doc = DocumentHelper.createDocument();
+        Element root = doc.addElement("meta");
+        for(Metaset m : fetchMetasets()){
+            root.add(Metaset.asElement("metaset", m));
+        }
+        return metadata;
+    }
+
+    /**
+     * Set the Metadata on this object. Tries to parse the submitted string
+     * and throws an exception if it is not valid XML.<br/>
+     * Note: this parses the meta-xml into metasets and stores them as such.
+     * @param metadata the custom metadata
+     */
+    public void setMetadata(String metadata) {
+        setMetadata(metadata, WritePolicy.BRANCH);
+    }
+
+    /**
+     * Set the Metadata on this object. Tries to parse the submitted string
+     * and throws an exception if it is not valid XML.<br/>
+     * Note: this parses the meta-xml into metasets and stores them as such.
+     * This method does not unlink existing metasets unless you submit metadata without any
+     * metasets inside.
+     * @param metadata the custom metadata
+     * @param writePolicy the write policy - what to do if other items already reference a metaset.
+     */
+    public void setMetadata(String metadata, WritePolicy writePolicy ) {
+        try{
+            if (metadata == null || metadata.trim().length() == 0) {
+                this.metadata = "<meta/>";
+            }
+            else {
+                Document doc = ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
+                List<Node> sets = doc.selectNodes("//metaset");
+//            log.debug("found "+sets.size()+" metaset nodes in:\n"+metadata);
+                if(sets.size() == 0){
+                    this.metadata = metadata;
+                    if(metasets.size() > 0){
+                        // delete obsolete metasets:
+                        for(Metaset m : fetchMetasets()){
+                            new MetasetService().unlinkMetaset(this, m);
+                        }
+                    }
+                    return;
+                }
+                for(Node metasetNode : sets){
+                    String content = metasetNode.detach().asXML();
+                    String metasetTypeName = metasetNode.selectSingleNode("@type").getText();
+                    log.debug("metasetType: "+metasetTypeName);
+                    MetasetType metasetType = MetasetType.findByName(metasetTypeName);
+                    if(metasetType == null){
+                        throw new CinnamonException("error.unknown.metasetType",metasetTypeName);
+                    }
+                    new MetasetService().createOrUpdateMetaset(this,metasetType, content, writePolicy);
+                }
+            }
+        }
+        catch (Exception e){
+            log.debug("failed to add metadata:",e);
+            throw new RuntimeException(e);
+        }
+//        this.metadata = metadata;
+    }
+
+    public IMetasetJoin fetchMetasetJoin(MetasetType type){
+        List<OsdMetaset> metasetList = OsdMetaset.findAll(
+                "from OsdMetaset o where o.metaset.type=:metasetType and o.osd=:osd", [metasetType:type, osd:this])
+        log.debug("query for: "+type.name+" / osd: "+id+" returned #objects: "+ metasetList.size() );
+        if(metasetList.size() == 0){
+            return null;
+        }
+        else if(metasetList.size() > 1){
+//            for(OsdMetaset om : metasetList){
+//                log.debug("found OsdMetaset: "+om.toString());
+//            }
+            throw new CinnamonConfigurationException("Found two metasets of the same type in osd #"+getId());
+        }
+        else{
+            return (IMetasetJoin) metasetList.get(0);
+        }
+    }
+
+    public void addMetaset(Metaset metaset){
+        // make sure that we do not add a second metaset of the same type:
+        MetasetType metasetType = metaset.getType();
+        IMetasetJoin metasetJoin = fetchMetasetJoin(metasetType);
+        if(metasetJoin != null){
+            log.debug("found existing metasetJoin: "+metasetJoin.getId());
+            throw new CinnamonException("you tried to add a second metaset of type "+metasetType.getName()+" to "+getId());
+        }
+
+        OsdMetaset om = new OsdMetaset(this,metaset);
+        // the correct way would be to use a DAO, but then we are on the way to use Grails
+        // GORM anyway, so this is a temporary solution:
+        log.debug("persist metaset");
+        om.save()
+    }
+
+    public Set<Metaset> fetchMetasets(){
+        Set<Metaset> metasets = new HashSet<Metaset>(metasets.size());
+        for(OsdMetaset om : metasets){
+            metasets.add(om.getMetaset());
+        }
+//        log.debug("found "+metasets.size()+" metasets");
+        return metasets;
+    }
+
+    /**
+     * Fetch a metaset by its given name. Returns null in case there is no such metaset
+     * associated with this object.
+     * @param name the name of the metaset
+     * @return the metaset or null
+     */
+    public Metaset fetchMetaset(String name){
+        Metaset metaset = null;
+        for(Metaset m: fetchMetasets()){
+//            log.debug("check "+name+" vs. "+m.getType().getName());
+            if(m.getType().getName().equals(name)){
+                metaset = m;
+                break;
+            }
+        }
+        return metaset;
+    }
+
 }

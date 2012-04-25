@@ -6,7 +6,7 @@ import org.apache.lucene.document.Document
 import cinnamon.i18n.LocalMessage
 import cinnamon.utils.ParamParser
 
-class IndexItem {
+class IndexItem implements Serializable  {
 
     static constraints = {
         name unique:true, size: 1..Constants.NAME_LENGTH

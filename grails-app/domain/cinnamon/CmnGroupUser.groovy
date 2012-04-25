@@ -1,6 +1,6 @@
 package cinnamon
 
-class CmnGroupUser {
+class CmnGroupUser  implements Serializable {
 
     static constraints = {
         cmnGroup unique: ['userAccount']

@@ -5,7 +5,7 @@ import cinnamon.i18n.LocalMessage
 import cinnamon.global.PermissionName
 import cinnamon.global.Constants
 
-class Permission {
+class Permission  implements Serializable {
 
     public static final String[] defaultPermissions = [
         // object:

@@ -1,6 +1,6 @@
 package cinnamon
 
-class AclEntryPermission {
+class AclEntryPermission implements Serializable  {
 
     static constraints = {
         aclEntry unique: ['permission']

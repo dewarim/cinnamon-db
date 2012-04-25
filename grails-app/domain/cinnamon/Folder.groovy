@@ -15,8 +15,13 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory
 import org.apache.commons.compress.utils.IOUtils
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import cinnamon.exceptions.CinnamonConfigurationException
+import cinnamon.interfaces.IMetasetOwner
+import org.dom4j.Node
+import javax.persistence.EntityManager
+import javax.persistence.Query
+import cinnamon.interfaces.IMetasetJoin
 
-class Folder implements Ownable, Indexable, XmlConvertable {
+class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetasetOwner {
 
     transient def folderService
     transient def userService
@@ -30,6 +35,8 @@ class Folder implements Ownable, Indexable, XmlConvertable {
     static mapping = {
         table 'folders'
     }
+
+    static hasMany = [metasets:FolderMetaset]
 
     String name
     String metadata = "<meta />"
@@ -129,22 +136,6 @@ class Folder implements Ownable, Indexable, XmlConvertable {
 
     Set<Folder> fetchChildren(){
         return Folder.findAll("from Folder f where f.parent=:parent", [parent:this])
-    }
-
-    /**
-     * Set the Metadata on this folder. Tries to parse the submitted string
-     * and throws an exception if it is not valid XML.
-     * @param metadata an XML metadata string
-     *
-     */
-    void setMetadata(String metadata) {
-        if(metadata == null || metadata.trim().length() == 0){
-            this.metadata = "<meta/>";
-        }
-        else{
-            ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
-            this.metadata = metadata;
-        }
     }
 
     /**
@@ -564,7 +555,114 @@ class Folder implements Ownable, Indexable, XmlConvertable {
         return rootFolder;
     }
 
-//    Long getId(){
-//        return id
-//    }
+    /**
+     * @return the compiled metadata of this element (all metasets collected under one meta root element).
+     */
+    public String getMetadata() {
+        // for compatibility: return non-empty metadata, otherwise try to compile metasets
+        if(metadata.length() > 8 && getFolderMetasets().size() == 0){
+            return metadata;
+        }
+        Document doc = DocumentHelper.createDocument();
+        Element root = doc.addElement("meta");
+        for(Metaset m : fetchMetasets()){
+            root.add(Metaset.asElement("metaset", m));
+        }
+        return doc.asXML();
+    }
+
+    /**
+     * Set the Metadata on this folder. Tries to parse the submitted string
+     * and throws an exception if it is not valid XML.<br/>
+     * Note: this parses the meta-xml into metasets and stores them as such.
+     * @param metadata the custom metadata
+     */
+    public void setMetadata(String metadata) {
+        setMetadata(metadata, WritePolicy.BRANCH);
+    }
+
+    /**
+     * Set the Metadata on this item. Tries to parse the submitted string
+     * and throws an exception if it is not valid XML.<br/>
+     * Note: this parses the meta-xml into metasets and stores them as such.
+     * This method does not unlink existing metasets unless you submit metadata without any
+     * metasets inside.
+     * @param metadata the custom metadata
+     * @param writePolicy the WritePolicy - how to treat existing metasets.
+     */
+    public void setMetadata(String metadata, WritePolicy writePolicy) {
+        if (metadata == null || metadata.trim().length() == 0) {
+            this.metadata = "<meta/>";
+        }
+        else {
+            Document doc = ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
+            List<Node> sets = doc.selectNodes("//metaset");
+            if(sets.size() == 0){
+                this.metadata = metadata;
+                if(metasets.size() > 0){
+                    // delete obsolete metasets:
+                    for(Metaset m : fetchMetasets()){
+                        new MetasetService().unlinkMetaset(this, m);
+                    }
+                }
+                return;
+            }
+            for(Node metasetNode : sets){
+                String content = metasetNode.detach().asXML();
+                String metasetTypeName = metasetNode.selectSingleNode("@type").getText();
+                log.debug("metasetType: "+metasetTypeName);
+                MetasetType metasetType = MetasetType.findByName(metasetTypeName);
+                if(metasetType == null){
+                    throw new CinnamonException("error.unknown.metasetType",metasetTypeName);
+                }
+                new MetasetService().createOrUpdateMetaset(this,metasetType, content, writePolicy);
+            }
+        }
+//        this.metadata = metadata;
+    }
+
+    public Set<Metaset> fetchMetasets(){
+        Set<Metaset> metasets = new HashSet<Metaset>(metasets.size());
+        for(FolderMetaset fm : metasets){
+            metasets.add(fm.getMetaset());
+        }
+        return metasets;
+    }
+
+    /**
+     * Fetch a metaset by its given name. Returns null in case there is no such metaset
+     * associated with this object.
+     * @param name the name of the metaset
+     * @return the metaset or null
+     */
+    public Metaset fetchMetaset(String name){
+        Metaset metaset = null;
+        for(Metaset m: fetchMetasets()){
+            if(m.getType().getName().equals(name)){
+                metaset = m;
+                break;
+            }
+        }
+        return metaset;
+    }
+
+    public IMetasetJoin fetchMetasetJoin(MetasetType type){
+        return (IMetasetJoin) FolderMetaset.find("from FolderMetaset o where o.metaset.type=:metasetType and o.folder=:folder",
+        [folder:folderService, metasetType:type]);
+    }
+
+    public void addMetaset(Metaset metaset){
+        // make sure that we do not add a second metaset of the same type:
+        MetasetType metasetType = metaset.getType();
+        IMetasetJoin metasetJoin = fetchMetasetJoin(metasetType);
+        if(metasetJoin != null){
+            log.debug("found existing metasetJoin: "+metasetJoin.getId());
+            throw new CinnamonException("you tried to add a second metaset of type "+metasetType.getName()+" to "+getId());
+        }
+        FolderMetaset om = new FolderMetaset(this, metaset);
+        addToMetasets(om)
+        metaset.addToFolderMetasets(om)
+        om.save()
+    }
+
 }

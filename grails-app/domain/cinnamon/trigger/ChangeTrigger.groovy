@@ -12,7 +12,7 @@ import cinnamon.utils.ParamParser
  * Add transformation functions for specific object types, for example have a PDF-renderer create a new
  * PDF rendition every time an object of ObjectType "document" is changed.
  */
-class ChangeTrigger {
+class ChangeTrigger  implements Serializable {
 
     static constraints = {
         config size: 1..Constants.METADATA_SIZE
@@ -66,7 +66,7 @@ class ChangeTrigger {
     /**
      * Set the config for the ITrigger class.
      * This should be a string in XML format (depends on actual implementation).
-     * For an example, see {@link cinnamon.lifecycle.state.ChangeAclState}.
+     * For an example, see {@link cinnamon.lifecycle.state. ChangeAclState}.
      * If parameter config is null or an empty string, the default value "&gt;config /&lt;"
      * is used.
      *

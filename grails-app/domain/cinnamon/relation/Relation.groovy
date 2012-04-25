@@ -6,7 +6,7 @@ import cinnamon.utils.ParamParser
 import org.dom4j.Element
 import org.dom4j.Node
 
-class Relation {
+class Relation implements Serializable  {
 
     static constraints = {
         leftOSD unique: ['rightOSD', 'type']

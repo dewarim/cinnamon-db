@@ -1,6 +1,9 @@
 class CinnamonDbGrailsPlugin {
+
+    def packaging = "binary"
+    def groupId = 'cinnamon'
     // the plugin version
-    def version = "0.1"
+    def version = "0.1.4"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0 > *"
     // the other plugins this plugin depends on
@@ -12,7 +15,7 @@ class CinnamonDbGrailsPlugin {
 
     // TODO Fill in these fields
     def title = "Cinnamon Db Plugin" // Headline display name of the plugin
-    def author = "Your name"
+    def author = "Ingo Wiarda"
     def authorEmail = ""
     def description = '''\
 Brief summary/description of the plugin.

@@ -3,7 +3,7 @@ package cinnamon
 import org.dom4j.Element
 import cinnamon.Permission as Permission
 
-class AclEntry {
+class AclEntry implements Serializable  {
 
     static mapping = {
         table "aclentries"

@@ -6,7 +6,7 @@ import org.dom4j.DocumentHelper
 import cinnamon.i18n.LocalMessage
 import cinnamon.global.Constants
 
-class ChangeTriggerType {
+class ChangeTriggerType  implements Serializable {
 
     static constraints = {
         name unique:true, size: 1..Constants.NAME_LENGTH

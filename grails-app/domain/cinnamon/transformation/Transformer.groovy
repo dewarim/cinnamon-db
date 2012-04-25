@@ -10,7 +10,7 @@ import org.dom4j.Element
 import org.dom4j.DocumentHelper
 import cinnamon.i18n.LocalMessage
 
-class Transformer {
+class Transformer  implements Serializable {
 
     static constraints = {
 

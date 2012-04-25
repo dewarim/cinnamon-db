@@ -6,7 +6,7 @@ import cinnamon.ObjectSystemData
 import cinnamon.exceptions.CinnamonException
 import cinnamon.utils.ParamParser
 
-class LifeCycleState {
+class LifeCycleState implements Serializable  {
 
     static constraints = {
         name size: 1..Constants.NAME_LENGTH

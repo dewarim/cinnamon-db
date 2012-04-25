@@ -6,7 +6,7 @@ import org.apache.lucene.document.Document
 import cinnamon.exceptions.CinnamonException
 import cinnamon.i18n.LocalMessage
 
-class IndexType {
+class IndexType implements Serializable  {
     public enum DataType {
         STRING, BOOLEAN, DATE_TIME, INTEGER, DECIMAL, TIME, TEXT
     }

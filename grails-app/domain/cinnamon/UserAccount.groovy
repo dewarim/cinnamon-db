@@ -4,7 +4,7 @@ import org.dom4j.Element
 import cinnamon.global.Constants
 import cinnamon.i18n.UiLanguage
 
-class UserAccount {
+class UserAccount  implements Serializable {
 
     static hasMany = [groupUsers:CmnGroupUser]
     static mapping = {
