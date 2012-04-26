@@ -10,7 +10,7 @@ import cinnamon.exceptions.CinnamonException
 import cinnamon.utils.ParamParser
 import org.dom4j.Document
 import org.dom4j.DocumentHelper
-import javax.persistence.EntityManager
+
 import org.dom4j.Element
 import cinnamon.global.Conf
 import cinnamon.global.ConfThreadLocal
@@ -18,7 +18,7 @@ import cinnamon.utils.FileKeeper
 import javax.persistence.NoResultException
 import cinnamon.utils.ContentReader
 import org.dom4j.Node
-import javax.persistence.Query
+
 import cinnamon.interfaces.IMetasetJoin
 import cinnamon.exceptions.CinnamonConfigurationException
 import cinnamon.interfaces.IMetasetOwner
@@ -904,4 +904,5 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         return metaset;
     }
 
+    Long myId() { return id }
 }

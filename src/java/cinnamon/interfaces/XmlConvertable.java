@@ -10,6 +10,7 @@ import org.dom4j.Element;
 public interface XmlConvertable extends Comparable<XmlConvertable> {
 
 	void toXmlElement(Element root);
-//	Long getId();
+    // getId() would be better, but runs into problems with dynamically generated GORM getId() method.
+    Long myId();
 
 }

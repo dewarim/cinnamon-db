@@ -1,6 +1,6 @@
 import org.springframework.jdbc.datasource.DriverManagerDataSource
 import humulus.Environment
-import cinnamon.CinnamonUserDetailsService
+import CinnamonUserDetailsService
 import humulus.CinnamonPasswordEncoder
 import humulus.RepositoryLoginFilter
 import humulus.SwitchableDataSource

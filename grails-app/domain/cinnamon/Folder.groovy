@@ -17,8 +17,7 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import cinnamon.exceptions.CinnamonConfigurationException
 import cinnamon.interfaces.IMetasetOwner
 import org.dom4j.Node
-import javax.persistence.EntityManager
-import javax.persistence.Query
+
 import cinnamon.interfaces.IMetasetJoin
 
 class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetasetOwner {
@@ -560,7 +559,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      */
     public String getMetadata() {
         // for compatibility: return non-empty metadata, otherwise try to compile metasets
-        if(metadata.length() > 8 && getFolderMetasets().size() == 0){
+        if(metadata.length() > 8 && metasets.size() == 0){
             return metadata;
         }
         Document doc = DocumentHelper.createDocument();
@@ -665,4 +664,5 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         om.save()
     }
 
+    Long myId() { return id }
 }

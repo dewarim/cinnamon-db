@@ -4,8 +4,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import cinnamon.interfaces.IMetasetOwner
 import cinnamon.interfaces.IMetasetJoin
-import javax.persistence.EntityManager
-import javax.persistence.Query
+
 import cinnamon.global.PermissionName
 import cinnamon.exceptions.CinnamonException
 

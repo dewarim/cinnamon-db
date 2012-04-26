@@ -16,6 +16,7 @@ public interface IMetasetOwner extends Indexable {
     void addMetaset(Metaset metaset);
     Acl getAcl();
     IMetasetJoin fetchMetasetJoin(MetasetType type);
-    long getId();
+    // getId() would be better, but runs into problems with dynamically generated GORM getId() method.
+    Long myId();
 
 }
