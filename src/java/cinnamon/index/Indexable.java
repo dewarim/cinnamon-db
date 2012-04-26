@@ -64,4 +64,6 @@ public interface Indexable {
 	void setIndexed(Date date);
     
     Boolean hasXmlContent();
+    
+    Long myId();
 }
