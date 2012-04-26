@@ -62,4 +62,6 @@ public interface Indexable {
      * @param date Java date object which defines moment of the last update event.
      */
 	void setIndexed(Date date);
+    
+    Boolean hasXmlContent();
 }

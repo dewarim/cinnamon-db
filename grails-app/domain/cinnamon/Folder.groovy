@@ -541,7 +541,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      *
      * @return	Folder rootFolder
      */
-    public Folder findRootFolder(){
+    static  Folder findRootFolder(){
         def rootFolder = Folder.find("select f from Folder f where f.name=:name and f.parent.id=f.id",
             [name:Constants.ROOT_FOLDER_NAME]
         )
@@ -665,4 +665,9 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     Long myId() { return id }
+
+    public Boolean hasXmlContent(){
+        return false;
+    }
+
 }

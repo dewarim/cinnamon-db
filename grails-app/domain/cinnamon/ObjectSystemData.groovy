@@ -25,9 +25,8 @@ import cinnamon.interfaces.IMetasetOwner
 
 class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner{
 
-    def folderService
-    def userService
-
+    public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
+    
     static constraints = {
         contentPath(size: 0..255, nullable: true)
         contentSize(nullable: true)
@@ -905,4 +904,42 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
     }
 
     Long myId() { return id }
+
+    /**
+     * Check if the content can be considered to be XML. This is used by the LuceneBridge to
+     * determine if it's worth parsing the content with an XML-Parser. Previously we would
+     * try to parse everything, but this is a waste of time and memory (especially when reading
+     * huge files only to have the parser croak on seeing that it's a zip archive etc)
+     * A somewhat crude heuristic (format.contenttype.endsWith("xml")) is used to detect xml content
+     * at the moment.
+     * @return true if the content is probably xml, false if not.
+     */
+    public Boolean hasXmlContent(){
+        if(format == null){
+            return false;
+        }
+        return getFormat().getExtension().toLowerCase().matches(fetchXmlFormatList());
+    }
+
+    /**
+     * You can add a config entry to define formats that can be parsed by XML/XPath based IndexItems.
+     * For example, DITA files are XML, but have their own extension.
+     * The default xmlFormatList is: "xml|xhtml|dita|ditamap"
+     * @return a String that may be used as a regex to filter for invalid format extensions<br/>
+     * Example: may return "dita|xml|foo"
+     */
+    String fetchXmlFormatList(){
+        ConfigEntry formatList = ConfigEntry.findByName("xml.format.list");
+        if(formatList == null){
+            log.debug("Did not find xml.format.list config entry, returning defaultXmlFormatList.");
+            return defaultXmlFormatList;
+        }
+        Node formatListNode = ParamParser.parseXmlToDocument(formatList.getConfig()).selectSingleNode("//format");
+        if(formatListNode == null){
+            log.debug("Did not find format node in xml.format.list config entry, returning defaultXmlFormatlist.");
+            return defaultXmlFormatList;
+        }
+        log.debug("Found formatList: " + formatListNode.getText());
+        return formatListNode.getText();
+    }
 }
