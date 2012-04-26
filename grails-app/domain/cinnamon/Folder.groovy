@@ -9,22 +9,19 @@ import cinnamon.exceptions.CinnamonException
 import org.dom4j.Element
 import org.dom4j.Document
 import org.dom4j.DocumentHelper
-import cinnamon.global.ConfThreadLocal
-import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
-import org.apache.commons.compress.archivers.ArchiveStreamFactory
-import org.apache.commons.compress.utils.IOUtils
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import cinnamon.exceptions.CinnamonConfigurationException
 import cinnamon.interfaces.IMetasetOwner
 import org.dom4j.Node
 
 import cinnamon.interfaces.IMetasetJoin
+import org.slf4j.LoggerFactory
+import org.slf4j.Logger
 
 class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetasetOwner {
 
-    transient def folderService
-    transient def userService
-
+    def folderService
+    def userService
+    
     static constraints = {
         name unique:['parent'], size: 1..Constants.NAME_LENGTH
         metadata( size: 1..Constants.METADATA_SIZE)
@@ -81,7 +78,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         log.debug("trying to find parent folder with id "+parentId);
 
         if(parentId == 0){
-            this.parent = folderService.findRootFolder();
+            this.parent = Folder.findRootFolder();
             log.debug("got root folder:  "+parent);
         }
         else{
@@ -138,10 +135,12 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     /**
+     * // TODO: move XML serialization to a service class 
      * Add the folder as XML Element "folder" to the parameter Element.
      * @param root
      */
     public void toXmlElement(Element root){
+        
         Element folder = root.addElement("folder");
         folder.addElement("id").addText(String.valueOf(getId()) );
         folder.addElement("name").addText( getName());
@@ -170,10 +169,10 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
       *
       */
     public int compareTo(XmlConvertable o) {
-        if(getId() > o.getId()){
+        if(getId() > o.myId()){
             return 1;
         }
-        else if(getId() < o.getId()){
+        else if(getId() < o.myId()){
             return -1;
         }
         return 0;
@@ -242,91 +241,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         return path.toString();
     }
 
-    /**
-     * Create a zipped folder containing those OSDs and subfolders (recursively) which the
-     * validator allows. <br/>
-     * Zip file encoding compatibility is difficult to achieve.<br/>
-     * Using Cp437 as encoding will generate zip archives which can be unpacked with MS Windows XP
-     * system utilities and also with the Linux unzip tool v6.0 (although the unzip tool will list them
-     * as corrupted filenames with "?" in place for the special characters, it should unpack them
-     * correctly). In tests, 7zip was unable to unpack those archives without messing up the filenames
-     * - it requires UTF8 as encoding, as far as I can tell.<br/>
-     * see: http://commons.apache.org/compress/zip.html#encoding<br/>
-     * to manually test this, use: https://github.com/dewarim/GrailsBasedTesting
-     * @param folderDao data access object for Folder objects
-     * @param latestHead if set to true, only add objects with latestHead=true, if set to false include only
-     *                   objects with latestHead=false, if set to null: include everything regardless of
-     *                   latestHead status.
-     * @param latestBranch if set to true, only add objects with latestBranch=true, if set to false include only
-     *                   objects with latestBranch=false, if set to null: include everything regardless of
-     *                     latestBranch status.
-     * @param validator a Validator object which should be configured for the current user to check if access
-     *                  to objects and folders inside the given folder is allowed. The content of this folder
-     *                  will be filtered before it is added to the archive.
-     * @return the zip archive of the given folder
-     */
-    public File createZippedFolder(session, Boolean latestHead, Boolean latestBranch,
-                                   Validator validator){
-        String repositoryName = session.repositoryName;
-        final File sysTempDir = new File(System.getProperty("java.io.tmpdir"));
-        File tempFolder = new File(sysTempDir, UUID.randomUUID().toString());
-        if (!tempFolder.mkdirs()) {
-            throw new CinnamonException(("error.create.tempFolder.fail"));
-        }
-
-        List<Folder> folders = new ArrayList<Folder>();
-        folders.add(this);
-        folders.addAll(folderService.getSubfolders(this, true));
-        folders = validator.filterUnbrowsableFolders(folders);
-        log.debug("# of folders found: "+folders.size());
-        // create zip archive:
-        File zipFile = null;
-        try {
-            zipFile = File.createTempFile("cinnamonArchive", "zip");
-            final OutputStream out = new FileOutputStream(zipFile);
-            ZipArchiveOutputStream zos = (ZipArchiveOutputStream) new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP, out);
-            String encoding = ConfThreadLocal.getConf().getField("zipFileEncoding", "Cp437");
-
-            log.debug("current file.encoding: "+System.getProperty("file.encoding"));
-            log.debug("current Encoding for ZipArchive: "+zos.getEncoding()+"; will now set: "+encoding);
-            zos.setEncoding(encoding);
-            zos.setFallbackToUTF8(true);
-            zos.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
-
-            for (Folder folder : folders) {
-                String path =  folder.fetchPath().replace(fetchPath(), name); // do not include the parent folders up to root.
-                log.debug("zipFolderPath: "+path);
-                File currentFolder = new File(tempFolder, path);
-                if (!currentFolder.mkdirs()) {
-                    // log.warn("failed  to create folder for: "+currentFolder.getAbsolutePath());
-                }
-                List<ObjectSystemData> osds = validator.filterUnbrowsableObjects(
-                       folderService.getFolderContent(folder, false, latestHead, latestBranch));
-                for (ObjectSystemData osd : osds) {
-                    if (osd.getContentSize() == null) {
-                        continue;
-                    }
-                    File outFile = osd.createFilenameFromName(currentFolder);
-                    // the name in the archive should be the path without the temp folder part prepended.
-                    String zipEntryPath = outFile.getAbsolutePath().replace(tempFolder.getAbsolutePath(), "");
-                    if(zipEntryPath.startsWith(File.separator)){
-                        zipEntryPath = zipEntryPath.substring(1);
-                    }
-                    log.debug("zipEntryPath: "+zipEntryPath);
-
-                    zipEntryPath = zipEntryPath.replaceAll("\\\\","/");
-                    zos.putArchiveEntry(new ZipArchiveEntry(zipEntryPath));
-                    IOUtils.copy(new FileInputStream(osd.getFullContentPath(repositoryName)), zos);
-                    zos.closeArchiveEntry();
-                }
-            }
-            zos.close();
-        } catch (Exception e) {
-            log.debug("Failed to create zipFolder:", e);
-            throw new CinnamonException("error.zipFolder.fail", e.getLocalizedMessage());
-        }
-        return zipFile;
-    }
+ 
 
     // TODO: rename method
     public boolean is_rootfolder(){
@@ -546,6 +461,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
             [name:Constants.ROOT_FOLDER_NAME]
         )
         if(! rootFolder){
+            Logger log = LoggerFactory.getLogger(Folder.class);
             log.error("RootFolder is missing!");
             throw new CinnamonConfigurationException("Could not find the root folder. Please create a folder called "+Constants.ROOT_FOLDER_NAME
                     + " with parent_id == its own id.");
