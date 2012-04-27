@@ -549,7 +549,7 @@ class Validator implements ResultValidator {
             return permissionCache.get(permissionName);
         }
         else {
-            Permission permission = Permission.fetch(permissionName);
+            Permission permission = Permission.findByName(permissionName);
             permissionCache.put(permissionName, permission);
             return permission;
         }
