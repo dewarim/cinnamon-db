@@ -14,6 +14,7 @@ class FolderType {
 
     static mapping = {
         table 'folder_types'
+        version 'obj_version'
     }
 
     String name

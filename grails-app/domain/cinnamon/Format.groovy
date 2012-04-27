@@ -17,6 +17,7 @@ class Format implements Serializable  {
 
     static mapping = {
         table 'formats'
+        version 'obj_version'
     }
 
     String name

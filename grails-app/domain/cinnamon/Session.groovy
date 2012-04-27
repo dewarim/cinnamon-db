@@ -5,6 +5,10 @@ import cinnamon.global.ConfThreadLocal
 import cinnamon.exceptions.CinnamonException
 import cinnamon.global.Constants
 
+/*
+ * Design Note: it may be easier in the long run to use session cookies or ids,
+ * but then we may lose the feature to have multiple sessions from one user.
+ */
 class Session  implements Serializable {
 
     static constraints = {
@@ -14,6 +18,11 @@ class Session  implements Serializable {
         message size: 0..65000, blank: true
     }
 
+    static mapping = {
+        table 'sessions'
+        version 'obj_version'
+    }
+    
     String ticket
     Date expires = new Date()
     Long lifetime

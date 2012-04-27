@@ -8,6 +8,7 @@ class Acl  implements Serializable {
 
     static mapping = {
         table 'acls'
+        version 'obj_version'
     }
 
     static constraints = {

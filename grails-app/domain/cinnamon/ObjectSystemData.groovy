@@ -657,7 +657,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         return file;
     }
 
-    String fetchVersionPredicate(String versions) {
+    static String fetchVersionPredicate(String versions) {
         String versionPred;
         if (versions == null || versions.length() == 0 || versions.equals("head")) {
             versionPred = " and latesthead=true";

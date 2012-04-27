@@ -22,6 +22,11 @@ class CustomTable implements Serializable {
         jdbcDriver(size: 1..128)
     }
 
+    static mapping = {
+        table('customtables')
+        version 'obj_version'
+    }
+    
     String name
     String connstring
     Acl acl

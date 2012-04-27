@@ -9,6 +9,7 @@ class UserAccount  implements Serializable {
     static hasMany = [groupUsers:CmnGroupUser]
     static mapping = {
         table 'users'
+        version 'obj_version'
     }
     static constraints = {
         name unique: true, size: 1..Constants.NAME_LENGTH, validator: {val, obj ->

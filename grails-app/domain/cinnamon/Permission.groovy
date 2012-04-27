@@ -33,6 +33,7 @@ class Permission  implements Serializable {
     
     static mapping = {
         table "permissions"
+        version 'obj_version'
     }
 
     static hasMany = [aePermissions:AclEntryPermission]

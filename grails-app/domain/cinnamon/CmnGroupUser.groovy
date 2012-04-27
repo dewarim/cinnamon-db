@@ -6,9 +6,15 @@ class CmnGroupUser  implements Serializable {
         cmnGroup unique: ['userAccount']
     }
 
-    CmnGroup cmnGroup
-    UserAccount userAccount
-
+    static belongsTo = [cmnGroup:CmnGroup, userAccount:UserAccount]
+    
+    static mapping = {
+        table('group_users')
+        version 'obj_version'
+        cmnGroup column: 'group_id'
+        userAccount column: 'user_id'
+    }
+    
     boolean equals(o) {
         if (this.is(o)) return true
         if (!(o instanceof CmnGroupUser)) return false

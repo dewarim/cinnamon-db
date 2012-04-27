@@ -3,8 +3,14 @@ package cinnamon
 class OsdMetaset {
 
     static constraints = {
+        osd unique: ['metaset']
     }
 
+    static mapping = {
+        table 'osd_metasets'
+        version 'obj_version'
+    }
+    
     ObjectSystemData osd
     Metaset metaset
 

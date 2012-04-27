@@ -12,6 +12,7 @@ class UiLanguage implements Serializable{
 
     static mapping = {
         table('ui_languages')
+        version 'obj_version'
     }
 
     String isoCode

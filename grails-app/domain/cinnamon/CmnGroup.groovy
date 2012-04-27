@@ -6,6 +6,8 @@ class CmnGroup implements Serializable  {
 
     static mapping = {
         table 'groups'
+        version 'obj_version'
+        parent column: 'parent_id'
     }
 
     static hasMany = [groupUsers:CmnGroupUser, aclEntries:AclEntry]
@@ -13,6 +15,7 @@ class CmnGroup implements Serializable  {
     static constraints = {
         name unique: true , size: 1..Constants.NAME_LENGTH
         description size:  0..Constants.DESCRIPTION_SIZE, blank: true
+        parent nullable: true
     }
 
     public static final String ALIAS_OWNER 		= "_owner";
@@ -21,7 +24,7 @@ class CmnGroup implements Serializable  {
 
     String name
     String description
-    Boolean groupOfOne // formerly known as is_user
+    Boolean groupOfOne = false // formerly known as is_user
     CmnGroup parent
 
     public CmnGroup(){

@@ -11,6 +11,11 @@ class Metaset {
         content size: 1..Constants.METADATA_SIZE
     }
 
+    static mapping = {
+        table('metasets')
+        version 'obj_version'
+    }
+    
     static hasMany = [osdMetasets:OsdMetaset, folderMetasets:FolderMetaset]
 
     String content

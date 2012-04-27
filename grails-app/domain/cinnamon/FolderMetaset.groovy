@@ -5,6 +5,11 @@ class FolderMetaset {
     static constraints = {
     }
 
+    static mapping = {
+        table('folder_metasets')
+        version 'obj_version'
+    }
+    
     Folder folder
     Metaset metaset
 

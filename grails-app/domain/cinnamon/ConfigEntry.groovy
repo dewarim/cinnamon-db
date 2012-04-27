@@ -16,6 +16,7 @@ class ConfigEntry  implements Serializable {
 
     static mapping = {
         table('config_entries')
+        version 'obj_version'
     }
 
     String name

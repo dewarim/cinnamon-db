@@ -18,6 +18,8 @@ class RelationResolver  implements Serializable, IXmlDumper {
 
     static mapping = {
         table 'relation_resolvers'
+        version 'obj_version'
+        resolverClass column: 'class_name'
     }
 
     String name = ""

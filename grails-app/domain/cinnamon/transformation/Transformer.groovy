@@ -13,7 +13,12 @@ import cinnamon.i18n.LocalMessage
 class Transformer  implements Serializable {
 
     static constraints = {
-
+        name unique: true
+    }
+    
+    static mapping = {
+        table('transformers')
+        version 'obj_version'
     }
     String name
     String description

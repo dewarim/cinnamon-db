@@ -15,6 +15,7 @@ class ObjectType implements Serializable  {
 
     static mapping = {
         table 'objtypes'
+        version 'obj_version'
     }
 
     String name

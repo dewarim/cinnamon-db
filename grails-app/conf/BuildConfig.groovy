@@ -49,7 +49,7 @@ grails.project.dependency.resolution = {
         compile(':webxml:1.4.1')
         compile(':jquery:1.7.1')
         compile(':resources:1.1.6')
-        compile(':spring-security-core:1.2.7.2')
+//        compile(':spring-security-core:1.2.7.2')
 
     }
 }

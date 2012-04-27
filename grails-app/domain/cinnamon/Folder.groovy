@@ -30,6 +30,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
     static mapping = {
         table 'folders'
+        version 'obj_version'
     }
 
     static hasMany = [metasets:FolderMetaset]

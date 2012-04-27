@@ -14,6 +14,7 @@ class Relation implements Serializable  {
 
     static mapping = {
         table('relations')
+        version 'obj_version'
     }
 
     RelationType type

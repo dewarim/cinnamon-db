@@ -20,6 +20,7 @@ class ChangeTrigger  implements Serializable {
 
     static mapping = {
         table('change_triggers')
+        version 'obj_version'
     }
 
     ChangeTriggerType triggerType

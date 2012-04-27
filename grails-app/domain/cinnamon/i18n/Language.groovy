@@ -15,6 +15,7 @@ class Language implements Serializable {
 
     static mapping = {
         table('languages')
+        version 'obj_version'
     }
 
     String isoCode

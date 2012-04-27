@@ -18,6 +18,7 @@ class RelationType implements IXmlDumper {
 
     static mapping = {
         table 'relationtypes'
+        version 'obj_version'
     }
 
     String name

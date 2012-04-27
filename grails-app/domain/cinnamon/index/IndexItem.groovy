@@ -16,6 +16,10 @@ class IndexItem implements Serializable  {
         vaProviderParams(size: 1..Constants.XML_PARAMS)
     }
 
+    static mapping = {
+        version 'obj_version'
+    }
+    
     static belongsTo = [indexType:IndexType, indexGroup:IndexGroup]
 
     String name

@@ -10,6 +10,8 @@ class Message implements Serializable {
 
     static mapping = {
         table('messages')
+        version 'obj_version'
+        language column: 'ui_language_id'
     }
 
     String message

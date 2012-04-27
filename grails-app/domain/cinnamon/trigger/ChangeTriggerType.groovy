@@ -13,6 +13,10 @@ class ChangeTriggerType  implements Serializable {
         description size: 1..Constants.DESCRIPTION_SIZE
     }
 
+    static mapping = {
+        version 'obj_version'
+    }
+    
     String name
     String description
     Class<? extends ITrigger> triggerClass;

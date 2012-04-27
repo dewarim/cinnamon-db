@@ -13,6 +13,7 @@ class LifeCycle implements Serializable  {
 
     static mapping = {
         table('lifecycles')
+        version 'obj_version'
     }
 
     String name

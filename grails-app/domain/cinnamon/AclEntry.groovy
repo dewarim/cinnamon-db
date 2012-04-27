@@ -7,6 +7,7 @@ class AclEntry implements Serializable  {
 
     static mapping = {
         table "aclentries"
+        version 'obj_version'
     }
 
     static constraints = {

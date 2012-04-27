@@ -13,6 +13,11 @@ class MetasetType {
         config size: 1..Constants.XML_PARAMS
     }
 
+    static mapping = {
+        table('metaset_types')
+        version 'obj_version'
+    }
+    
     String name
     String description
     String config = '<metaset />'

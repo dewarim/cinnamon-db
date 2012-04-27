@@ -4,3 +4,14 @@ Group.is_user => Group.groupOfOne
 User => UserAccount ("user" is a reserved word in several database dialects)
 Group => CmnGroup ("group" is a reserved word in SQL, and always having to escape table names gets old very quickly,
     to say nothing about automatically generated code which sometimes cannot do this properly.)
+    
+Database changes
+groups: rename is_user to group_of_one   
+formats: add obj_version column   
+objtypes: add obj_version column   
+messages: add obj_version column
+
+alter table groups rename is_user to group_of_one;
+alter table formats add column obj_version bigint default 0 NOT NULL;
+alter table objtypes add column obj_version bigint default 0 NOT NULL;
+alter table messages add column obj_version bigint default 0 NOT NULL;

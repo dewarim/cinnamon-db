@@ -10,6 +10,10 @@ class IndexGroup implements Serializable{
         name unique:true, size: 1..Constants.NAME_LENGTH
     }
 
+    static mapping = {
+        version 'obj_version'
+    }
+    
     static hasMany = [items:IndexItem]
 
     String name
