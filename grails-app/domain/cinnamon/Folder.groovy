@@ -43,6 +43,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     FolderType type
     Acl acl
     Date indexed = new Date()
+    
+    Set metasets = [] 
 
     public Folder(){
 
@@ -276,7 +278,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         result = (name != null ? name.hashCode() : 0)
         result = 31 * result + (metadata != null ? metadata.hashCode() : 0)
         result = 31 * result + (owner != null ? owner.hashCode() : 0)
-        result = 31 * result + (parent != null ? parent.hashCode() : 0)
         result = 31 * result + (indexOk != null ? indexOk.hashCode() : 0)
         result = 31 * result + (type != null ? type.hashCode() : 0)
         result = 31 * result + (acl != null ? acl.hashCode() : 0)
@@ -458,7 +459,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * @return	Folder rootFolder
      */
     static  Folder findRootFolder(){
-        def rootFolder = Folder.find("select f from Folder f where f.name=:name and f.parent.id=f.id",
+        def rootFolder = Folder.find("from Folder f where f.name=:name and f.parent=f",
             [name:Constants.ROOT_FOLDER_NAME]
         )
         if(! rootFolder){
