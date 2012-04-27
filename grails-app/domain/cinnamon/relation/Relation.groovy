@@ -13,6 +13,7 @@ class Relation implements Serializable  {
     }
 
     static mapping = {
+        cache true
         table('relations')
         version 'obj_version'
     }

@@ -32,6 +32,7 @@ class Permission  implements Serializable {
     }
     
     static mapping = {
+        cache true
         table "permissions"
         version 'obj_version'
     }

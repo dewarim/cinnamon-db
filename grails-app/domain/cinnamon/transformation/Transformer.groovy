@@ -17,6 +17,7 @@ class Transformer  implements Serializable {
     }
     
     static mapping = {
+        cache true
         table('transformers')
         version 'obj_version'
     }

@@ -12,6 +12,7 @@ class LifeCycle implements Serializable  {
     }
 
     static mapping = {
+        cache true
         table('lifecycles')
         version 'obj_version'
     }

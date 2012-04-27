@@ -13,6 +13,7 @@ class FolderType {
     }
 
     static mapping = {
+        cache true
         table 'folder_types'
         version 'obj_version'
     }

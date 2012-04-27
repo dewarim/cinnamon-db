@@ -7,6 +7,7 @@ import cinnamon.i18n.LocalMessage
 class Acl  implements Serializable {
 
     static mapping = {
+        cache true
         table 'acls'
         version 'obj_version'
     }

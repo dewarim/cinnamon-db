@@ -19,6 +19,7 @@ class LifeCycleState implements Serializable  {
     static belongsTo = [lifecycle:LifeCycle]
 
     static mapping = {
+        cache true
         table('lifecycle_states')
         version 'obj_version'
     }

@@ -14,6 +14,7 @@ class ObjectType implements Serializable  {
     }
 
     static mapping = {
+        cache true
         table 'objtypes'
         version 'obj_version'
     }

@@ -5,6 +5,7 @@ import cinnamon.global.Constants
 class CmnGroup implements Serializable  {
 
     static mapping = {
+        cache true
         table 'groups'
         version 'obj_version'
         parent column: 'parent_id'

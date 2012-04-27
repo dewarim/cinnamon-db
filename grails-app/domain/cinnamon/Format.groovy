@@ -16,6 +16,7 @@ class Format implements Serializable  {
     }
 
     static mapping = {
+        cache true
         table 'formats'
         version 'obj_version'
     }

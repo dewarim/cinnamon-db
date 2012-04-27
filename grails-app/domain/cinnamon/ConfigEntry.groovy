@@ -15,6 +15,7 @@ class ConfigEntry  implements Serializable {
     }
 
     static mapping = {
+        cache true
         table('config_entries')
         version 'obj_version'
     }

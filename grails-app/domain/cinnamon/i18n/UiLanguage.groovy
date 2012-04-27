@@ -11,6 +11,7 @@ class UiLanguage implements Serializable{
     }
 
     static mapping = {
+        cache true
         table('ui_languages')
         version 'obj_version'
     }

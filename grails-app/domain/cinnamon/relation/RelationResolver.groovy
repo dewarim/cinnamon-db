@@ -17,6 +17,7 @@ class RelationResolver  implements Serializable, IXmlDumper {
     }
 
     static mapping = {
+        cache true
         table 'relation_resolvers'
         version 'obj_version'
         resolverClass column: 'class_name'

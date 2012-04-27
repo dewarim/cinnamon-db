@@ -23,6 +23,7 @@ class CustomTable implements Serializable {
     }
 
     static mapping = {
+        cache true
         table('customtables')
         version 'obj_version'
     }

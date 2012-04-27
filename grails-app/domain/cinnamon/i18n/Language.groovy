@@ -6,14 +6,13 @@ import org.dom4j.Element
 
 class Language implements Serializable {
 
-
-
     static constraints = {
         isoCode(unique: true, size: 1..Constants.MAX_ISO_CODE_LENGTH)
         metadata(size: 1..Constants.METADATA_SIZE)
     }
 
     static mapping = {
+        cache true
         table('languages')
         version 'obj_version'
     }

@@ -19,6 +19,7 @@ class ChangeTrigger  implements Serializable {
     }
 
     static mapping = {
+        cache true
         table('change_triggers')
         version 'obj_version'
     }

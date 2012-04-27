@@ -14,6 +14,7 @@ class MetasetType {
     }
 
     static mapping = {
+        cache true
         table('metaset_types')
         version 'obj_version'
     }

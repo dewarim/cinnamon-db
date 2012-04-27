@@ -17,6 +17,7 @@ class RelationType implements IXmlDumper {
     }
 
     static mapping = {
+        cache true
         table 'relationtypes'
         version 'obj_version'
     }
