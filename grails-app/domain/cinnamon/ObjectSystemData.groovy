@@ -76,7 +76,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
     Boolean latestBranch = true
     String version = '1'
     LifeCycleState state
-
+    Set metasets = []
 
     public ObjectSystemData() {
 
