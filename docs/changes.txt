@@ -22,3 +22,4 @@ alter table objects rename column latestbranch to latest_branch;
 alter table objects rename column latesthead to latest_head;
 alter table relations rename column leftid to left_id;
 alter table relations rename column rightid to right_id;
+alter table change_triggers rename column trigger_type_id to change_trigger_type_id;

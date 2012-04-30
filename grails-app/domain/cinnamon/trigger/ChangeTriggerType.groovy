@@ -13,9 +13,12 @@ class ChangeTriggerType  implements Serializable {
         description size: 1..Constants.DESCRIPTION_SIZE
     }
 
+    static hasMany = [changeTriggers:ChangeTrigger]
+    
     static mapping = {
         cache true
         version 'obj_version'
+        table 'change_trigger_types'
     }
     
     String name

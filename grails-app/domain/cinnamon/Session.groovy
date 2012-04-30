@@ -21,6 +21,7 @@ class Session  implements Serializable {
     static mapping = {
         table 'sessions'
         version 'obj_version'
+        language column: 'ui_language_id'
     }
     
     String ticket

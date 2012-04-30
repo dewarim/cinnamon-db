@@ -18,13 +18,15 @@ class ChangeTrigger  implements Serializable {
         config size: 1..Constants.METADATA_SIZE
     }
 
+    static belongsTo = [triggerType:ChangeTriggerType]
+    
     static mapping = {
         cache true
         table('change_triggers')
         version 'obj_version'
+        triggerType column: 'change_trigger_type_id'
     }
 
-    ChangeTriggerType triggerType
     Integer ranking = 1
     String command
     Boolean active = false
