@@ -16,6 +16,8 @@ class Relation implements Serializable  {
         cache true
         table('relations')
         version 'obj_version'
+        leftOSD column: 'left_id'
+        rightOSD column: 'right_id'
     }
 
     RelationType type

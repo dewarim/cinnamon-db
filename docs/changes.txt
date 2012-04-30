@@ -10,8 +10,15 @@ groups: rename is_user to group_of_one
 formats: add obj_version column   
 objtypes: add obj_version column   
 messages: add obj_version column
+objects: rename lang_id to language_id
+
 
 alter table groups rename is_user to group_of_one;
 alter table formats add column obj_version bigint default 0 NOT NULL;
 alter table objtypes add column obj_version bigint default 0 NOT NULL;
 alter table messages add column obj_version bigint default 0 NOT NULL;
+alter table objects rename column lang_id to language_id;
+alter table objects rename column latestbranch to latest_branch;
+alter table objects rename column latesthead to latest_head;
+alter table relations rename column leftid to left_id;
+alter table relations rename column rightid to right_id;

@@ -46,6 +46,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
     static mapping = {
         table('objects')
         version 'obj_version'
+        appName column: 'appname'
     }
 
     static hasMany = [metasets:OsdMetaset]

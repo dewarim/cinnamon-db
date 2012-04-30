@@ -9,6 +9,7 @@ class AclEntryPermission implements Serializable  {
     static mapping = {
         table('aclentry_permissions')
         version 'obj_version'
+        aclEntry column: 'aclentry_id'
     }
 
     AclEntry aclEntry
