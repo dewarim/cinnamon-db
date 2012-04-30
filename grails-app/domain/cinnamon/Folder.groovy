@@ -508,8 +508,16 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * @param writePolicy the WritePolicy - how to treat existing metasets.
      */
     public void setMetadata(String metadata, WritePolicy writePolicy) {
-        if (metadata == null || metadata.trim().length() == 0) {
+        if (metadata == null || metadata.trim().length() < 9) {
             this.metadata = "<meta/>";
+            metasets.each{FolderMetaset folderMetaset ->
+                Metaset metaset = folderMetaset.metaset
+                folderMetaset.doDelete()
+                def metaCount = FolderMetaset.countByMetaset(metaset) + OsdMetaset.countByMetaset(metaset)
+                if(metaCount == 0){
+                    metaset.delete()
+                }
+            }
         }
         else {
             Document doc = ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
