@@ -1,6 +1,8 @@
 package cinnamon
 
-class OsdMetaset {
+import cinnamon.interfaces.IMetasetJoin
+
+class OsdMetaset implements IMetasetJoin {
 
     static constraints = {
         osd unique: ['metaset']

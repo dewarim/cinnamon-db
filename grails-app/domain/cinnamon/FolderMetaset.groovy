@@ -1,6 +1,8 @@
 package cinnamon
 
-class FolderMetaset {
+import cinnamon.interfaces.IMetasetJoin
+
+class FolderMetaset implements IMetasetJoin {
 
     static constraints = {
     }
