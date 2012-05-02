@@ -21,10 +21,11 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
     def folderService
     def userService
-    
+    def metasetService
+
     static constraints = {
-        name unique:['parent'], size: 1..Constants.NAME_LENGTH
-        metadata( size: 1..Constants.METADATA_SIZE)
+        name unique: ['parent'], size: 1..Constants.NAME_LENGTH
+        metadata(size: 1..Constants.METADATA_SIZE)
         parent nullable: true
     }
 
@@ -33,7 +34,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         version 'obj_version'
     }
 
-    static hasMany = [metasets:FolderMetaset]
+    static hasMany = [metasets: FolderMetaset]
 
     String name
     String metadata = "<meta />"
@@ -43,14 +44,14 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     FolderType type
     Acl acl
     Date indexed = new Date()
-    
-    Set metasets = [] 
 
-    public Folder(){
+    Set metasets = []
+
+    public Folder() {
 
     }
 
-    public Folder(Folder that){
+    public Folder(Folder that) {
         name = that.name;
         owner = that.owner;
         parent = that.parent;
@@ -62,7 +63,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     // TODO: determine which constructors are really needed.
-    public Folder(String name, String metadata, Acl acl, Folder parent, UserAccount owner, FolderType type){
+    public Folder(String name, String metadata, Acl acl, Folder parent, UserAccount owner, FolderType type) {
         this.name = name;
         setMetadata(metadata);
         this.acl = acl;
@@ -71,70 +72,70 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         this.type = type;
     }
 
-    public Folder(Map<String, String> cmd){
+    public Folder(Map<String, String> cmd) {
         log.debug("Entering Folder-Constructor");
 
         this.name = cmd.get("name");
         this.setMetadata(cmd.get("metadata"));
-        Long parentId= ParamParser.parseLong(cmd.get("parentid"), "error.param.parent_id");
+        Long parentId = ParamParser.parseLong(cmd.get("parentid"), "error.param.parent_id");
 
-        log.debug("trying to find parent folder with id "+parentId);
+        log.debug("trying to find parent folder with id " + parentId);
 
-        if(parentId == 0){
+        if (parentId == 0) {
             this.parent = Folder.findRootFolder();
-            log.debug("got root folder:  "+parent);
+            log.debug("got root folder:  " + parent);
         }
-        else{
+        else {
             Folder myParent = Folder.get(parentId);
-            if(myParent == null ){ // parent not found
+            if (myParent == null) { // parent not found
                 throw new CinnamonException("error.parent_folder.not_found");
             }
-            else{
+            else {
                 this.parent = myParent;
             }
         }
 
         // typeid is optional
-        if(! cmd.containsKey("typeid")){
+        if (!cmd.containsKey("typeid")) {
             cmd.put("typeid", "0");
         }
         Long folderTypeId = ParamParser.parseLong(cmd.get("typeid"), "error.param.type_id");
 
-        if(folderTypeId == 0){
+        if (folderTypeId == 0) {
             this.type = FolderType.findByName(Constants.FOLDER_TYPE_DEFAULT);
         }
-        else{
+        else {
             this.type = FolderType.get(folderTypeId);
         }
         log.debug("check if folder already exists.");
 
         // check whether folder exists in parent folder
         Folder existingFolder = Folder.findByNameAndParent(name, parent);
-        if(existingFolder != null){
+        if (existingFolder != null) {
             throw new CinnamonException("error.folder.exists");
         }
 
         log.debug("set acl for this folder");
         // Set ACL for this folder:
-        if(cmd.containsKey("aclid")){
+        if (cmd.containsKey("aclid")) {
             Long acl_id = ParamParser.parseLong(cmd.get("aclid"), "error.param.acl_id");
             this.acl = Acl.get(acl_id);
         }
-        else{
+        else {
             // a folder normally inherits the parent folder's acl.
             this.acl = parent.acl;
         }
 
         Long ownerId = ParamParser.parseLong(cmd.get("ownerid"), "error.param.owner_id");
         UserAccount myOwner = UserAccount.get(ownerId);
-        if(myOwner == null){
+        if (myOwner == null) {
             throw new CinnamonException("error.user.not_found");
         }
         owner = myOwner;
     }
 
-    Set<Folder> fetchChildren(){
-        return Folder.findAll("from Folder f where f.parent=:parent", [parent:this])
+    Set<Folder> fetchChildren() {
+        return Folder.findAll("from Folder f where f.parent=:parent", [parent: this])
     }
 
     /**
@@ -142,24 +143,24 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * Add the folder as XML Element "folder" to the parameter Element.
      * @param root
      */
-    public void toXmlElement(Element root){
-        
+    public void toXmlElement(Element root) {
+
         Element folder = root.addElement("folder");
-        folder.addElement("id").addText(String.valueOf(getId()) );
-        folder.addElement("name").addText( getName());
+        folder.addElement("id").addText(String.valueOf(getId()));
+        folder.addElement("name").addText(getName());
         folder.add(userService.asElement("owner", getOwner()));
         folder.addElement("aclId").addText(String.valueOf(getAcl().getId()));
         folder.addElement("typeId").addText(String.valueOf(type.getId()));
-        if(folder.getParent() != null){
+        if (folder.getParent() != null) {
             folder.addElement("parentId").addText(String.valueOf(getParent().getId()));
         }
-        else{
+        else {
             folder.addElement("parentId");
         }
-        if(folderService.getSubfolders(this).isEmpty()){
+        if (folderService.getSubfolders(this).isEmpty()) {
             folder.addElement("hasChildren").addText("false");
         }
-        else{
+        else {
             folder.addElement("hasChildren").addText("true");
         }
     }
@@ -172,10 +173,10 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
       *
       */
     public int compareTo(XmlConvertable o) {
-        if(getId() > o.myId()){
+        if (getId() > o.myId()) {
             return 1;
         }
-        else if(getId() < o.myId()){
+        else if (getId() < o.myId()) {
             return -1;
         }
         return 0;
@@ -186,10 +187,10 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * root folder is not returned).
      * @return List of parent folders
      */
-    List<Folder> getAncestors(){
+    List<Folder> getAncestors() {
         List<Folder> folderList = new ArrayList<Folder>();
         Folder folder = this;
-        while(folder.getParent() != null && folder.getParent() != folder){
+        while (folder.getParent() != null && folder.getParent() != folder) {
             folderList.add(folder.getParent());
             folder = folder.getParent();
         }
@@ -208,7 +209,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     @Override
-    public byte[] getContentAsBytes(String repository){
+    public byte[] getContentAsBytes(String repository) {
         return "<content/>".getBytes();
     }
 
@@ -229,7 +230,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * for example: /system/workflows/templates.
      * @return the path of this folder.
      */
-    public String fetchPath(){
+    public String fetchPath() {
         /*
          * getParentFolders returns: "c/b/a" for folders /a/b/c
         */
@@ -237,18 +238,16 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         StringBuilder path = new StringBuilder();
         Collections.reverse(folders);
         folders.add(this);
-        for(Folder f : folders){
+        for (Folder f : folders) {
             path.append('/');
             path.append(f.getName());
         }
         return path.toString();
     }
 
- 
-
     // TODO: rename method
-    public boolean is_rootfolder(){
-        if(getParent() == null){
+    public boolean is_rootfolder() {
+        if (getParent() == null) {
             return false;
         }
 
@@ -285,61 +284,59 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         return result
     }
 
-
-
     /**
      * Update the fields of this folder objects from a parameter map (from HTTP requests)
      * @param fields map of the fields to be set
      * @return the updated folder object
      */
-    public Folder update(Map<String,String> fields){
+    public Folder update(Map<String, String> fields) {
         if (fields.containsKey("parentid")) {
             Long folderId = ParamParser.parseLong(fields.get("parentid"), "error.param.parent_id");
             Folder newParentFolder = get(folderId);
-            if(newParentFolder == null){
+            if (newParentFolder == null) {
                 throw new CinnamonException("error.param.parent_id");
             }
-            else if(newParentFolder.equals(this)){
+            else if (newParentFolder.equals(this)) {
                 // prevent a folder from being its own parent.
                 throw new CinnamonException("error.illegal_parent_id");
             }
-            else if(getParentFolders(newParentFolder).contains(this)){
+            else if (getParentFolders(newParentFolder).contains(this)) {
                 // prevent a folder from being moved into one of its child folders.
                 throw new CinnamonException("error.illegal_parent_id");
             }
-            else{
+            else {
                 setParent(newParentFolder);
                 resetIndexOnFolderContent();
             }
         }
-        if(fields.containsKey("ownerid")){
+        if (fields.containsKey("ownerid")) {
             Long ownerId = ParamParser.parseLong(fields.get("ownerid"), "error.param.owner_id");
             UserAccount owner = UserAccount.get(ownerId);
-            if(owner == null){
+            if (owner == null) {
                 throw new CinnamonException("error.user.not_found");
             }
             setOwner(owner);
         }
-        if( fields.containsKey("name")) {
+        if (fields.containsKey("name")) {
             setName(fields.get("name"));
             resetIndexOnFolderContent();
         }
-        if( fields.containsKey("metadata")){
+        if (fields.containsKey("metadata")) {
             setMetadata(fields.get("metadata"));
         }
-        if( fields.containsKey("aclid")){
+        if (fields.containsKey("aclid")) {
             Long aclId = ParamParser.parseLong(fields.get("aclid"), "error.param.acl_id");
             Acl acl = Acl.get(aclId);
-            if(acl == null){
+            if (acl == null) {
                 throw new CinnamonException("error.param.acl_id");
             }
             setAcl(acl);
 
         }
-        if(fields.containsKey("typeid")){
+        if (fields.containsKey("typeid")) {
             Long typeId = ParamParser.parseLong(fields.get("typeid"), "error.param.type_id");
             FolderType ft = FolderType.get(typeId);
-            if(ft == null){
+            if (ft == null) {
                 throw new CinnamonException("error.param.type_id");
             }
             setType(ft);
@@ -353,12 +350,12 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * index each object anew.
      * @param folder a folder who will be re-indexed along with its content (recursively).
      */
-    void resetIndexOnFolderContent(){
+    void resetIndexOnFolderContent() {
         setIndexOk(null);
-        for(ObjectSystemData osd : fetchFolderContent(false)){
+        for (ObjectSystemData osd : fetchFolderContent(false)) {
             osd.setIndexOk(null);
         }
-        for(Folder childFolder : fetchSubfolders(true)){
+        for (Folder childFolder : fetchSubfolders(true)) {
             childFolder.resetIndexOnFolderContent();
         }
     }
@@ -367,7 +364,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * Returns the subfolders of this folder
      * @return List of folders
      */
-    public List<Folder> getSubfolders(){
+    public List<Folder> getSubfolders() {
         return Folder.findAllByParent(this);
     }
 
@@ -376,11 +373,11 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * @param recursive if true, descend into sub folders
      * @return List of folders or an empty list.
      */
-    public List<Folder> fetchSubfolders(Boolean recursive){
+    public List<Folder> fetchSubfolders(Boolean recursive) {
         def folders = Folder.findAllByParent(this)
         List<Folder> newFolders = new ArrayList<Folder>();
-        if(recursive){
-            for(Folder folder : folders){
+        if (recursive) {
+            for (Folder folder : folders) {
                 newFolders.addAll(folder.fetchSubfolders(true));
             }
         }
@@ -394,11 +391,11 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * @param folder the folder whose parent folders you want.
      * @return List of parent folders excluding root folder.
      */
-    public List<Folder> getParentFolders(Folder folder){
+    public List<Folder> getParentFolders(Folder folder) {
         List<Folder> folders = new ArrayList<Folder>();
         Folder root = findRootFolder();
         folder = folder.getParent();
-        while(folder != null && folder !=  root ){
+        while (folder != null && folder != root) {
             folders.add(folder);
             folder = folder.getParent();
         }
@@ -418,28 +415,28 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      *                     of the criteria (where latestHead _or_ latestBranch matches the parameter).
      * @return a List of the objects found in this folder, as filtered by the parameters set.
      */
-    public List<ObjectSystemData> fetchFolderContent(Boolean recursive, Boolean latestHead, Boolean latestBranch){
+    public List<ObjectSystemData> fetchFolderContent(Boolean recursive, Boolean latestHead, Boolean latestBranch) {
         def osds
-        if(latestHead != null && latestBranch != null){
+        if (latestHead != null && latestBranch != null) {
             osds = ObjectSystemData.findAll("select o from ObjectSystemData o where o.parent=:parent and (o.latestHead=:latestHead or o.latestBranch=:latestBranch)",
-                    [parent:this, latestHead:true,latestBranch:true])
+                    [parent: this, latestHead: true, latestBranch: true])
         }
-        else if(latestHead != null){
+        else if (latestHead != null) {
             osds = ObjectSystemData.findAll("select o from ObjectSystemData o where o.parent=:parent and o.latestHead=:latestHead",
-                    [parent:this, latestHead: true]
+                    [parent: this, latestHead: true]
             )
         }
-        else if(latestBranch != null){
+        else if (latestBranch != null) {
             osds = ObjectSystemData.findAll("select o from ObjectSystemData o where o.parent=:parent and o.latestBranch=:latestBranch",
-                    [parent:this, latestBranch: true]
+                    [parent: this, latestBranch: true]
             )
         }
-        else{
+        else {
             osds = ObjectSystemData.findAllByParent(this)
         }
-        if(recursive){
+        if (recursive) {
             List<Folder> subFolders = getSubfolders();
-            for(Folder f : subFolders){
+            for (Folder f : subFolders) {
                 osds.addAll(f.fetchFolderContent(true, latestHead, latestBranch));
             }
         }
@@ -447,7 +444,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
 
-    public List<ObjectSystemData> fetchFolderContent(Boolean recursive){
+    public List<ObjectSystemData> fetchFolderContent(Boolean recursive) {
         return fetchFolderContent(recursive, null, null);
     }
 
@@ -456,16 +453,16 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * Create a Folder whose parent equals it's own id and whose name is equals the ROOT_FOLDER_NAME.
      * This is the default folder in which objects and folders are created if no parent_id is given.
      *
-     * @return	Folder rootFolder
+     * @return Folder rootFolder
      */
-    static  Folder findRootFolder(){
+    static Folder findRootFolder() {
         def rootFolder = Folder.find("from Folder f where f.name=:name and f.parent=f",
-            [name:Constants.ROOT_FOLDER_NAME]
+                [name: Constants.ROOT_FOLDER_NAME]
         )
-        if(! rootFolder){
+        if (!rootFolder) {
             Logger log = LoggerFactory.getLogger(Folder.class);
             log.error("RootFolder is missing!");
-            throw new CinnamonConfigurationException("Could not find the root folder. Please create a folder called "+Constants.ROOT_FOLDER_NAME
+            throw new CinnamonConfigurationException("Could not find the root folder. Please create a folder called " + Constants.ROOT_FOLDER_NAME
                     + " with parent_id == its own id.");
         }
 
@@ -477,12 +474,13 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      */
     public String getMetadata() {
         // for compatibility: return non-empty metadata, otherwise try to compile metasets
-        if(metadata.length() > 8 && metasets.size() == 0){
-            return metadata;
+        if (metadata.length() > 8 && metasets.size() == 0) {
+            // create metasets:
+            setMetadata(metadata)
         }
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("meta");
-        for(Metaset m : fetchMetasets()){
+        for (Metaset m : fetchMetasets()) {
             root.add(Metaset.asElement("metaset", m));
         }
         return doc.asXML();
@@ -509,61 +507,57 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      */
     public void setMetadata(String metadata, WritePolicy writePolicy) {
         if (metadata == null || metadata.trim().length() < 9) {
-            this.metadata = "<meta/>";
-            metasets.each{FolderMetaset folderMetaset ->
-                Metaset metaset = folderMetaset.metaset
-                folderMetaset.doDelete()
-                def metaCount = FolderMetaset.countByMetaset(metaset) + OsdMetaset.countByMetaset(metaset)
-                if(metaCount == 0){
-                    metaset.delete()
-                }
+            log.debug("delete obsolete metasets")
+            metasets.each {FolderMetaset folderMetaset ->
+                metasetService.unlinkMetaset(this, folderMetaset.metaset)
             }
         }
         else {
             Document doc = ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
             List<Node> sets = doc.selectNodes("//metaset");
-            if(sets.size() == 0){
+            if (sets.size() == 0) {
                 this.metadata = metadata;
-                if(metasets.size() > 0){
+                if (metasets.size() > 0) {
                     // delete obsolete metasets:
-                    for(Metaset m : fetchMetasets()){
-                        new MetasetService().unlinkMetaset(this, m);
+                    for (Metaset m : fetchMetasets()) {
+                        metasetService.unlinkMetaset(this, m);
                     }
                 }
                 return;
             }
-            for(Node metasetNode : sets){
+            for (Node metasetNode : sets) {
                 String content = metasetNode.detach().asXML();
                 String metasetTypeName = metasetNode.selectSingleNode("@type").getText();
-                log.debug("metasetType: "+metasetTypeName);
+                log.debug("metasetType: " + metasetTypeName);
                 MetasetType metasetType = MetasetType.findByName(metasetTypeName);
-                if(metasetType == null){
-                    throw new CinnamonException("error.unknown.metasetType",metasetTypeName);
+                if (metasetType == null) {
+                    throw new CinnamonException("error.unknown.metasetType", metasetTypeName);
                 }
-                new MetasetService().createOrUpdateMetaset(this,metasetType, content, writePolicy);
+                metasetService.createOrUpdateMetaset(this, metasetType, content, writePolicy);
             }
         }
-//        this.metadata = metadata;
+        // convert to new metaset style:
+        this.metadata = "<meta/>"
     }
 
-    public Set<Metaset> fetchMetasets(){
+    public Set<Metaset> fetchMetasets() {
         Set<Metaset> metasets = new HashSet<Metaset>(metasets.size());
-        for(FolderMetaset fm : metasets){
+        for (FolderMetaset fm : FolderMetaset.findByFolder(this)) {
             metasets.add(fm.getMetaset());
         }
         return metasets;
     }
 
-    /**
-     * Fetch a metaset by its given name. Returns null in case there is no such metaset
-     * associated with this object.
-     * @param name the name of the metaset
-     * @return the metaset or null
-     */
-    public Metaset fetchMetaset(String name){
+/**
+ * Fetch a metaset by its given name. Returns null in case there is no such metaset
+ * associated with this object.
+ * @param name the name of the metaset
+ * @return the metaset or null
+ */
+    public Metaset fetchMetaset(String name) {
         Metaset metaset = null;
-        for(Metaset m: fetchMetasets()){
-            if(m.getType().getName().equals(name)){
+        for (Metaset m : fetchMetasets()) {
+            if (m.getType().getName().equals(name)) {
                 metaset = m;
                 break;
             }
@@ -571,28 +565,28 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         return metaset;
     }
 
-    public IMetasetJoin fetchMetasetJoin(MetasetType type){
+    public IMetasetJoin fetchMetasetJoin(MetasetType type) {
         return (IMetasetJoin) FolderMetaset.find("from FolderMetaset o where o.metaset.type=:metasetType and o.folder=:folder",
-        [folder:folderService, metasetType:type]);
+                [folder: this, metasetType: type]);
     }
 
-    public void addMetaset(Metaset metaset){
+    public void addMetaset(Metaset metaset) {
         // make sure that we do not add a second metaset of the same type:
         MetasetType metasetType = metaset.getType();
         IMetasetJoin metasetJoin = fetchMetasetJoin(metasetType);
-        if(metasetJoin != null){
-            log.debug("found existing metasetJoin: "+metasetJoin.getId());
-            throw new CinnamonException("you tried to add a second metaset of type "+metasetType.getName()+" to "+getId());
+        if (metasetJoin != null) {
+//            log.debug("found existing metasetJoin: "+metasetJoin.getId());
+            throw new CinnamonException("you tried to add a second metaset of type " + metasetType.getName() + " to " + getId());
         }
-        FolderMetaset om = new FolderMetaset(this, metaset);
-        addToMetasets(om)
-        metaset.addToFolderMetasets(om)
-        om.save()
+        FolderMetaset folderMetaset = new FolderMetaset(this, metaset);
+        addToMetasets(folderMetaset)
+        metaset.addToFolderMetasets(folderMetaset)
+        folderMetaset.save()
     }
 
     Long myId() { return id }
 
-    public Boolean hasXmlContent(){
+    public Boolean hasXmlContent() {
         return false;
     }
 

@@ -26,6 +26,8 @@ import cinnamon.interfaces.IMetasetOwner
 class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner{
 
     public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
+
+    def metasetService
     
     static constraints = {
         contentPath(size: 0..255, nullable: true)
@@ -807,19 +809,20 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
      */
     public void setMetadata(String metadata, WritePolicy writePolicy ) {
         try{
-            if (metadata == null || metadata.trim().length() == 0) {
-                this.metadata = "<meta/>";
+            if (metadata == null || metadata.trim().length() < 9) {
+                log.debug("delete obsolete metasets")
+                metasets.each{OsdMetaset osdMetaset ->
+                        metasetService.unlinkMetaset(this, osdMetaset.metaset)
+                }
             }
             else {
                 Document doc = ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
                 List<Node> sets = doc.selectNodes("//metaset");
-//            log.debug("found "+sets.size()+" metaset nodes in:\n"+metadata);
                 if(sets.size() == 0){
                     this.metadata = metadata;
                     if(metasets.size() > 0){
-                        // delete obsolete metasets:
                         for(Metaset m : fetchMetasets()){
-                            new MetasetService().unlinkMetaset(this, m);
+                            metasetService.unlinkMetaset(this, m);
                         }
                     }
                     return;
@@ -832,15 +835,16 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
                     if(metasetType == null){
                         throw new CinnamonException("error.unknown.metasetType",metasetTypeName);
                     }
-                    new MetasetService().createOrUpdateMetaset(this,metasetType, content, writePolicy);
+                    metasetService.createOrUpdateMetaset(this,metasetType, content, writePolicy);
                 }
             }
+            // finish conversion to new metaset format:
+            this.metadata = "<meta/>"
         }
         catch (Exception e){
             log.debug("failed to add metadata:",e);
             throw new RuntimeException(e);
         }
-//        this.metadata = metadata;
     }
 
     public IMetasetJoin fetchMetasetJoin(MetasetType type){
@@ -866,7 +870,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         MetasetType metasetType = metaset.getType();
         IMetasetJoin metasetJoin = fetchMetasetJoin(metasetType);
         if(metasetJoin != null){
-            log.debug("found existing metasetJoin: "+metasetJoin.getId());
+//            log.debug("found existing metasetJoin: "+metasetJoin.getId());
             throw new CinnamonException("you tried to add a second metaset of type "+metasetType.getName()+" to "+getId());
         }
 
