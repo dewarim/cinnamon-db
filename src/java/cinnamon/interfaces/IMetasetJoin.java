@@ -11,7 +11,7 @@ import cinnamon.Metaset;
  */
 public interface IMetasetJoin {
 
-    long getId();
+//    long getId();
     void doDelete();
     Metaset getMetaset();
 
