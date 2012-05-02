@@ -96,13 +96,16 @@ public class MetasetService {
 
     public void unlinkMetaset(IMetasetOwner owner, Metaset metaset) {
         IMetasetJoin metasetJoin = owner.fetchMetasetJoin(metaset.type);
-        metasetJoin.doDelete();
-        Collection<IMetasetOwner> metasetOwners = fetchOwners(metaset);
-        if (metasetOwners.size() == 0) {
-            // if nothing links to this metaset, delete it.
-            em.remove(metaset);
+        if(! metasetJoin){
+            log.warn("metaset join for metaset ${metaset.id} was not found.")
+            return
         }
-
+        metasetJoin.doDelete()
+        def metaCount = FolderMetaset.countByMetaset(metaset) + OsdMetaset.countByMetaset(metaset)
+        if (metaCount == 0) {
+            // only delete a metaset if no one else links there:
+            metaset.delete()
+        }
     }
 
     public Metaset createOrUpdateMetaset(IMetasetOwner owner, MetasetType metasetType, String content, WritePolicy writePolicy) {
@@ -111,19 +114,18 @@ public class MetasetService {
             log.debug("metadata is: "+owner.getMetadata()+" and contains no "+metasetType.getName()+" metaset.");
             // create new metaset
             metaset = new Metaset(content, metasetType);
-            ObjectSystemData osd
-            osd.save()
-            owner.addMetaset(metaset);
+            owner.save() // we need the Hibernate Id to add a Metaset
             metaset.save()
+            owner.addMetaset(metaset);
         } else {
             // update metaset
             switch (writePolicy) {
-                case WRITE:
+                case WritePolicy.WRITE:
                     metaset.setContent(content);
                     break;
-                case IGNORE:
+                case WritePolicy.IGNORE:
                     break; // do nothing, there already is content;
-                case BRANCH:
+                case WritePolicy.BRANCH:
                     new MetasetService().updateWithBranch(content, owner, metaset);
                     break;
             }
