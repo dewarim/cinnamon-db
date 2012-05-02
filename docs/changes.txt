@@ -23,3 +23,14 @@ alter table objects rename column latesthead to latest_head;
 alter table relations rename column leftid to left_id;
 alter table relations rename column rightid to right_id;
 alter table change_triggers rename column trigger_type_id to change_trigger_type_id;
+
+--- insert default metaset_types 
+COPY metaset_types (id, config, description, name, obj_version) FROM stdin WITH DELIMITER ',';
+1,<metaset />,search,search,0
+2,<metaset />,cart,cart,0
+3,<metaset />,translation_extension,translation_extension,0
+4,<metaset />,render_input,render_input,0
+5,<metaset />,render_output,render_output,0
+6,<metaset />,test,test,0
+7,<metaset />,tika,tika,0
+\.
