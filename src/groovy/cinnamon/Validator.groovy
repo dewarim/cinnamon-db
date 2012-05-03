@@ -99,7 +99,7 @@ class Validator implements ResultValidator {
         return allowedFolders;
     }
 
-    public void validatePermissions(ObjectSystemData osd, String... permissions) {
+    public void validatePermissions(ObjectSystemData osd, List permissions) {
         for (String perm : permissions) {
             validateAgainstAcl(osd, fetchPermission(perm));
         }
