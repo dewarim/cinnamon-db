@@ -111,14 +111,14 @@ public class MetasetService {
     public Metaset createOrUpdateMetaset(IMetasetOwner owner, MetasetType metasetType, String content, WritePolicy writePolicy) {
         Metaset metaset = owner.fetchMetaset(metasetType.getName());
         if (metaset == null) {
-            log.debug("metadata is: "+owner.getMetadata()+" and contains no "+metasetType.getName()+" metaset.");
             // create new metaset
+            log.debug("create new metaset")
             metaset = new Metaset(content, metasetType);
             owner.save() // we need the Hibernate Id to add a Metaset
             metaset.save()
             owner.addMetaset(metaset);
         } else {
-            // update metaset
+            // update metaset            
             switch (writePolicy) {
                 case WritePolicy.WRITE:
                     metaset.setContent(content);
@@ -126,7 +126,7 @@ public class MetasetService {
                 case WritePolicy.IGNORE:
                     break; // do nothing, there already is content;
                 case WritePolicy.BRANCH:
-                    new MetasetService().updateWithBranch(content, owner, metaset);
+                    updateWithBranch(content, owner, metaset);
                     break;
             }
             log.debug("setting metaset content to:\n" + content);

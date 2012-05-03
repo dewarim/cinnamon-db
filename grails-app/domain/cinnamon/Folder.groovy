@@ -45,7 +45,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     Acl acl
     Date indexed = new Date()
 
-    Set metasets = []
+    Set<FolderMetaset> metasets = []
 
     public Folder() {
 
@@ -473,16 +473,12 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * @return the compiled metadata of this element (all metasets collected under one meta root element).
      */
     public String getMetadata() {
-        // for compatibility: return non-empty metadata, otherwise try to compile metasets
-        if (metadata.length() > 8 && metasets.size() == 0) {
-            // create metasets:
-            setMetadata(metadata)
-        }
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("meta");
-        for (Metaset m : fetchMetasets()) {
+        for (Metaset m : metasets.collect{it.metaset}) {
             root.add(Metaset.asElement("metaset", m));
         }
+        log.debug("metadata: ${doc.asXML()}")
         return doc.asXML();
     }
 
@@ -536,24 +532,19 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
                 metasetService.createOrUpdateMetaset(this, metasetType, content, writePolicy);
             }
         }
-        // convert to new metaset style:
-        this.metadata = "<meta/>"
     }
 
-    public Set<Metaset> fetchMetasets() {
-        Set<Metaset> metasets = new HashSet<Metaset>(metasets.size());
-        for (FolderMetaset fm : FolderMetaset.findByFolder(this)) {
-            metasets.add(fm.getMetaset());
-        }
-        return metasets;
+    public Set fetchMetasets() {        
+        FolderMetaset.findAll("from FolderMetaset fm where fm.folder=:folder",
+                [folder: this]).collect {it.metaset}
     }
 
-/**
- * Fetch a metaset by its given name. Returns null in case there is no such metaset
- * associated with this object.
- * @param name the name of the metaset
- * @return the metaset or null
- */
+    /**
+     * Fetch a metaset by its given name. Returns null in case there is no such metaset
+     * associated with this object.
+     * @param name the name of the metaset
+     * @return the metaset or null
+     */
     public Metaset fetchMetaset(String name) {
         Metaset metaset = null;
         for (Metaset m : fetchMetasets()) {
@@ -579,8 +570,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
             throw new CinnamonException("you tried to add a second metaset of type " + metasetType.getName() + " to " + getId());
         }
         FolderMetaset folderMetaset = new FolderMetaset(this, metaset);
-        addToMetasets(folderMetaset)
-        metaset.addToFolderMetasets(folderMetaset)
         folderMetaset.save()
     }
 

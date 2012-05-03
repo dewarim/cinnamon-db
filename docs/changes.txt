@@ -33,4 +33,5 @@ COPY metaset_types (id, config, description, name, obj_version) FROM stdin WITH 
 5,<metaset />,render_output,render_output,0
 6,<metaset />,test,test,0
 7,<metaset />,tika,tika,0
+8,<metaset />,translation_folder,translation_folder,0
 \.

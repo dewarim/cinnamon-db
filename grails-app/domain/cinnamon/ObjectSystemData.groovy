@@ -23,22 +23,22 @@ import cinnamon.interfaces.IMetasetJoin
 import cinnamon.exceptions.CinnamonConfigurationException
 import cinnamon.interfaces.IMetasetOwner
 
-class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner{
+class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner {
 
     public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
 
     def metasetService
-    
+
     static constraints = {
         contentPath(size: 0..255, nullable: true)
         contentSize(nullable: true)
-        name(name:1..Constants.NAME_LENGTH)
+        name(name: 1..Constants.NAME_LENGTH)
         indexOk(nullable: true)
         predecessor(nullable: true)
         root(nullable: true) // TODO: can we switch to OSD.root:non-nullable?
         locker(nullable: true)
         format(nullable: true)
-        appName(size: 0..255, blank: true)
+        appName(size: 0..255, blank: true)        
         metadata(size: 1..Constants.METADATA_SIZE)
         procstate(size: 0..128, blank: true)
         version(size: 1..128)
@@ -51,7 +51,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         appName column: 'appname'
     }
 
-    static hasMany = [metasets:OsdMetaset]
+    static hasMany = [metasets: OsdMetaset]
 
     String name
     String contentPath
@@ -72,13 +72,15 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
     Format format
     ObjectType type
     String appName = ''
+    
+    @Deprecated
     String metadata = '<meta />'
     String procstate = ''
     Boolean latestHead
     Boolean latestBranch = true
     String version = '1'
     LifeCycleState state
-    Set metasets = []
+    Set<OsdMetaset> metasets = []
 
     public ObjectSystemData() {
 
@@ -91,12 +93,12 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
      * 2. the user who is going to be owner, modifier and creator;
      * 3) the target folder wherein to create the object.
      * Everything else is set to default and can be modified after instantiation.
-     * @param name  the name of the object.
+     * @param name the name of the object.
      * @param user the user who is to be the creator, owner and modifier.
      * @param parentFolder the folder where the object will be created. The object will
      *                     inherit this folder's ACL by default.
      */
-    public ObjectSystemData(String name, UserAccount user, Folder parentFolder){
+    public ObjectSystemData(String name, UserAccount user, Folder parentFolder) {
         this.name = name;
         latestHead = true;
 
@@ -138,7 +140,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
                 metadata = pred.getMetadata();
                 appName = pred.getAppName();
                 language = pred.getLanguage();
-                if(pred.getState() != null){
+                if (pred.getState() != null) {
                     state = pred.getState().getLifeCycleStateForCopy();
                 }
             }
@@ -312,8 +314,6 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
             state = that.getState().getLifeCycleStateForCopy();
         }
     }
-
-
 
     /**
      * createClone: create a copy with created and modified set to current date, <br>
@@ -507,14 +507,14 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         return fileContent;
     }
 
-    public byte[] getContentAsBytes(String repository){
+    public byte[] getContentAsBytes(String repository) {
         byte[] fileContent;
         try {
             String path = getFullContentPath(repository);
-            if(path == null){
+            if (path == null) {
                 return "<empty />".getBytes();
             }
-            log.debug("path to file: "+path);
+            log.debug("path to file: " + path);
             fileContent = ContentReader.readFileAsBytes(path);
         } catch (Exception e) {
             throw new CinnamonException(e);
@@ -581,7 +581,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         String lastDescendantVersion;
         try {
             log.debug("query for predecessor " + getPredecessor().getId());
-            List<ObjectSystemData> versions = ObjectSystemData.findAll("from ObjectSystemData o where o.predecessor=:pred order by id desc",[pred:predecessor])
+            List<ObjectSystemData> versions = ObjectSystemData.findAll("from ObjectSystemData o where o.predecessor=:pred order by id desc", [pred: predecessor])
             ObjectSystemData lastDescendant;
             if (versions.size() == 0) {
                 throw new NoResultException()
@@ -608,6 +608,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         buffer = String.valueOf(Integer.parseInt(buffer) + 1);
         return predecessorVersion + "." + buffer + "-1";
     }
+
     @Override
     /*
       * Implements Comparable interface based on id.
@@ -639,9 +640,9 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
      */
     public File createFilenameFromName(File path) {
         String extension = "";
-        if(format != null){
+        if (format != null) {
             // the format *should* be set, but you never know. Perhaps someone created a 0-byte lock file without format.
-            extension = "."+format.getExtension();
+            extension = "." + format.getExtension();
         }
         name = name.replaceAll("[^\\w]", "_");
         File file = new File(path, name + extension);
@@ -696,7 +697,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         if (latestBranch != that.latestBranch) return false
         if (latestHead != that.latestHead) return false
         if (locker != that.locker) return false
-        if (metadata != that.metadata) return false
+//        if (metadata != that.metadata) return false
         if (modified != that.modified) return false
         if (modifier != that.modifier) return false
         if (name != that.name) return false
@@ -719,7 +720,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         result = 31 * result + (contentSize != null ? contentSize.hashCode() : 0)
         result = 31 * result + (indexOk != null ? indexOk.hashCode() : 0)
         result = 31 * result + (predecessor != null ? predecessor.hashCode() : 0)
-        result = 31 * result + (root != null ? root.hashCode() : 0)
+//        result = 31 * result + (root != null ? root.hashCode() : 0)
         result = 31 * result + (creator != null ? creator.hashCode() : 0)
         result = 31 * result + (modifier != null ? modifier.hashCode() : 0)
         result = 31 * result + (owner != null ? owner.hashCode() : 0)
@@ -733,7 +734,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         result = 31 * result + (format != null ? format.hashCode() : 0)
         result = 31 * result + (type != null ? type.hashCode() : 0)
         result = 31 * result + (appName != null ? appName.hashCode() : 0)
-        result = 31 * result + (metadata != null ? metadata.hashCode() : 0)
+//        result = 31 * result + (metadata != null ? metadata.hashCode() : 0)
         result = 31 * result + (procstate != null ? procstate.hashCode() : 0)
         result = 31 * result + (latestHead != null ? latestHead.hashCode() : 0)
         result = 31 * result + (latestBranch != null ? latestBranch.hashCode() : 0)
@@ -742,32 +743,23 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
         return result
     }
 
-    ObjectSystemData findLatestBranch(){
+    ObjectSystemData findLatestBranch() {
         return ObjectSystemData.find("from ObjectSystemData o WHERE o.latestBranch = true and o.root=:root order by o.modified desc",
-        [root:this.root])
+                [root: this.root])
     }
 
-    ObjectSystemData findLatestHead(){
+    ObjectSystemData findLatestHead() {
         return ObjectSystemData.find("from ObjectSystemData o WHERE o.latestHead = true and o.root=:root",
-        [root:this.root])
+                [root: this.root])
     }
-
-//    Long getId(){
-//        return id
-//    }
 
     /**
      * @return the compiled metadata of this element (all metasets collected under one meta root element).
      */
     public String getMetadata() {
-        // for compatibility: return non-empty metadata, otherwise try to compile metasets
-        if(metadata.length() > 8 && metasets.size() == 0){
-            // create metasets:
-            setMetadata(metadata)
-        }
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("meta");
-        for(Metaset m : fetchMetasets()){
+        for (Metaset m : metasets.collect{it.metaset}) {
             root.add(Metaset.asElement("metaset", m));
         }
         return doc.asXML();
@@ -777,16 +769,12 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
      * @return the compiled metadata of this element (all metasets collected under one meta root element).
      */
     public String getMetadata(List<String> metasetNames) {
-        // for compatibility: return non-empty metadata, otherwise try to compile metasets
-//        if(metadata.length() > 8 && getOsdMetasets().size() == 0){
-//            return metadata;
-//        }
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("meta");
-        for(Metaset m : fetchMetasets()){
+        for (Metaset m : fetchMetasets()) {
             root.add(Metaset.asElement("metaset", m));
         }
-        return metadata;
+        return root.asXML();
     }
 
     /**
@@ -796,6 +784,7 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
      * @param metadata the custom metadata
      */
     public void setMetadata(String metadata) {
+        log.debug("setMetadata")
         setMetadata(metadata, WritePolicy.BRANCH);
     }
 
@@ -808,87 +797,77 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
      * @param metadata the custom metadata
      * @param writePolicy the write policy - what to do if other items already reference a metaset.
      */
-    public void setMetadata(String metadata, WritePolicy writePolicy ) {
-        try{
+    public void setMetadata(String metadata, WritePolicy writePolicy) {
+        try {
             if (metadata == null || metadata.trim().length() < 9) {
                 log.debug("delete obsolete metasets")
-                metasets.each{OsdMetaset osdMetaset ->
-                        metasetService.unlinkMetaset(this, osdMetaset.metaset)
+                metasets.each {OsdMetaset osdMetaset ->
+                    metasetService.unlinkMetaset(this, osdMetaset.metaset)
                 }
             }
             else {
                 Document doc = ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
                 List<Node> sets = doc.selectNodes("//metaset");
-                if(sets.size() == 0){
+                if (sets.size() == 0) {
                     this.metadata = metadata;
-                    if(metasets.size() > 0){
-                        for(Metaset m : fetchMetasets()){
+                    if (metasets.size() > 0) {
+                        for (Metaset m : fetchMetasets()) {
                             metasetService.unlinkMetaset(this, m);
                         }
                     }
                     return;
                 }
-                for(Node metasetNode : sets){
+                log.debug("found: ${sets?.size()} metasets.")
+                for (Node metasetNode : sets) {
                     String content = metasetNode.detach().asXML();
                     String metasetTypeName = metasetNode.selectSingleNode("@type").getText();
-                    log.debug("metasetType: "+metasetTypeName);
-                    MetasetType metasetType = MetasetType.findByName(metasetTypeName);
-                    if(metasetType == null){
-                        throw new CinnamonException("error.unknown.metasetType",metasetTypeName);
+                    log.debug("metasetType: " + metasetTypeName);
+                    MetasetType metasetType = MetasetType.findByName(metasetTypeName);                    
+                    if (metasetType == null) {
+                        throw new CinnamonException("error.unknown.metasetType", metasetTypeName);
                     }
-                    metasetService.createOrUpdateMetaset(this,metasetType, content, writePolicy);
+                    log.debug("calling metasetService")
+                    metasetService.createOrUpdateMetaset(this, metasetType, content, writePolicy);
                 }
             }
-            // finish conversion to new metaset format:
-            this.metadata = "<meta/>"
         }
-        catch (Exception e){
-            log.debug("failed to add metadata:",e);
+        catch (Exception e) {
+            log.debug("failed to add metadata:", e);
             throw new RuntimeException(e);
         }
     }
 
-    public IMetasetJoin fetchMetasetJoin(MetasetType type){
+    public IMetasetJoin fetchMetasetJoin(MetasetType type) {
         List<OsdMetaset> metasetList = OsdMetaset.findAll(
-                "from OsdMetaset o where o.metaset.type=:metasetType and o.osd=:osd", [metasetType:type, osd:this])
-        log.debug("query for: "+type.name+" / osd: "+id+" returned #objects: "+ metasetList.size() );
-        if(metasetList.size() == 0){
+                "from OsdMetaset o where o.metaset.type=:metasetType and o.osd=:osd", [metasetType: type, osd: this])
+        log.debug("query for: " + type.name + " / osd: " + id + " returned #objects: " + metasetList.size());
+        if (metasetList.size() == 0) {
             return null;
         }
-        else if(metasetList.size() > 1){
-//            for(OsdMetaset om : metasetList){
-//                log.debug("found OsdMetaset: "+om.toString());
-//            }
-            throw new CinnamonConfigurationException("Found two metasets of the same type in osd #"+getId());
+        else if (metasetList.size() > 1) {
+            throw new CinnamonConfigurationException("Found two metasets of the same type in osd #" + getId());
         }
-        else{
+        else {
             return (IMetasetJoin) metasetList.get(0);
         }
     }
 
-    public void addMetaset(Metaset metaset){
+    public void addMetaset(Metaset metaset) {
         // make sure that we do not add a second metaset of the same type:
         MetasetType metasetType = metaset.getType();
         IMetasetJoin metasetJoin = fetchMetasetJoin(metasetType);
-        if(metasetJoin != null){
+        if (metasetJoin != null) {
 //            log.debug("found existing metasetJoin: "+metasetJoin.getId());
-            throw new CinnamonException("you tried to add a second metaset of type "+metasetType.getName()+" to "+getId());
+            throw new CinnamonException("you tried to add a second metaset of type " + metasetType.getName() + " to " + getId());
         }
 
-        OsdMetaset om = new OsdMetaset(this,metaset);
-        // the correct way would be to use a DAO, but then we are on the way to use Grails
-        // GORM anyway, so this is a temporary solution:
+        OsdMetaset om = new OsdMetaset(this, metaset);
         log.debug("persist metaset");
         om.save()
     }
 
-    public Set<Metaset> fetchMetasets(){
-        Set<Metaset> metasets = new HashSet<Metaset>(metasets.size());
-        for(OsdMetaset om : metasets){
-            metasets.add(om.getMetaset());
-        }
-//        log.debug("found "+metasets.size()+" metasets");
-        return metasets;
+    public Set<Metaset> fetchMetasets() {
+        OsdMetaset.findAll("from OsdMetaset om where om.osd=:osd",[osd: this]).collect{it.metaset}
     }
 
     /**
@@ -897,11 +876,11 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
      * @param name the name of the metaset
      * @return the metaset or null
      */
-    public Metaset fetchMetaset(String name){
+    public Metaset fetchMetaset(String name) {
         Metaset metaset = null;
-        for(Metaset m: fetchMetasets()){
+        for (Metaset m : fetchMetasets()) {
 //            log.debug("check "+name+" vs. "+m.getType().getName());
-            if(m.getType().getName().equals(name)){
+            if (m.getType().getName().equals(name)) {
                 metaset = m;
                 break;
             }
@@ -920,8 +899,8 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
      * at the moment.
      * @return true if the content is probably xml, false if not.
      */
-    public Boolean hasXmlContent(){
-        if(format == null){
+    public Boolean hasXmlContent() {
+        if (format == null) {
             return false;
         }
         return getFormat().getExtension().toLowerCase().matches(fetchXmlFormatList());
@@ -934,14 +913,14 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
      * @return a String that may be used as a regex to filter for invalid format extensions<br/>
      * Example: may return "dita|xml|foo"
      */
-    String fetchXmlFormatList(){
+    String fetchXmlFormatList() {
         ConfigEntry formatList = ConfigEntry.findByName("xml.format.list");
-        if(formatList == null){
+        if (formatList == null) {
             log.debug("Did not find xml.format.list config entry, returning defaultXmlFormatList.");
             return defaultXmlFormatList;
         }
         Node formatListNode = ParamParser.parseXmlToDocument(formatList.getConfig()).selectSingleNode("//format");
-        if(formatListNode == null){
+        if (formatListNode == null) {
             log.debug("Did not find format node in xml.format.list config entry, returning defaultXmlFormatlist.");
             return defaultXmlFormatList;
         }
