@@ -761,8 +761,9 @@ class ObjectSystemData  implements Serializable, Ownable, Indexable, XmlConverta
      */
     public String getMetadata() {
         // for compatibility: return non-empty metadata, otherwise try to compile metasets
-        if(metadata.length() > 8 && getOsdMetasets().size() == 0){
-            return metadata;
+        if(metadata.length() > 8 && metasets.size() == 0){
+            // create metasets:
+            setMetadata(metadata)
         }
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("meta");
