@@ -19,37 +19,37 @@ package cinnamon;
 
 public class UploadedFile {
 
-	private String fileBufferPath_;
-	private String name_;
-	private String fileName_;
-	private String type_;
-	private long length_;
-	
-	public UploadedFile(String fileBufferPath, String name, String fileName, String type, long len) {
-		fileBufferPath_=fileBufferPath;
-		name_=name;
-		fileName_=fileName;
-		type_=type;
-		length_=len;
-	}
-	
-	public String getFileBufferPath() {
-		return fileBufferPath_;	// path of uploaded file in file-buffer
-	}
+    private String fileBufferPath;
+    private String name;
+    private String fileName;
+    private String type;
+    private long length;
 
-	public String getName() {
-		return name_;	// parameter name
-	}
+    public UploadedFile(String fileBufferPath, String name, String fileName, String type, long len) {
+        this.fileBufferPath = fileBufferPath;
+        this.name = name;
+        this.fileName = fileName;
+        this.type = type;
+        length = len;
+    }
 
-	public String getFileName() {
-		return fileName_;	// original file name
-	}
+    public String getFileBufferPath() {
+        return fileBufferPath;    // path of uploaded file in file-buffer
+    }
 
-	public String getType() {
-		return type_;
-	}
+    public String getName() {
+        return name;    // parameter name
+    }
 
-	public long getLength() {
-		return length_;
-	}
+    public String getFileName() {
+        return fileName;    // original file name
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public long getLength() {
+        return length;
+    }
 }
