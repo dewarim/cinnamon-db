@@ -104,6 +104,12 @@ class Validator implements ResultValidator {
             validateAgainstAcl(osd, fetchPermission(perm));
         }
     }
+    
+    public void validatePermissions(Folder folder, List permissions) {
+        for (String perm : permissions) {
+            validateFolderAgainstAcl(folder, fetchPermission(perm));
+        }
+    }
 
     public void validateCreate(cinnamon.Folder folder) {
         Permission createFolderPermission = fetchPermission(PermissionName.CREATE_OBJECT);
