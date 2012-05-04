@@ -83,27 +83,24 @@ class RelationResolver  implements Serializable, IXmlDumper {
         }
     }
 
-    @Override
-    boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof RelationResolver)) return false;
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof RelationResolver)) return false
 
-        RelationResolver that = (RelationResolver) o;
+        RelationResolver that = (RelationResolver) o
 
-        if (config != null ? !config.equals(that.config) : that.config != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (resolverClass != null ? !resolverClass.equals(that.resolverClass) : that.resolverClass != null)
-            return false;
+        if (config != that.config) return false
+        if (name != that.name) return false
+        if (resolverClass != that.resolverClass) return false
 
-        return true;
+        return true
     }
 
-    @Override
     int hashCode() {
-        int result = config != null ? config.hashCode() : 0;
-        result = 31 * result + (resolverClass != null ? resolverClass.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
+        int result
+        result = (name != null ? name.hashCode() : 0)
+        result = 31 * result + (config != null ? config.hashCode() : 0)
+        result = 31 * result + (resolverClass != null ? resolverClass.hashCode() : 0)
+        return result
     }
-
 }
