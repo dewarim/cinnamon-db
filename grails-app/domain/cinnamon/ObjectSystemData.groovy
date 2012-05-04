@@ -401,6 +401,25 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         setFormat(newFormat);
     }
 
+
+    /**
+     * Set the contentPath <em>and the contentSize</em>, if the former is a valid String which can
+     * be mapped to a valid File.
+     *
+     * @param contentPath relative path to this object's content. The full path is computed from $cinnamon_data
+     *                    as set in cinnamon_config.xml) and $repository_name.
+     * @param repository  name of the this OSDs repository..
+     */
+    public void setContentPath(String contentPath, String repository) {
+        this.contentPath = contentPath;
+        if (contentPath != null) {
+            this.contentSize = contentPath.length() > 0 ? (new File(getFullContentPath(repository))).length() : 0;
+        }
+        else {
+            this.contentSize = null;
+        }
+    }
+
     public void toXmlElement(Element root) {
         root.add(convert2domElement());
     }
