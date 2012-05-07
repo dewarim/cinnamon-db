@@ -92,8 +92,7 @@ public class ContentStore {
         Conf conf = ConfThreadLocal.getConf();
 
         File f = new File(file.getFileBufferPath());
-
-        String subfolderName = getSubFolderName(f.getName());
+        String subfolderName = getSubFolderName(file.getName());
 
         String subfolderPath = conf.getDataRoot() + repository
                 + sep + subfolderName;
@@ -105,8 +104,7 @@ public class ContentStore {
         String contentPath = subfolderPath + sep + f.getName();
 
         result = f.renameTo(new File(contentPath));
-        log.debug("Result of renameTo(" + contentPath + ": "
-                + result);
+        log.debug("Result of renameTo(" + contentPath + ": " + result);
         if (!result && !subfolder.isDirectory()) {
             throw new IOException("Could not rename uploaded file " + contentPath);
         } else {
