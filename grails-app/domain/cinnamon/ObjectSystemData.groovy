@@ -33,7 +33,8 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         contentPath(size: 0..255, nullable: true)
         contentSize(nullable: true)
         name(name: 1..Constants.NAME_LENGTH)
-        indexOk(nullable: true)
+        indexOk nullable: true
+        indexed nullable: true
         predecessor(nullable: true)
         root(nullable: true) // TODO: can we switch to OSD.root:non-nullable?
         locker(nullable: true)
