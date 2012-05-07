@@ -42,13 +42,13 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         appName(size: 0..255, blank: true)        
         metadata(size: 1..Constants.METADATA_SIZE)
         procstate(size: 0..128, blank: true)
-        version(size: 1..128)
+        cmnVersion(size: 1..128)
         state(nullable: true)
     }
 
     static mapping = {
         table('objects')
-        version 'obj_version'
+//        version 'obj_version'
         appName column: 'appname'
     }
 
@@ -79,7 +79,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     String procstate = ''
     Boolean latestHead
     Boolean latestBranch = true
-    String version = '1'
+    String cmnVersion = '1'
     LifeCycleState state
     Set<OsdMetaset> metasets = []
 
@@ -157,9 +157,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         }
 
         log.debug("set version label");
-        version = createNewVersionLabel();
-        log.debug("new version: " + version);
-        latestHead = !version.contains(".");
+        cmnVersion = createNewVersionLabel();
+        log.debug("new version: " + cmnVersion);
+        latestHead = !cmnVersion.contains(".");
 
         log.debug("set root");
         if (predecessor == null) {
@@ -309,7 +309,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         predecessor = null;
         procstate = that.getProcstate();
         type = that.getType();
-        version = "0";
+        cmnVersion = "0";
 
         if (that.getState() != null) {
             state = that.getState().getLifeCycleStateForCopy();
@@ -346,7 +346,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         twin.setProcstate(procstate)
         twin.setRoot(root)
         twin.setType(type)
-        twin.setVersion(version)
+        twin.setCmnVersion(cmnVersion)
         if (state != null) {
             twin.setState(state.lifeCycleStateForCopy);
         }
@@ -429,7 +429,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         Element data = DocumentHelper.createElement("object");
         data.addElement("id").addText(String.valueOf(getId()));
         data.addElement("name").addText(getName());
-        data.addElement("version").addText(getVersion());
+        data.addElement("version").addText(getCmnVersion());
         data.addElement("created").addText(ParamParser.dateToIsoString(getCreated()));
         data.addElement("modified").addText(ParamParser.dateToIsoString(getModified()));
         data.addElement("procstate").addText(getProcstate());
@@ -593,7 +593,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             return "1";
         }
 
-        String predecessorVersion = getPredecessor().getVersion();
+        String predecessorVersion = getPredecessor().getCmnVersion();
         String[] branches = predecessorVersion.split("\\.");
         String lastSegment = branches[branches.length - 1];
         String[] lastBranch = lastSegment.split("-");
@@ -609,7 +609,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             else {
                 lastDescendant = versions.get(0);
             }
-            lastDescendantVersion = lastDescendant.getVersion();
+            lastDescendantVersion = lastDescendant.getCmnVersion();
         } catch (NoResultException e) {
             // no object with same predecessor
             log.debug("no result for last-descendant-query");
@@ -667,7 +667,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         name = name.replaceAll("[^\\w]", "_");
         File file = new File(path, name + extension);
         if (file.exists()) {
-            name = name + "_" + getVersion();
+            name = name + "_" + getCmnVersion();
             file = new File(path, name + extension);
             if (file.exists()) {
                 name = name + "_" + getId();
@@ -728,7 +728,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         if (root != that.root) return false
         if (state != that.state) return false
         if (type != that.type) return false
-        if (version != that.version) return false
+        if (cmnVersion != that.cmnVersion) return false
 
         return true
     }
@@ -758,7 +758,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         result = 31 * result + (procstate != null ? procstate.hashCode() : 0)
         result = 31 * result + (latestHead != null ? latestHead.hashCode() : 0)
         result = 31 * result + (latestBranch != null ? latestBranch.hashCode() : 0)
-        result = 31 * result + (version != null ? version.hashCode() : 0)
+        result = 31 * result + (cmnVersion != null ? cmnVersion.hashCode() : 0)
         result = 31 * result + (state != null ? state.hashCode() : 0)
         return result
     }
@@ -947,4 +947,5 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         log.debug("Found formatList: " + formatListNode.getText());
         return formatListNode.getText();
     }
+
 }

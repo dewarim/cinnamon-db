@@ -35,3 +35,9 @@ COPY metaset_types (id, config, description, name, obj_version) FROM stdin WITH 
 7,<metaset />,tika,tika,0
 8,<metaset />,translation_folder,translation_folder,0
 \.
+
+alter table folder_types add column config character varying 10241024 default '<config />' NOT NULL;
+alter table objtypes add column config character varying 10241024 default '<config />' NOT NULL;
+alter table objects alter column version set default '1';
+alter table objects rename column version to cmn_version;
+alter table objects rename obj_version to version;
