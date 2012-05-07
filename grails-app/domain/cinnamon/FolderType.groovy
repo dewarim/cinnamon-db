@@ -10,6 +10,7 @@ class FolderType {
     static constraints = {
         description( size: 0..Constants.DESCRIPTION_SIZE, blank: true)
         name(size: 1..Constants.NAME_LENGTH, blank: false, unique: true)
+        config size: 1..Constants.METADATA_SIZE, blank: false
     }
 
     static mapping = {
@@ -20,6 +21,7 @@ class FolderType {
 
     String name
     String description
+    String config = '<meta />'
 
 
     /**
