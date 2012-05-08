@@ -154,7 +154,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         Element folder = root.addElement("folder");
         folder.addElement("id").addText(String.valueOf(getId()));
         folder.addElement("name").addText(getName());
-        folder.add(userService.asElement("owner", getOwner()));
+        folder.add(UserAccount.asElement("owner", getOwner()));
         folder.addElement("aclId").addText(String.valueOf(getAcl().getId()));
         folder.addElement("typeId").addText(String.valueOf(type.getId()));
         if (folder.getParent() != null) {

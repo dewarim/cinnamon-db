@@ -63,6 +63,7 @@ class IndexType implements Serializable  {
     public Indexer getIndexer() {
         Indexer indexer;
         try {
+            log.debug("indexerClass: $indexerClass")
             indexer = indexerClass.newInstance();
         }
         catch (InstantiationException e) {
@@ -79,6 +80,7 @@ class IndexType implements Serializable  {
     }
 
     public void indexSysMeta(ContentContainer sysMeta, Document doc, String fieldname, String searchString, Boolean multipleResults) {
+        log.debug("starting indexSysMeta")
         getIndexer().indexObject(sysMeta, doc, fieldname, searchString, multipleResults);
     }
 

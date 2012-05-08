@@ -128,7 +128,12 @@ class IndexItem implements Serializable  {
         }
         if(forSysMeta){
 //            log.debug("sysMeta:\n "+systemMetadata.asString());
+            try{
             indexType.indexSysMeta(systemMetadata, doc, fieldname, searchString, multipleResults);
+            }
+            catch (Exception e){
+                log.debug("failed to index sysmeta:",e)
+            }
         }
         if(forMetadata){
             indexType.indexMetadata(metadata, doc, fieldname, searchString, multipleResults);

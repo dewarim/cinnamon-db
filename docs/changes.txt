@@ -43,4 +43,22 @@ alter table objects rename column version to cmn_version;
 alter table objects rename obj_version to version;
 alter table objects rename contentsize to content_size;
 alter table objects rename contentpath to content_path;
+alter table index_items rename for_sysmeta to for_sys_meta;
+alter table index_items rename system_index to systemic;
 
+--- update index_types with new package names
+update index_types set indexer_class='cinnamon.index.indexer.BooleanXPathIndexer' where name='xpath.boolean_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.DateXPathIndexer' where name='xpath.date_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.IntegerXPathIndexer' where name='xpath.integer_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.DecimalXPathIndexer' where name='xpath.decimal_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.TimeXPathIndexer' where name='xpath.time_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.ReverseStringIndexer' where name='xpath.reverse_string_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.ReverseCompleteStringIndexer' where name='xpath.reverse_complete_string_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.ParentFolderPathIndexer' where name='xpath.parent_folder_path_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.CompleteStringIndexer' where name='xpath.complete_string_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.DescendingCompleteStringIndexer' where name='xpath.descending_complete_string_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.DescendingStringIndexer' where name='xpath.descending_string_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.DescendingReverseCompleteStringIndexer' where name='xpath.descending_reverse_complete_string_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.DescendingReverseStringIndexer' where name='xpath.descending_reverse_string_indexer';
+update index_types set indexer_class='cinnamon.index.indexer.DefaultIndexer' where name='xpath.string_indexer';
+update index_types set va_provider_class = 'cinnamon.index.valueAssistance.DefaultProvider';

@@ -27,7 +27,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 
     public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
 
-    def metasetService
+    transient def metasetService
 
     static constraints = {
         contentPath(size: 0..255, nullable: true)
@@ -440,10 +440,10 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         data.addElement("latestBranch").addText(getLatestBranch().toString());
 
         log.debug("UserAsElementSection");
-        data.add(userService.asElement("lockedBy", locker));
-        data.add(userService.asElement("owner", owner));
-        data.add(userService.asElement("creator", creator));
-        data.add(userService.asElement("modifier", modifier));
+        data.add(UserAccount.asElement("lockedBy", locker));
+        data.add(UserAccount.asElement("owner", owner));
+        data.add(UserAccount.asElement("creator", creator));
+        data.add(UserAccount.asElement("modifier", modifier));
 
         log.debug("FormatAsElement");
         data.add(Format.asElement("format", getFormat()));
