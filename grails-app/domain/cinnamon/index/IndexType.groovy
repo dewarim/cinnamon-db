@@ -18,6 +18,7 @@ class IndexType implements Serializable  {
 
     static mapping = {
         cache true
+        table 'index_types'
         version 'obj_version'
     }
     

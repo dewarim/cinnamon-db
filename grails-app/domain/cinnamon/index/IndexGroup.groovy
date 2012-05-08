@@ -12,6 +12,7 @@ class IndexGroup implements Serializable{
 
     static mapping = {
         cache true
+        table 'index_groups'
         version 'obj_version'
     }
     

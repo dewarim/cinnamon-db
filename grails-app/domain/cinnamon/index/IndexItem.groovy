@@ -19,6 +19,8 @@ class IndexItem implements Serializable  {
     static mapping = {
         cache true
         version 'obj_version'
+        table 'index_items'
+        vaProviderParams column: 'va_params'
     }
     
     static belongsTo = [indexType:IndexType, indexGroup:IndexGroup]
