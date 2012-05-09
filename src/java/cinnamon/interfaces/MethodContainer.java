@@ -3,7 +3,7 @@ package cinnamon.interfaces;
 import java.lang.reflect.Method;
 
 /**
- * A container for a class and a method, which can be called with a command from a CommandRegistry.  
+ * A container for a class and a method, which can be called with a controller from a CommandRegistry.  
  *
  */
 public interface MethodContainer {

@@ -6,7 +6,7 @@ import cinnamon.utils.ParamParser
 /**
  * A ChangeTrigger is a class which decouples a CinnamonMethod and a Trigger-class. Every time an API-method
  * of the CinnamonServer is invoked which is marked with CinnamonMethod@trigger=true, the server checks
- * if a trigger condition is defined and executes the Trigger-classes before and after invoking the command.
+ * if a trigger condition is defined and executes the Trigger-classes before and after invoking the controller.
  * <br/>
  * <h2>Purpose of ChangeTriggers</h2>
  * Add transformation functions for specific object types, for example have a PDF-renderer create a new
@@ -28,7 +28,8 @@ class ChangeTrigger  implements Serializable {
     }
 
     Integer ranking = 1
-    String command
+    String controller
+    String action
     Boolean active = false
     Boolean preTrigger = false
     Boolean postTrigger = false
@@ -37,13 +38,14 @@ class ChangeTrigger  implements Serializable {
     public ChangeTrigger() {
     }
 
-    public ChangeTrigger(String command, ChangeTriggerType ctt) {
+    public ChangeTrigger(String controller, ChangeTriggerType ctt) {
         triggerType = ctt;
     }
 
     public ChangeTrigger(Map<String, String> fields) {
         ranking = Integer.parseInt(fields.get("ranking"));
-        command = fields.get("command");
+        controller = fields.get("controller");
+        action = fields.get("action");
         active = Boolean.parseBoolean(fields.get("active"));
         preTrigger = Boolean.parseBoolean(fields.get("pre_trigger"));
         postTrigger = Boolean.parseBoolean(fields.get("post_trigger"));
@@ -51,17 +53,17 @@ class ChangeTrigger  implements Serializable {
         triggerType = ChangeTriggerType.get(Long.parseLong(fields.get("trigger_type_id")));
     }
 
-    public ChangeTrigger(String command, ChangeTriggerType ctt, Integer ranking,
+    public ChangeTrigger(String controller, String action, ChangeTriggerType ctt, Integer ranking,
                          Boolean active, Boolean preTrigger, Boolean postTrigger, String config) {
-        this(command, ctt, ranking, active, preTrigger, postTrigger);
+        this(controller, action, ctt, ranking, active, preTrigger, postTrigger);
         setConfig(config);
     }
 
-    public ChangeTrigger(String command, ChangeTriggerType ctt, Integer ranking,
+    public ChangeTrigger(String controller, String action, ChangeTriggerType ctt, Integer ranking,
                          Boolean active, Boolean preTrigger, Boolean postTrigger) {
         triggerType = ctt;
         this.ranking = ranking;
-        this.command = command;
+        this.controller = controller;
         this.active = active;
         this.preTrigger = preTrigger;
         this.postTrigger = postTrigger;
@@ -88,7 +90,7 @@ class ChangeTrigger  implements Serializable {
     // TODO implement and rename
     public static List<ChangeTrigger> findAllByCommandAndPostAndActiveOrderByRanking(String command) {
 //        Query q = getSession().createNamedQuery("findAllChangeTriggersByCommandAndPostAndActiveOrderByRanking");
-//        q.setParameter("command", command);
+//        q.setParameter("controller", controller);
 //        return q.getResultList();
         return null
     }
@@ -96,7 +98,7 @@ class ChangeTrigger  implements Serializable {
     // TODO: implement and rename
     public static List<ChangeTrigger> findAllByCommandAndPreAndActiveOrderByRanking(String command) {
 //        Query q = getSession().createNamedQuery("findAllChangeTriggersByCommandAndPreAndActiveOrderByRanking");
-//        q.setParameter("command", command);
+//        q.setParameter("controller", controller);
 //        return q.getResultList();
         return null
     }
