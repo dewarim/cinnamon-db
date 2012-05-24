@@ -25,9 +25,11 @@ public class ContentContainer {
     /**
      * Instantiate a new ContentContainer object and set the content with a byte[] array.
      * @param content a byte array which holds the content
+     * @param indexable the item whose (metadata-, sysMeta- or file-) content this container holds.               
      */
-    public ContentContainer(byte[] content) {
+    public ContentContainer(Indexable indexable, byte[] content) {
         this.content = content;
+        this.indexable = indexable;
         contentLoaded = true;
     }
 
@@ -90,5 +92,13 @@ public class ContentContainer {
             contentLoaded = true;
             return content;
         }
+    }
+    
+    public Indexable getIndexable(){
+        return indexable;
+    }
+
+    public void setIndexable(Indexable indexable) {
+        this.indexable = indexable;
     }
 }
