@@ -12,7 +12,17 @@ objtypes: add obj_version column
 messages: add obj_version column
 objects: rename lang_id to language_id
 
+--- create metaset_types-table: see Server/docs/migration-2.2.sql
+--- create lifecycle_logs table: see Server/docs/migration-2.2.2.sql
+-- substitute with your local connection:
+ insert into customtables values(1,'jdbc:postgresql://127.0.0.1/demo?user=cinnamon&password=cinnamon',
+ 'org.postgresql.Driver','audit.connection', 0, 3)
 
+
+alter table users rename ui_language_id to language_id;
+alter table objects rename column lifecycle_state_id to state_id;
+alter table objects rename column pre_id to predecessor_id;
+alter table objects rename column locked_by to locker_id;
 alter table groups rename is_user to group_of_one;
 alter table formats add column obj_version bigint default 0 NOT NULL;
 alter table objtypes add column obj_version bigint default 0 NOT NULL;
@@ -67,5 +77,9 @@ alter table change_triggers rename column command to action;
 alter table change_triggers add column controller character varying(255) not null default 'cinnamon';
 update change_trigger_types set trigger_class='cinnamon.trigger.impl.RelationChangeTrigger';
 
+alter table lifecycle_states add column life_cycle_state_for_copy_id bigint not null default 0 
 --- test insert:
 insert into change_triggers values(6,true,0,100,1,'newVersion',true,true,'<config />', 'osd');
+
+update lifecycle_states set state_class='cinnamon.lifecycle.state.NopState' where state_class like '%NopState';
+update lifecycle_states set state_class='cinnamon.lifecycle.state.ChangeAclState' where state_class like '%ChangeAclState';
