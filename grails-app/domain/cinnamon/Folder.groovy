@@ -251,8 +251,12 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         return path.toString();
     }
 
-    // TODO: rename method
-    public boolean is_rootfolder() {
+    /**
+     * Determine if this folder is the root folder of the repository.
+     * The root folder has itself as its parent.
+     * @return true if this is the repository's root folder, false otherwise.
+     */
+    public boolean rootFolderCheck() {
         if (getParent() == null) {
             return false;
         }
