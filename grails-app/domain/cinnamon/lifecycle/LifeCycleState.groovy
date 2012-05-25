@@ -13,7 +13,6 @@ class LifeCycleState implements Serializable  {
         lifeCycle(nullable: true)
         lifeCycleStateForCopy(nullable: true)
         config size: 1..Constants.METADATA_SIZE
-
     }
 
     static belongsTo = [lifecycle:LifeCycle]

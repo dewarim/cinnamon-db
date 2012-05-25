@@ -36,11 +36,11 @@ public class DemoReviewState extends BaseLifeCycleState implements IState {
 
     @Override
     public void enter(ObjectSystemData osd, String params) {
-        log.debug("osd "+osd.getId()+" entered DemoReviewState.");
+        log.debug("osd ${osd.id} entered DemoReviewState.")
     }
 
     @Override
     public void exit(ObjectSystemData osd, IState nextState, String params) {
-        log.debug("osd "+osd.getId()+" left DemoReviewState.");
+        log.debug("osd ${osd.id} left DemoReviewState.")
     }
 }

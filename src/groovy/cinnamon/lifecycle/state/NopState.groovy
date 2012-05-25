@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class NopState extends BaseLifeCycleState implements IState {
 
-    Logger log = LoggerFactory.getLogger(this.getClass());
+    Logger log = LoggerFactory.getLogger(this.class)
 
     @Override
     public List<IState> getExitStates(ObjectSystemData osd) {
@@ -28,11 +28,11 @@ public class NopState extends BaseLifeCycleState implements IState {
 
     @Override
     public void enter(ObjectSystemData osd, String params) {
-        log.debug("OSD "+osd.getId()+" entered NopState");
+        log.debug("OSD ${osd.id} entered NopState")
     }
 
     @Override
     public void exit(ObjectSystemData osd, IState nextState, String params) {
-        log.debug("OSD "+osd.getId()+" left NopState.");
+        log.debug("OSD ${osd.id} left NopState.")
     }
 }
