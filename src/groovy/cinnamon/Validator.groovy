@@ -27,7 +27,8 @@ import cinnamon.interfaces.XmlConvertable
 import cinnamon.index.Indexable
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger
-import cinnamon.relation.Relation;
+import cinnamon.relation.Relation
+import cinnamon.index.SearchableDomain;
 
 class Validator implements ResultValidator {
 
@@ -484,7 +485,7 @@ class Validator implements ResultValidator {
 //		log.debug(String.format("filterClass: %s - javaClass: %s - hibernateId: %s", 
 //				filterClass, javaClass, hibernateId));
         try {
-            if (javaClass.equals("server.data.ObjectSystemData")) {
+            if (javaClass.equals(SearchableDomain.OSD.name)) {
                 log.debug("load OSD from database");
                 ObjectSystemData osd = ObjectSystemData.get(hibernateId);
                 log.debug("...done");
@@ -500,7 +501,7 @@ class Validator implements ResultValidator {
                     log.debug("Object with id " + hibernateId + " was not found.");
                 }
             }
-            else if (javaClass.equals("server.Folder")) {
+            else if (javaClass.equals(SearchableDomain.FOLDER.name)) {
                 cinnamon.Folder folder = Folder.get(hibernateId);
                 if (folder != null) {
                     Permission permission = fetchPermission(PermissionName.BROWSE_FOLDER);
