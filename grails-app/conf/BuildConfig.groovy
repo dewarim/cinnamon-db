@@ -38,7 +38,7 @@ grails.project.dependency.resolution = {
         runtime('org.apache.lucene:lucene-xml-query-parser:3.5.0')
         runtime('org.apache.lucene:lucene-queries:3.5.0')
         runtime 'postgresql:postgresql:9.1-901.jdbc4'
-
+        runtime 'org.mindrot:jbcrypt:0.3m'
     }
 
     plugins {
