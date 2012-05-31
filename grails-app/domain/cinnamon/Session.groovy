@@ -26,10 +26,10 @@ class Session  implements Serializable {
     
     String ticket
     Date expires = new Date()
-    Long lifetime
+    Long lifetime = new Date().time+3600000
     String username
-    String machinename
-    String message
+    String machinename = 'unknown'
+    String message = '-'
     UiLanguage language
     UserAccount user
 
