@@ -18,6 +18,17 @@ objects: rename lang_id to language_id
  insert into customtables values(1,'jdbc:postgresql://127.0.0.1/demo?user=cinnamon&password=cinnamon',
  'org.postgresql.Driver','audit.connection', 0, 3)
 
+--- insert default metaset_types 
+COPY metaset_types (id, config, description, name, obj_version) FROM stdin WITH DELIMITER ',';
+1,<metaset />,search,search,0
+2,<metaset />,cart,cart,0
+3,<metaset />,translation_extension,translation_extension,0
+4,<metaset />,render_input,render_input,0
+5,<metaset />,render_output,render_output,0
+6,<metaset />,test,test,0
+7,<metaset />,tika,tika,0
+8,<metaset />,translation_folder,translation_folder,0
+\.
 
 alter table users rename ui_language_id to language_id;
 alter table objects rename column lifecycle_state_id to state_id;
@@ -33,19 +44,6 @@ alter table objects rename column latesthead to latest_head;
 alter table relations rename column leftid to left_id;
 alter table relations rename column rightid to right_id;
 alter table change_triggers rename column trigger_type_id to change_trigger_type_id;
-
---- insert default metaset_types 
-COPY metaset_types (id, config, description, name, obj_version) FROM stdin WITH DELIMITER ',';
-1,<metaset />,search,search,0
-2,<metaset />,cart,cart,0
-3,<metaset />,translation_extension,translation_extension,0
-4,<metaset />,render_input,render_input,0
-5,<metaset />,render_output,render_output,0
-6,<metaset />,test,test,0
-7,<metaset />,tika,tika,0
-8,<metaset />,translation_folder,translation_folder,0
-\.
-
 alter table folder_types add column config character varying(10241024) default '<config />' NOT NULL;
 alter table objtypes add column config character varying(10241024) default '<config />' NOT NULL;
 alter table objects alter column version set default '1';
@@ -55,6 +53,7 @@ alter table objects rename contentsize to content_size;
 alter table objects rename contentpath to content_path;
 alter table index_items rename for_sysmeta to for_sys_meta;
 alter table index_items rename system_index to systemic;
+alter table lifecycle_states rename column lifecycle_state_id to life_cycle_state_for_copy_id;
 
 --- update index_types with new package names
 update index_types set indexer_class='cinnamon.index.indexer.BooleanXPathIndexer' where name='xpath.boolean_indexer';
