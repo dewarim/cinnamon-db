@@ -9,10 +9,10 @@ import org.dom4j.Element
 import cinnamon.ObjectSystemData
 import cinnamon.relation.resolver.RelationSide
 
-class RelationResolver  implements Serializable, IXmlDumper {
+class RelationResolver implements Serializable, IXmlDumper {
 
     static constraints = {
-        config( size: 0..Constants.METADATA_SIZE, blank: false)
+        config(size: 0..Constants.METADATA_SIZE, blank: false)
         name(size: 1..Constants.NAME_LENGTH, blank: false, unique: true)
     }
 
@@ -27,16 +27,14 @@ class RelationResolver  implements Serializable, IXmlDumper {
     String config = "<config />"
     Class<? extends IRelationResolver> resolverClass
 
-    RelationResolver() {
-
-    }
-
-    RelationResolver(Map<String,String> fields){
-        this(fields.get("config"), fields.get("class_name"), fields.get("name"));
-    }
+    RelationResolver() { }
+    
+//    RelationResolver(Map fields) {
+//        this(fields.get("config"), fields.get("class_name"), fields.get("name"));
+//    }
 
     RelationResolver(String config, String className, String name) {
-        if(className == null){
+        if (className == null) {
             throw new CinnamonException("error.param.classname");
         }
         setConfig(config);
