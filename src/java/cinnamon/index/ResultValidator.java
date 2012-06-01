@@ -27,8 +27,8 @@ public interface ResultValidator {
      *
 	 * @param doc the Document to check
      * @param filterClass a class which implements the Indexable interface and will be used to filter all
-     * results whose class is not of filterClass. For example, if you set this parameter to server.Folder,
-     * all server.data.OSD-results will be omitted from the final result. This parameter may be null, in that
+     * results whose class is not of filterClass. For example, if you set this parameter to cinnamon.Folder,
+     * all cinnamon.data.OSD-results will be omitted from the final result. This parameter may be null, in that
      * case class based filtering will not happen).
 	 * @return the XmlConvertable instance referenced by the document - or null if this result was filtered.
 	 */
