@@ -33,7 +33,7 @@ class FolderMetaset implements IMetasetJoin {
     public void doDelete(){
         metaset.getFolderMetasets().remove(this);
         folder.getMetasets().remove(this);
-        this.delete()
+        this.delete(flush: true)
     }
 
     boolean equals(o) {

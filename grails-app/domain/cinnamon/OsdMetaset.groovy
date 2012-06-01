@@ -33,7 +33,7 @@ class OsdMetaset implements IMetasetJoin {
     public void doDelete(){
         metaset.removeFromOsdMetasets(this);
         osd.removeFromMetasets(this);
-        this.delete()
+        this.delete(flush: true)
     }
 
     boolean equals(o) {
