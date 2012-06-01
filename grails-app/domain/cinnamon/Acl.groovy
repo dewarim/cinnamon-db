@@ -57,7 +57,7 @@ class Acl  implements Serializable {
     public List<AclEntry> getUserEntries(UserAccount user){
         if(! userEntries.containsKey(user)){
             def entries = AclEntry.findAll("from AclEntry ae where ae.acl=:acl and ae.group in (select g.cmnGroup from CmnGroupUser g where g.userAccount=:user)",
-                    [aclEntries: this, user:user]);
+                    [acl: this, user:user]);
             userEntries.put(user,entries);
         }
         return userEntries.get(user);
