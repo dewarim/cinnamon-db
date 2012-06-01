@@ -104,6 +104,13 @@ public class MetasetService {
         def metaCount = FolderMetaset.countByMetaset(metaset) + OsdMetaset.countByMetaset(metaset)
         if (metaCount == 0) {
             // only delete a metaset if no one else links there:
+            if(metaset.folderMetasets.size() > 0){
+                log.warn("Metaset #${metaset.id} still has folderMetasets. Something's wrong.")
+                metaset.folderMetasets.clear()                
+            }
+            if(metaset.osdMetasets.size() > 0){
+                log.warn("Metaset #${metaset.id} still has osdMetasets. Something's wrong.")
+            }
             metaset.delete()
         }
     }
