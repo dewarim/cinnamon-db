@@ -46,7 +46,10 @@ class Validator implements ResultValidator {
     }
 
     public List<ObjectSystemData> filterUnbrowsableObjects(Collection<ObjectSystemData> objects) {
-        List<ObjectSystemData> allowedObjects = new ArrayList<ObjectSystemData>();
+        if(objects == null || objects.size() == 0){
+            return []
+        }
+        List<ObjectSystemData> allowedObjects = new ArrayList<ObjectSystemData>();        
         if (user.verifySuperuserStatus()) {
             allowedObjects.addAll(objects);
             return allowedObjects;
@@ -83,6 +86,9 @@ class Validator implements ResultValidator {
     }
 
     public List<cinnamon.Folder> filterUnbrowsableFolders(Collection<cinnamon.Folder> folders) {
+        if(folders == null || folders.size() == 0){
+            return []
+        }
         List<cinnamon.Folder> allowedFolders = new ArrayList<cinnamon.Folder>();
         if (user.verifySuperuserStatus()) {
             log.debug("UserAccount is admin - show all folders.");
