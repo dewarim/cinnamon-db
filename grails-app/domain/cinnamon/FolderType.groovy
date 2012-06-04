@@ -21,7 +21,7 @@ class FolderType {
 
     String name
     String description
-    String config = '<meta />'
+    String config = '<config />'
 
 
     /**
