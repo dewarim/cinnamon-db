@@ -25,11 +25,29 @@ class Metaset {
 
     }
 
+    /**
+     * Create a new Metaset with the given content and type. This constructor does not
+     * validate the parameters. A proper content doc should look like this:
+     * <pre>
+     * @code{
+     *  <metaset id='id of metaset' type='id of metaset type'>
+     *      ...data...
+     *  </metaset>
+     * }
+     * <pre>
+     * @param content the XML content
+     * @param type the type of this metaset
+     */
     public Metaset(String content, MetasetType type) {
         this.type = type;
         this.content = content;
     }
 
+    /**
+     * Create a new Metaset with the parameters of the map. This constructor will
+     * check if the XML content is well-formed and add the id and type to the XML node, if possible.  
+     * @param cmd a Map containing the String parameters 'type' with the id of the metaset type and 'content'
+     */
     public Metaset(Map<String, String> cmd) {
         type = MetasetType.findByName(cmd.get("type"));
         setContent(cmd.get("content"));
