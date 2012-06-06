@@ -20,7 +20,10 @@ class Metaset {
 
     String content
     MetasetType type
-
+    
+    Set<OsdMetaset> osdMetasets = []
+    Set<FolderMetaset> folderMetasets = []
+    
     public Metaset() {
 
     }
