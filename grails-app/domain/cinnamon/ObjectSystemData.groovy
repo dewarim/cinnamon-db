@@ -858,8 +858,8 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     public IMetasetJoin fetchMetasetJoin(MetasetType type) {
-        List<OsdMetaset> metasetList = OsdMetaset.findAll(
-                "from OsdMetaset o where o.metaset.type=:metasetType and o.osd=:osd", [metasetType: type, osd: this])
+        List<OsdMetaset> metasetList = OsdMetaset.findAll("from OsdMetaset o where o.metaset.type=:metasetType and o.osd=:osd",
+                [metasetType: type, osd: this])
         log.debug("query for: " + type.name + " / osd: " + id + " returned #objects: " + metasetList.size());
         if (metasetList.size() == 0) {
             return null;
