@@ -98,17 +98,27 @@ public class ContentStore {
                 + sep + subfolderName;
         File subfolder = new File(subfolderPath);
 
-        boolean result = subfolder.mkdirs();
+        boolean result = subfolder.mkdirs();    
         log.debug("Result of mkdir: " + result);
 
-        String contentPath = subfolderPath + sep + f.getName();
+        String contentPath = subfolderPath + sep + file.getName();
 
-        result = f.renameTo(new File(contentPath));
-        log.debug("Result of renameTo(" + contentPath + ": " + result);
+        result = f.renameTo(new File(contentPath));               
+        log.debug("Result of renameTo: " + contentPath + ": " + result);
+        if(!result){
+            log.debug("renameTo failed. Trying to copy.");
+//            if(new File(subfolderPath).canWrite()){
+//                log.warn("cannot write to "+subfolderPath);
+//                throw new IOException(subfolderPath+" is not writable.");
+//            }
+            copyFile(f, new File(contentPath));
+            log.debug("contentPath after copy: "+contentPath);
+        }
+                
         if (!result && !subfolder.isDirectory()) {
             throw new IOException("Could not rename uploaded file " + contentPath);
         } else {
-            return subfolderName + sep + f.getName();
+            return subfolderName + sep + file.getName();
         }
     }
 

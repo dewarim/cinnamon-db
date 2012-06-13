@@ -413,8 +413,14 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      */
     public void setContentPath(String contentPath, String repository) {
         this.contentPath = contentPath;
+        log.debug("contentPath: $contentPath")
+        log.debug("repository: $repository")
         if (contentPath != null) {
-            this.contentSize = contentPath.length() > 0 ? (new File(getFullContentPath(repository))).length() : 0;
+            def fullcp = getFullContentPath(repository)
+            log.debug("full contentpath: $fullcp")
+            def fullcpLength = new File(fullcp).length()
+            log.debug("fullCpLength: $fullcpLength")
+            this.contentSize = contentPath.length() > 0 ? fullcpLength : 0;
         }
         else {
             this.contentSize = null;
