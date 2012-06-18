@@ -1,6 +1,0 @@
-create services for domain classes
-move DAOfooHibernate methods to services, where applicable.
-set table names so we can use legacy databases.
-
-mapping of column names
-
