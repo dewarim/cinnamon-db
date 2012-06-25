@@ -40,27 +40,30 @@ class FolderType {
             e.addElement("description").addText( LocalMessage.loc(type.getDescription()));
         }
         return e;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof FolderType)) return false;
-
-        FolderType that = (FolderType) o;
-
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return name != null ? name.hashCode() : 0;
-    }
+    }  
 
     public String toString(){
         return "FolderType #"+id+" "+name+" ("+description+")";
+    }
+
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof FolderType)) return false
+
+        FolderType that = (FolderType) o
+
+        if (config != that.config) return false
+        if (description != that.description) return false
+        if (name != that.name) return false
+
+        return true
+    }
+
+    int hashCode() {
+        int result
+        result = (name != null ? name.hashCode() : 0)
+        result = 31 * result + (description != null ? description.hashCode() : 0)
+        result = 31 * result + (config != null ? config.hashCode() : 0)
+        return result
     }
 }

@@ -49,22 +49,25 @@ class ObjectType implements Serializable  {
         return e;
     }
 
-    @Override
-    boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ObjectType)) return false;
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof ObjectType)) return false
 
-        ObjectType that = (ObjectType) o;
+        ObjectType that = (ObjectType) o
 
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (config != that.config) return false
+        if (description != that.description) return false
+        if (name != that.name) return false
 
-        return true;
+        return true
     }
 
-    @Override
     int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        int result
+        result = (name != null ? name.hashCode() : 0)
+        result = 31 * result + (description != null ? description.hashCode() : 0)
+        result = 31 * result + (config != null ? config.hashCode() : 0)
+        return result
     }
 
     String toString(){

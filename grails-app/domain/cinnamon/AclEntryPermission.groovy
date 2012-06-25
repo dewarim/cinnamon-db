@@ -25,23 +25,22 @@ class AclEntryPermission implements Serializable  {
         permission.getAePermissions().add(this);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AclEntryPermission)) return false;
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof AclEntryPermission)) return false
 
-        AclEntryPermission that = (AclEntryPermission) o;
+        AclEntryPermission that = (AclEntryPermission) o
 
-        if (aclEntry != null ? !aclEntry.equals(that.aclEntry) : that.aclentry != null) return false;
-        if (permission != null ? !permission.equals(that.permission) : that.permission != null) return false;
+        if (aclEntry != that.aclEntry) return false
+        if (permission != that.permission) return false
 
-        return true;
+        return true
     }
 
-    @Override
-    public int hashCode() {
-        int result = aclEntry != null ? aclEntry.hashCode() : 0;
-        result = 31 * result + (permission != null ? permission.hashCode() : 0);
-        return result;
+    int hashCode() {
+        int result
+        result = (aclEntry != null ? aclEntry.hashCode() : 0)
+        result = 31 * result + (permission != null ? permission.hashCode() : 0)
+        return result
     }
 }

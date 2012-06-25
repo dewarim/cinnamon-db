@@ -50,21 +50,22 @@ class Permission  implements Serializable {
         permission.addElement("description").addText( LocalMessage.loc(getDescription()));
     }
 
-    @Override
-    boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Permission)) return false;
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof Permission)) return false
 
-        Permission that = (Permission) o;
+        Permission that = (Permission) o
 
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (description != that.description) return false
+        if (name != that.name) return false
 
-        return true;
+        return true
     }
 
-    @Override
     int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        int result
+        result = (name != null ? name.hashCode() : 0)
+        result = 31 * result + (description != null ? description.hashCode() : 0)
+        return result
     }
 }

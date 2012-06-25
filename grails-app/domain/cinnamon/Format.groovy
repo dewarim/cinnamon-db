@@ -81,27 +81,26 @@ class Format implements Serializable  {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Format)) return false;
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof Format)) return false
 
-        Format format = (Format) o;
+        Format format = (Format) o
 
-        if (contenttype != null ? !contenttype.equals(format.contenttype) : format.contenttype != null) return false;
-        if (description != null ? !description.equals(format.description) : format.description != null) return false;
-        if (extension != null ? !extension.equals(format.extension) : format.extension != null) return false;
-        if (name != null ? !name.equals(format.name) : format.name != null) return false;
+        if (contenttype != format.contenttype) return false
+        if (description != format.description) return false
+        if (extension != format.extension) return false
+        if (name != format.name) return false
 
-        return true;
+        return true
     }
 
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (extension != null ? extension.hashCode() : 0);
-        result = 31 * result + (contenttype != null ? contenttype.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        return result;
+    int hashCode() {
+        int result
+        result = (name != null ? name.hashCode() : 0)
+        result = 31 * result + (description != null ? description.hashCode() : 0)
+        result = 31 * result + (extension != null ? extension.hashCode() : 0)
+        result = 31 * result + (contenttype != null ? contenttype.hashCode() : 0)
+        return result
     }
 }

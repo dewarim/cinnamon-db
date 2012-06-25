@@ -109,29 +109,22 @@ class RelationType implements IXmlDumper {
         return null; // is never reached unless RelationSide is null. And then you are up a certain creek without a paddle anyway.
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof RelationType)) return false;
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof RelationType)) return false
 
-        RelationType that = (RelationType) o;
+        RelationType that = (RelationType) o
 
-        if (id != that.id) return false;
-        if (cloneOnLeftCopy != null ? !cloneOnLeftCopy.equals(that.cloneOnLeftCopy) : that.cloneOnLeftCopy != null)
-            return false;
-        if (cloneOnRightCopy != null ? !cloneOnRightCopy.equals(that.cloneOnRightCopy) : that.cloneOnRightCopy != null)
-            return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (leftResolver != null ? !leftResolver.equals(that.leftResolver) : that.leftResolver != null) return false;
-        if (leftobjectprotected != null ? !leftobjectprotected.equals(that.leftobjectprotected) : that.leftobjectprotected != null)
-            return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (rightResolver != null ? !rightResolver.equals(that.rightResolver) : that.rightResolver != null)
-            return false;
-        if (rightobjectprotected != null ? !rightobjectprotected.equals(that.rightobjectprotected) : that.rightobjectprotected != null)
-            return false;
+        if (cloneOnLeftCopy != that.cloneOnLeftCopy) return false
+        if (cloneOnRightCopy != that.cloneOnRightCopy) return false
+        if (description != that.description) return false
+        if (leftResolver != that.leftResolver) return false
+        if (leftobjectprotected != that.leftobjectprotected) return false
+        if (name != that.name) return false
+        if (rightResolver != that.rightResolver) return false
+        if (rightobjectprotected != that.rightobjectprotected) return false
 
-        return true;
+        return true
     }
 
     @Override

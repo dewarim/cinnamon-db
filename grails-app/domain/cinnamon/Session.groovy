@@ -75,28 +75,35 @@ class Session  implements Serializable {
         setExpires(new Date(newTime));
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Session)) return false;
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof Session)) return false
 
-        Session session = (Session) o;
+        Session session = (Session) o
 
-        if (lifetime != session.lifetime) return false;
-        if (expires != null ? !expires.equals(session.expires) : session.expires != null) return false;
-        if (language != null ? !language.equals(session.language) : session.language != null) return false;
-        if (machinename != null ? !machinename.equals(session.machinename) : session.machinename != null) return false;
-        if (message != null ? !message.equals(session.message) : session.message != null) return false;
-        if (ticket != null ? !ticket.equals(session.ticket) : session.ticket != null) return false;
-        if (user != null ? !user.equals(session.user) : session.user != null) return false;
-        if (username != null ? !username.equals(session.username) : session.username != null) return false;
+        if (expires != session.expires) return false
+        if (language != session.language) return false
+        if (lifetime != session.lifetime) return false
+        if (machinename != session.machinename) return false
+        if (message != session.message) return false
+        if (ticket != session.ticket) return false
+        if (user != session.user) return false
+        if (username != session.username) return false
 
-        return true;
+        return true
     }
 
-    @Override
-    public int hashCode() {
-        return ticket != null ? ticket.hashCode() : 0;
+    int hashCode() {
+        int result
+        result = (ticket != null ? ticket.hashCode() : 0)
+        result = 31 * result + (expires != null ? expires.hashCode() : 0)
+        result = 31 * result + (lifetime != null ? lifetime.hashCode() : 0)
+        result = 31 * result + (username != null ? username.hashCode() : 0)
+        result = 31 * result + (machinename != null ? machinename.hashCode() : 0)
+        result = 31 * result + (message != null ? message.hashCode() : 0)
+        result = 31 * result + (language != null ? language.hashCode() : 0)
+        result = 31 * result + (user != null ? user.hashCode() : 0)
+        return result
     }
 
     public String toString(){

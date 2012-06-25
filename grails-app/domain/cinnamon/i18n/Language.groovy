@@ -74,4 +74,22 @@ class Language implements Serializable {
         lang.add(ParamParser.parseXml(getMetadata(), null));
     }
 
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof Language)) return false
+
+        Language language = (Language) o
+
+        if (isoCode != language.isoCode) return false
+        if (metadata != language.metadata) return false
+
+        return true
+    }
+
+    int hashCode() {
+        int result
+        result = (isoCode != null ? isoCode.hashCode() : 0)
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0)
+        return result
+    }
 }

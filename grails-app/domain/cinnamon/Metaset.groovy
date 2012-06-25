@@ -87,4 +87,23 @@ class Metaset {
         content.addAttribute("type", metaset.getType().getName());
         return content;
     }
+
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof Metaset)) return false
+
+        Metaset metaset = (Metaset) o
+
+        if (content != metaset.content) return false
+        if (type != metaset.type) return false
+
+        return true
+    }
+
+    int hashCode() {
+        int result
+        result = (content != null ? content.hashCode() : 0)
+        result = 31 * result + (type != null ? type.hashCode() : 0)
+        return result
+    }
 }

@@ -41,4 +41,25 @@ class Message implements Serializable {
         msg.addElement("languageId").addText( String.valueOf(language.getId()));
         msg.addElement("translation").addText( translation );
     }
+
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof Message)) return false
+
+        Message message1 = (Message) o
+
+        if (language != message1.language) return false
+        if (message != message1.message) return false
+        if (translation != message1.translation) return false
+
+        return true
+    }
+
+    int hashCode() {
+        int result
+        result = (message != null ? message.hashCode() : 0)
+        result = 31 * result + (language != null ? language.hashCode() : 0)
+        result = 31 * result + (translation != null ? translation.hashCode() : 0)
+        return result
+    }
 }

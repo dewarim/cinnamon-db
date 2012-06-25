@@ -52,27 +52,26 @@ class CustomTable implements Serializable {
         acl = Acl.get(new Long(cmd.get("acl_id")));
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CustomTable)) return false;
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof CustomTable)) return false
 
-        CustomTable that = (CustomTable) o;
+        CustomTable that = (CustomTable) o
 
-        if (acl != null ? !acl.equals(that.acl) : that.acl != null) return false;
-        if (connstring != null ? !connstring.equals(that.connstring) : that.connstring != null) return false;
-        if (jdbcDriver != null ? !jdbcDriver.equals(that.jdbcDriver) : that.jdbcDriver != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (acl != that.acl) return false
+        if (connstring != that.connstring) return false
+        if (jdbcDriver != that.jdbcDriver) return false
+        if (name != that.name) return false
 
-        return true;
+        return true
     }
 
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (connstring != null ? connstring.hashCode() : 0);
-        result = 31 * result + (acl != null ? acl.hashCode() : 0);
-        result = 31 * result + (jdbcDriver != null ? jdbcDriver.hashCode() : 0);
-        return result;
+    int hashCode() {
+        int result
+        result = (name != null ? name.hashCode() : 0)
+        result = 31 * result + (connstring != null ? connstring.hashCode() : 0)
+        result = 31 * result + (acl != null ? acl.hashCode() : 0)
+        result = 31 * result + (jdbcDriver != null ? jdbcDriver.hashCode() : 0)
+        return result
     }
 }

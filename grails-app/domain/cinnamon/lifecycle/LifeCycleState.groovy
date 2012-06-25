@@ -190,8 +190,8 @@ class LifeCycleState implements Serializable  {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof LifeCycleState)) return false;
+        if (this.is(o)) return true
+        if (!(o instanceof LifeCycleState)) return false
 
         LifeCycleState that = (LifeCycleState) o;
 

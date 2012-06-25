@@ -103,4 +103,34 @@ class ChangeTrigger  implements Serializable {
         return null
     }
 
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof ChangeTrigger)) return false
+
+        ChangeTrigger that = (ChangeTrigger) o
+
+        if (action != that.action) return false
+        if (active != that.active) return false
+        if (config != that.config) return false
+        if (controller != that.controller) return false
+        if (postTrigger != that.postTrigger) return false
+        if (preTrigger != that.preTrigger) return false
+        if (ranking != that.ranking) return false
+        if (triggerType != that.triggerType) return false
+
+        return true
+    }
+
+    int hashCode() {
+        int result
+        result = (ranking != null ? ranking.hashCode() : 0)
+        result = 31 * result + (controller != null ? controller.hashCode() : 0)
+        result = 31 * result + (action != null ? action.hashCode() : 0)
+        result = 31 * result + (active != null ? active.hashCode() : 0)
+        result = 31 * result + (preTrigger != null ? preTrigger.hashCode() : 0)
+        result = 31 * result + (postTrigger != null ? postTrigger.hashCode() : 0)
+        result = 31 * result + (config != null ? config.hashCode() : 0)
+        result = 31 * result + (triggerType != null ? triggerType.hashCode() : 0)
+        return result
+    }
 }
