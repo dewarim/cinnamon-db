@@ -20,7 +20,7 @@ public class HashMaker {
 	 */
 	public static String createDigest(String text){
 		Logger log = LoggerFactory.getLogger(HashMaker.class);
-		Integer rounds = Integer.parseInt(ConfThreadLocal.getConf().getField("passwordRounds", "12"));
+		Integer rounds = Integer.parseInt(ConfThreadLocal.getConf().getField("passwordRounds", "10"));
 		String digest = BCrypt.hashpw(text, BCrypt.gensalt(rounds));
 		log.debug("digest:"+digest);
 		return digest;
