@@ -5,6 +5,8 @@ import cinnamon.global.Constants
 import cinnamon.i18n.UiLanguage
 import org.dom4j.DocumentHelper
 import cinnamon.utils.ParamParser
+import cinnamon.utils.security.HashMaker
+import cinnamon.global.ConfThreadLocal
 
 class UserAccount  implements Serializable {
 
@@ -70,6 +72,22 @@ class UserAccount  implements Serializable {
         this.description = description;
     }
 
+    def beforeInsert() {
+        encodePassword()
+    }
+
+    def beforeUpdate() {
+        if (isDirty('pwd')) {            
+            encodePassword()
+        }
+    }
+
+    protected void encodePassword() {
+        if( ConfThreadLocal.getConf().getField("encryptPassword", "true") == 'true'){
+            pwd = HashMaker.createDigest(pwd)
+        }       
+    }
+    
     public Boolean verifySuperuserStatus(){
         if(userIsSuperuser != null){
             return userIsSuperuser;
