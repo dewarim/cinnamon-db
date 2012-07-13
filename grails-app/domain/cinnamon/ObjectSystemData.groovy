@@ -319,8 +319,12 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     /**
      * createClone: create a copy with created and modified set to current date, <br>
      * and without an Id (which should be set by the persistence layer when inserting into  the db).
-     * @return the cloned OSD, not yet persisted to the database. Note: this clone lacks the relations
+     * @return the cloned OSD, not yet persisted to the database. 
+     * Note 1: this clone lacks the relations
      * of the original. If you need the relations, you should use original.copyRelations(clone).
+     * Note 2: the latestBranch and latestHead information are also copied, which may not be
+     * what a new object needs (If you copy an object as version 1, it needs both fields to be true.
+     * If you are rebuilding a version tree etc, the current behavior is correct).
      */
     public ObjectSystemData createClone() {
         ObjectSystemData twin = new ObjectSystemData();
