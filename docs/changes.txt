@@ -82,3 +82,8 @@ insert into change_triggers values(6,true,0,100,1,'newVersion',true,true,'<confi
 
 update lifecycle_states set state_class='cinnamon.lifecycle.state.NopState' where state_class like '%NopState';
 update lifecycle_states set state_class='cinnamon.lifecycle.state.ChangeAclState' where state_class like '%ChangeAclState';
+
+--- update relation resolvers:
+update relation_resolvers set class_name = 'cinnamon.relation.resolver.FixedRelationResolver' where name='FixedRelationResolver';
+update relation_resolvers set class_name = 'cinnamon.relation.resolver.LatestBranchResolver' where name='LatestBranchResolver';
+update relation_resolvers set class_name = 'cinnamon.relation.resolver.LatestHeadResolver' where name='LatestHeadResolver';
