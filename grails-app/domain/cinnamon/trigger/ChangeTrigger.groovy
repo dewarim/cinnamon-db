@@ -43,14 +43,14 @@ class ChangeTrigger  implements Serializable {
     }
 
     public ChangeTrigger(Map<String, String> fields) {
-        ranking = Integer.parseInt(fields.get("ranking"));
-        controller = fields.get("controller");
-        action = fields.get("action");
-        active = Boolean.parseBoolean(fields.get("active"));
-        preTrigger = Boolean.parseBoolean(fields.get("pre_trigger"));
-        postTrigger = Boolean.parseBoolean(fields.get("post_trigger"));
-        setConfig(fields.get("config"));
-        triggerType = ChangeTriggerType.get(Long.parseLong(fields.get("trigger_type_id")));
+        ranking = Integer.parseInt(fields.get("ranking"))
+        controller = fields.get("controller")
+        action = fields.get("action")
+        active = Boolean.parseBoolean(fields.get("active"))
+        preTrigger = Boolean.parseBoolean(fields.get("pre_trigger"))
+        postTrigger = Boolean.parseBoolean(fields.get("post_trigger"))
+        setConfig(fields.get("config"))
+        triggerType = ChangeTriggerType.get(Long.parseLong(fields.get("trigger_type_id")))
     }
 
     public ChangeTrigger(String controller, String action, ChangeTriggerType ctt, Integer ranking,
