@@ -87,3 +87,5 @@ update lifecycle_states set state_class='cinnamon.lifecycle.state.ChangeAclState
 update relation_resolvers set class_name = 'cinnamon.relation.resolver.FixedRelationResolver' where name='FixedRelationResolver';
 update relation_resolvers set class_name = 'cinnamon.relation.resolver.LatestBranchResolver' where name='LatestBranchResolver';
 update relation_resolvers set class_name = 'cinnamon.relation.resolver.LatestHeadResolver' where name='LatestHeadResolver';
+
+update change_trigger_types set trigger_class='cinnamon.trigger.impl.LifecycleStateAuditTrigger' where trigger_class like '%LifecycleStateAuditTrigger';
