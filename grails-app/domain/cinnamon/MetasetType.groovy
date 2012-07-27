@@ -20,6 +20,7 @@ class MetasetType {
     }
     
     String name
+    @Deprecated // not used in production scenarios.
     String description
     String config = '<metaset />'
 
