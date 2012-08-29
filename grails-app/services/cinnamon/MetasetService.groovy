@@ -95,6 +95,11 @@ public class MetasetService {
     }
 
     public void unlinkMetaset(IMetasetOwner owner, Metaset metaset) {
+        if(! metaset){
+            // nop. Example use case:
+            // unlinkMetaset(osd, osd.fetchMetaset(thumbnail))
+            return
+        }
         IMetasetJoin metasetJoin = owner.fetchMetasetJoin(metaset.type);
         if(! metasetJoin){
             log.warn("metaset join for metaset ${metaset.id} was not found.")

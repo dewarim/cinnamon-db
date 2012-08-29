@@ -30,9 +30,15 @@ class OsdMetaset implements IMetasetJoin {
         return "OsdMetaset: "+id+" OSD: "+osd.getId()+" Metaset: "+metaset.getId();
     }
 
+    /*
+     * Note: this method will cause Hibernate to fail with  
+     * "deleted object would be re-saved by cascade (remove deleted object from associations)"
+     * if the osd or the metaset have changed during this session 
+     * (which changes the hashCode and thus confuses the HashSet-Implementation)
+     */
     public void doDelete(){
-        metaset.osdMetasets.remove(this);
-        osd.metasets.remove(this);
+        metaset.osdMetasets.remove(this)
+        osd.metasets.remove(this)
         this.delete(flush: true)
     }
 
