@@ -6,6 +6,14 @@ class CmnGroupUser  implements Serializable {
         cmnGroup unique: ['userAccount']
     }
 
+    CmnGroupUser() {
+    }
+
+    CmnGroupUser(cmnGroup, userAccount) {
+        this.cmnGroup = cmnGroup
+        this.userAccount = userAccount
+    }
+
     static belongsTo = [cmnGroup:CmnGroup, userAccount:UserAccount]
     
     static mapping = {

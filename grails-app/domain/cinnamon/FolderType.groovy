@@ -19,6 +19,17 @@ class FolderType {
         version 'obj_version'
     }
 
+    FolderType() {
+    }
+
+    FolderType(String name, String description, String config) {
+        this.name = name
+        this.description = description
+        if(config){
+            this.config = config
+        }
+    }
+
     String name
     String description
     String config = '<config />'

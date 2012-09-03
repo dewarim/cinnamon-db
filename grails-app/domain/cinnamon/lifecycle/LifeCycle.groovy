@@ -38,34 +38,34 @@ class LifeCycle implements Serializable  {
             defaultState.toXmlElement(ds);
         }
         Element cycleStates = lc.addElement("states");
-        for(LifeCycleState lcs : states){
+        for(LifeCycleState lcs : fetchStates()){
             lcs.toXmlElement(cycleStates);
         }
     }
 
     public Set<LifeCycleState> fetchStates() {
-        return LifeCycleState.findAll("from LifeCycleState lcs where lcs.lifeCycle=:lifeCycle",
-                [lifeCycle:this]).toSet();
+        def lcsSet = new HashSet<LifeCycleState>()
+        lcsSet.addAll(LifeCycleState.findAll("from LifeCycleState lcs where lcs.lifeCycle=:lifeCycle",
+                [lifeCycle:this]))
+        return lcsSet
     }
 
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof LifeCycle)) return false
 
-    @Override
-    boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof LifeCycle)) return false;
+        LifeCycle lifeCycle = (LifeCycle) o
 
-        LifeCycle lifeCycle = (LifeCycle) o;
+        if (defaultState != lifeCycle.defaultState) return false
+        if (name != lifeCycle.name) return false
 
-        if (defaultState != null ? !defaultState.equals(lifeCycle.defaultState) : lifeCycle.defaultState != null)
-            return false;
-        if (name != null ? !name.equals(lifeCycle.name) : lifeCycle.name != null) return false;
-
-        return true;
+        return true
     }
 
-    @Override
     int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        int result
+        result = (name != null ? name.hashCode() : 0)
+        result = 31 * result + (defaultState != null ? defaultState.hashCode() : 0)
+        return result
     }
-
 }

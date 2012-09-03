@@ -29,6 +29,9 @@ class LifeCycleState implements Serializable  {
     String config = '<config />'
     LifeCycleState lifeCycleStateForCopy
 
+    LifeCycleState() {
+    }
+
     public LifeCycleState(String name, Class<? extends IState> stateClass, String config, LifeCycle lifeCycle) {
         this.name = name;
         this.stateClass = stateClass;

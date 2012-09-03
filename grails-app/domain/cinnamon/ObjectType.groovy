@@ -20,6 +20,17 @@ class ObjectType implements Serializable  {
         version 'obj_version'
     }
 
+    ObjectType() {
+    }
+
+    ObjectType(String name, String description, String config) {
+        this.name = name
+        this.description = description
+        if(config){
+            this.config = config
+        }
+    }
+
     String name
     String description
     String config = '<meta />'
