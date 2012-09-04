@@ -76,7 +76,7 @@ alter table change_triggers rename column command to action;
 alter table change_triggers add column controller character varying(255) not null default 'cinnamon';
 update change_trigger_types set trigger_class='cinnamon.trigger.impl.RelationChangeTrigger';
 
-alter table lifecycle_states add column life_cycle_state_for_copy_id bigint not null default 0 
+alter table lifecycle_states add column life_cycle_state_for_copy_id bigint;
 --- test insert:
 insert into change_triggers values(6,true,0,100,1,'newVersion',true,true,'<config />', 'osd');
 
@@ -89,3 +89,7 @@ update relation_resolvers set class_name = 'cinnamon.relation.resolver.LatestBra
 update relation_resolvers set class_name = 'cinnamon.relation.resolver.LatestHeadResolver' where name='LatestHeadResolver';
 
 update change_trigger_types set trigger_class='cinnamon.trigger.impl.LifecycleStateAuditTrigger' where trigger_class like '%LifecycleStateAuditTrigger';
+
+--- the references to LifeCycle are turned into life_cycle because of camel case:
+alter table lifecycle_states rename lifecycle_id to life_cycle_id;
+alter table lifecycle_states alter column life_cycle_id drop NOT NULL;
