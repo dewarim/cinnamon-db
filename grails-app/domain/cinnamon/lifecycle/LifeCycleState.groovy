@@ -5,6 +5,7 @@ import org.dom4j.Element
 import cinnamon.ObjectSystemData
 import cinnamon.exceptions.CinnamonException
 import cinnamon.utils.ParamParser
+import cinnamon.i18n.LocalMessage
 
 class LifeCycleState implements Serializable  {
 
@@ -14,8 +15,6 @@ class LifeCycleState implements Serializable  {
         lifeCycleStateForCopy(nullable: true)
         config size: 1..Constants.METADATA_SIZE
     }
-
-    static belongsTo = [lifecycle:LifeCycle]
 
     static mapping = {
         cache true
