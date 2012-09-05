@@ -32,7 +32,21 @@ class RelationType implements IXmlDumper {
     RelationResolver rightResolver
 
     public RelationType(){}
-
+    
+    public RelationType(name, description, 
+                        leftProtected, rightProtected,
+                        leftResolver, rightResolver,
+                        cloneLeftCopy, cloneRightCopy){
+        this.name = name
+        this.description = description
+        this.leftobjectprotected = leftProtected
+        this.rightobjectprotected = rightProtected
+        this.leftResolver = leftResolver
+        this.rightResolver = rightResolver
+        this.cloneOnLeftCopy = cloneLeftCopy
+        this.cloneOnRightCopy = cloneOnRightCopy
+    }
+    
     public RelationType(Map<String, String> cmd) {
         name = cmd.get("name");
         description = cmd.get("description");
