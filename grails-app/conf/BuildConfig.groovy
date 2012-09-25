@@ -36,9 +36,9 @@ grails.project.dependency.resolution = {
 
         // runtime 'mysql:mysql-connector-java:5.1.5'
         runtime('org.apache.commons:commons-compress:1.4')
-        runtime('org.apache.lucene:lucene-core:3.5.0')
-        runtime('org.apache.lucene:lucene-xml-query-parser:3.5.0')
-        runtime('org.apache.lucene:lucene-queries:3.5.0')
+        runtime('org.apache.lucene:lucene-core:3.6.1')
+        runtime('org.apache.lucene:lucene-xml-query-parser:3.6.1')
+        runtime('org.apache.lucene:lucene-queries:3.6.1')
         runtime 'postgresql:postgresql:9.1-901.jdbc4'
         runtime 'org.mindrot:jbcrypt:0.3m'
     }
@@ -48,10 +48,10 @@ grails.project.dependency.resolution = {
               ":release:2.0.3") {
             export = false
         }
+        runtime(":hibernate:$grailsVersion")
         compile(':webxml:1.4.1')
         compile(':jquery:1.7.1')
         compile(':resources:1.1.6')
-//        compile(':spring-security-core:1.2.7.2')
 
     }
 }
