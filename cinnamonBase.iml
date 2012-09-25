@@ -48,19 +48,11 @@
       <library name="Grails User Library (cinnamonDb)">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.lucene/lucene-core/jars/lucene-core-3.5.0.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/jakarta-regexp/jakarta-regexp/jars/jakarta-regexp-1.4.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.lucene/lucene-queries/jars/lucene-queries-3.5.0.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.lucene/lucene-xml-query-parser/jars/lucene-xml-query-parser-3.5.0.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.tukaani/xz/jars/xz-1.0.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.commons/commons-compress/jars/commons-compress-1.4.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/postgresql/postgresql/jars/postgresql-9.1-901.jdbc4.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.mindrot/jbcrypt/jars/jbcrypt-0.3m.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.antlr/stringtemplate/jars/stringtemplate-3.2.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.antlr/antlr-runtime/jars/antlr-runtime-3.1.3.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.tmatesoft.sqljet/sqljet/jars/sqljet-1.0.4.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.tmatesoft.svnkit/trilead-ssh2/jars/trilead-ssh2-build213-svnkit-1.3-patch.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.tmatesoft.svnkit/svnkit/jars/svnkit-1.3.5.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/xml-resolver/xml-resolver/jars/xml-resolver-1.2.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/xerces/xercesImpl/jars/xercesImpl-2.8.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/net.sourceforge.nekohtml/nekohtml/jars/nekohtml-1.9.9.jar!/" />
@@ -101,15 +93,17 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/classworlds/classworlds/jars/classworlds-1.1-alpha-2.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/ant/ant/jars/ant-1.6.5.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.maven/maven-ant-tasks/jars/maven-ant-tasks-2.1.0.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.lucene/lucene-queries/jars/lucene-queries-3.6.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.lucene/lucene-xml-query-parser/jars/lucene-xml-query-parser-3.6.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.lucene/lucene-core/jars/lucene-core-3.6.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="grails-2.0.4" level="application" />
+    <orderEntry type="library" name="grails-2.1.1" level="application" />
     <orderEntry type="module" module-name="cinnamonBase-grailsPlugins" />
-    <orderEntry type="library" name="grails-2.1.0" level="application" />
   </component>
 </module>
 
