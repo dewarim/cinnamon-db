@@ -25,14 +25,16 @@ import cinnamon.global.ConfThreadLocal
 
 class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetasetOwner {
 
-    def folderService
-    def userService
-    def metasetService
+    static def folderService
+    static def userService
+    static def metasetService
 
     static constraints = {
         name unique: ['parent'], size: 1..Constants.NAME_LENGTH
         metadata(size: 1..Constants.METADATA_SIZE)
         parent nullable: true
+        indexOk nullable: true
+        indexed nullable: true
     }
 
     static mapping = {
@@ -65,7 +67,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         acl = that.acl;
         indexed = null;
         indexOk = null;
-        metadata = that.metadata;
+        setMetadata(that.getMetadata())
     }
 
     // TODO: determine which constructors are really needed.
