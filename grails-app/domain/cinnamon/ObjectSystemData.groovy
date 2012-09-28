@@ -27,7 +27,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 
     public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
 
-    transient def metasetService
+    static def metasetService
 
     static constraints = {
         contentPath(size: 0..255, nullable: true)
@@ -283,10 +283,17 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     /**
-     * Create a new OSD based upon "that". The lifecycle state (if not null) is set to the default lifecycle state.
-     * Root, predecessor, format and locked_by are set to null,
-     * version is also 0. You MUST set those to the correct values.
-     *
+     * Create a new OSD based upon "that". 
+     * Notes:
+     * <ul>
+     *     <li>The lifecycle state (if not null) is set to the default lifecycle state.</li>
+     *     <li>Root, predecessor, format and locked_by are set to null</li>
+     *     <li>version is also 0. You MUST set those to the correct values.</li>
+     *     <li>Metadata is NOT copied, you SHOULD do this after saving the instance 
+     *     to the database (since the metaset-to-object mapping requires a valid id).
+     *     If you do not copy the metadata, the new instance will have only an empty "meta" element.
+     *     </li> 
+     * </ul>
      * @param that the source OSD
      * @param user the active user who will be set as creator / modifier.
      */
@@ -303,7 +310,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         latestHead = that.getLatestHead();
         latestBranch = that.getLatestBranch();
         locker = null;
-        metadata = that.getMetadata();
         name = that.getName();
         parent = that.getParent();
         predecessor = null;
@@ -315,7 +321,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             state = that.getState().getLifeCycleStateForCopy();
         }
     }
-
+   
     /**
      * createClone: create a copy with created and modified set to current date, <br>
      * and without an Id (which should be set by the persistence layer when inserting into  the db).
@@ -326,6 +332,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      * what a new object needs (If you copy an object as version 1, it needs both fields to be true.
      * If you are rebuilding a version tree etc, the current behavior is correct).
      */
+    // TODO: this method will currently not work as intended (because setMeta only works safely after osd.save())
+    // (but atm this is not used in Cinnamon3, only in Cinnamon2. Still, needs refactoring if more C2-methods
+    // are migrated to C3.
     public ObjectSystemData createClone() {
         ObjectSystemData twin = new ObjectSystemData();
 
@@ -778,6 +787,11 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 [root: this.root])
     }
 
+    List<ObjectSystemData> findLatestBranches() {
+        return ObjectSystemData.findAll("from ObjectSystemData o WHERE o.latestBranch = true and o.root=:root order by o.id asc",
+                [root: this.root])
+    }
+    
     ObjectSystemData findLatestHead() {
         return ObjectSystemData.find("from ObjectSystemData o WHERE o.latestHead = true and o.root=:root",
                 [root: this.root])
