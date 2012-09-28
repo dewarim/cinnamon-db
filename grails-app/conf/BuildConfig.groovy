@@ -50,7 +50,6 @@ grails.project.dependency.resolution = {
         }
         runtime(":hibernate:$grailsVersion")
         compile(':webxml:1.4.1')
-        compile(':jquery:1.7.1')
         compile(':resources:1.1.6')
 
     }
