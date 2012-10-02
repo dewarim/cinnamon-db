@@ -59,6 +59,22 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
     }
 
+    /**
+     * Create a new Folder, based on another.
+     * Notes:
+     * <ul><li>
+     * The new folder has the same name and parent, so you must at least change
+     * one of them as folder names must be unique inside a given folder (like in a
+     * hierarchical file system).
+     * </li>
+     * <li>
+     * This constructor does not copy the custom metadata, as that requires a Hibernate id,
+     * which is generated on calling newFolder.save(). So if you want more than an empty
+     * custom metadata field, you should set the metadata after saving the new instance. 
+     * </li>
+     * </ul>
+     * @param that the folder upon which the copy is based.
+     */
     public Folder(Folder that) {
         name = that.name;
         owner = that.owner;
@@ -67,7 +83,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         acl = that.acl;
         indexed = null;
         indexOk = null;
-        setMetadata(that.getMetadata())
+//        setMetadata(that.getMetadata())
     }
 
     // TODO: determine which constructors are really needed.
