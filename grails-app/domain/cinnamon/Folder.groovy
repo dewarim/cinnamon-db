@@ -551,6 +551,12 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
                 }
                 return;
             }
+            
+            Set<MetasetType> currentMetasetMap = new HashSet<MetasetType>();
+            fetchMetasets().each{
+                // create a set of the currently existing metasets.
+                currentMetasetMap.add(it.type);
+            }
             for (Node metasetNode : sets) {
                 String content = metasetNode.detach().asXML();
                 String metasetTypeName = metasetNode.selectSingleNode("@type").getText();
@@ -560,6 +566,12 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
                     throw new CinnamonException("error.unknown.metasetType", metasetTypeName);
                 }
                 metasetService.createOrUpdateMetaset(this, metasetType, content, writePolicy);
+                currentMetasetMap.remove(metasetType);
+            }
+
+            currentMetasetMap.each{
+                // any metaset that was not found in the metadata parameter has to be deleted.                    
+                metasetService.unlinkMetaset(this, this.fetchMetaset(it.name)); // somewhat convoluted.
             }
         }
     }

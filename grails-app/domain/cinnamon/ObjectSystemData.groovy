@@ -861,6 +861,13 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                     }
                     return;
                 }
+
+                Set<MetasetType> currentMetasetMap = new HashSet<MetasetType>();
+                fetchMetasets().each{
+                    // create a set of the currently existing metasets.
+                    currentMetasetMap.add(it.type);
+                }
+                
                 log.debug("found: ${sets?.size()} metasets.")
                 for (Node metasetNode : sets) {
                     String content = metasetNode.detach().asXML();
@@ -872,6 +879,12 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                     }
                     log.debug("calling metasetService")
                     metasetService.createOrUpdateMetaset(this, metasetType, content, writePolicy);
+                    currentMetasetMap.remove(metasetType);
+                }
+                
+                currentMetasetMap.each{
+                    // any metaset that was not found in the metadata parameter has to be deleted.                    
+                    metasetService.unlinkMetaset(this, this.fetchMetaset(it.name)); // somewhat convoluted.
                 }
             }
         }
