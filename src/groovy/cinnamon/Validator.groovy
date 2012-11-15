@@ -322,7 +322,7 @@ class Validator implements ResultValidator {
         // get acl id		
         log.debug("permission needed: " + permission.getName());
         if (folder == null) {
-            throw new CinnamonException("error.folder.not_found");
+            throw new CinnamonException("error.folder.not.found");
         }
 
         if (user.verifySuperuserStatus()) {
@@ -332,7 +332,7 @@ class Validator implements ResultValidator {
 
         cinnamon.Acl acl = folder.getAcl();
         if (acl == null) {
-            throw new CinnamonException("error.acl.not_found");
+            throw new CinnamonException("error.acl.not.found");
         }
         else {
             log.debug(String.format("found acl: %s (%s)", acl.getId(), acl.getName()));
