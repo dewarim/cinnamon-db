@@ -534,8 +534,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     public void setMetadata(String metadata, WritePolicy writePolicy) {
         if (metadata == null || metadata.trim().length() < 9) {
             log.debug("delete obsolete metasets")
-            metasets.each {FolderMetaset folderMetaset ->
-                metasetService.unlinkMetaset(this, folderMetaset.metaset)
+            metasets.collect{it.metaset}.each {Metaset metaset->
+                metasetService.unlinkMetaset(this, metaset)
             }
         }
         else {

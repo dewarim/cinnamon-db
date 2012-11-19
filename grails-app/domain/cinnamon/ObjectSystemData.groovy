@@ -845,8 +845,8 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         try {
             if (metadata == null || metadata.trim().length() < 9) {
                 log.debug("delete obsolete metasets")
-                metasets.each {OsdMetaset osdMetaset ->
-                    metasetService.unlinkMetaset(this, osdMetaset.metaset)
+                metasets.collect{it.metaset}.each {Metaset metaset ->
+                    metasetService.unlinkMetaset(this, metaset)
                 }
             }
             else {
