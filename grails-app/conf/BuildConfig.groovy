@@ -36,9 +36,9 @@ grails.project.dependency.resolution = {
 
         // runtime 'mysql:mysql-connector-java:5.1.5'
         runtime('org.apache.commons:commons-compress:1.4')
-        runtime('org.apache.lucene:lucene-core:3.6.1')
-        runtime('org.apache.lucene:lucene-xml-query-parser:3.6.1')
-        runtime('org.apache.lucene:lucene-queries:3.6.1')
+        runtime('org.apache.lucene:lucene-core:3.6.2')
+        runtime('org.apache.lucene:lucene-xml-query-parser:3.6.2')
+        runtime('org.apache.lucene:lucene-queries:3.6.2')
         runtime 'postgresql:postgresql:9.1-901.jdbc4'
         runtime 'org.mindrot:jbcrypt:0.3m'
     }
