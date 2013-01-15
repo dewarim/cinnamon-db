@@ -13,6 +13,10 @@ class Link {
         osd nullable: true
         folder nullable: true
     }
+
+    static mapping = {
+        table('links')
+    }
     
     UserAccount owner
     Folder parent
