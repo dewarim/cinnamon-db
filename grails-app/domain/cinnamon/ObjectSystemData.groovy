@@ -28,6 +28,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
 
     static def metasetService
+    static def folderService
 
     static constraints = {
         contentPath(size: 0..255, nullable: true)

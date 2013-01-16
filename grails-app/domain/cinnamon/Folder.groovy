@@ -106,7 +106,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         log.debug("trying to find parent folder with id " + parentId);
 
         if (parentId == 0) {
-            this.parent = Folder.findRootFolder();
+            this.parent = folderService.findRootFolder();
             log.debug("got root folder:  " + parent);
         }
         else {
@@ -421,7 +421,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      */
     public List<Folder> getParentFolders(Folder folder) {
         List<Folder> folders = new ArrayList<Folder>();
-        Folder root = findRootFolder();
+        Folder root = folderService.findRootFolder();
         folder = folder.getParent();
         while (folder != null && folder != root) {
             folders.add(folder);
@@ -476,27 +476,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
     public List<ObjectSystemData> fetchFolderContent(Boolean recursive) {
         return fetchFolderContent(recursive, null, null);
-    }
-
-    /**
-     * Installation-Hint<br>
-     * Create a Folder whose parent equals it's own id and whose name is equals the ROOT_FOLDER_NAME.
-     * This is the default folder in which objects and folders are created if no parent_id is given.
-     *
-     * @return Folder rootFolder
-     */
-    static Folder findRootFolder() {
-        def rootFolder = Folder.find("from Folder f where f.name=:name and f.parent=f",
-                [name: Constants.ROOT_FOLDER_NAME]
-        )
-        if (!rootFolder) {
-            Logger log = LoggerFactory.getLogger(Folder.class);
-            log.error("RootFolder is missing!");
-            throw new CinnamonConfigurationException("Could not find the root folder. Please create a folder called " + Constants.ROOT_FOLDER_NAME
-                    + " with parent_id == its own id.");
-        }
-
-        return rootFolder;
     }
 
     /**
