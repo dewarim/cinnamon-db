@@ -8,10 +8,6 @@ import cinnamon.i18n.LocalMessage
 
 class IndexType implements Serializable  {
    
-    public enum DataType {
-        STRING, BOOLEAN, DATE_TIME, INTEGER, DECIMAL, TIME, TEXT
-    }
-
     static constraints = {
         name unique:true, size: 1..Constants.NAME_LENGTH
     }

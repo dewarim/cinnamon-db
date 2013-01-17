@@ -3,7 +3,7 @@ class CinnamonDbGrailsPlugin {
 //    def packaging = "binary"
     def groupId = 'cinnamon'
     // the plugin version
-    def version = "0.3.1.1"
+    def version = "0.3.1.2"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.1 > *"
     // the other plugins this plugin depends on
@@ -45,9 +45,7 @@ Domain and base classes for the Cinnamon CMS.
     }
 
     def doWithSpring = {
-        imageService(ImageService){
-            osdServiceBean = ref('osdService')
-        }
+
     }
 
     def doWithDynamicMethods = { ctx ->
