@@ -52,6 +52,7 @@ public class FileKeeper {
      * Delete all files of this thread which have been
      * scheduled for deletion.
      */
+    // TODO: finishDeleteFiles is not used anywhere. Refactor.
     public void finishDeleteFiles() {
         for (File file : files) {
             if (!file.exists()) {
