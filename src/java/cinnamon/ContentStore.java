@@ -202,7 +202,7 @@ public class ContentStore {
             deleteFileInRepository(contentPath, repository);
         }
         catch (IOException e){
-            log.error("Failed to replace content file on #"+osd.getId()+" with " +file.getAbsolutePath(),e);
+            log.error("Failed to replace content file on #"+osd.myId()+" with " +file.getAbsolutePath(),e);
             osd.setContentPath(contentPath);
             throw new CinnamonException(e);
         }
