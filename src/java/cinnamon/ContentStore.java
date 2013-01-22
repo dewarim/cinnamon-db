@@ -124,17 +124,28 @@ public class ContentStore {
 
     /**
      * Delete a file corresponding to an OSD object from the file system (and its
-     * containing folder if it will empty after deletion)
+     * containing folder if it is empty after deletion)
      *
      * @param osd the OSD whose content is going to be deleted.
      */
-    public static void deleteObjectFile(ObjectSystemData osd) {
-        if (osd.getContentPath() == null) {
-            return;
-        }
-        File contentFile = new File(osd.getContentPath());
-        if (contentFile.exists()) { // cannot delete non-existent file
-            FileKeeper.getInstance().addFileForDeletion(contentFile);
+    public static void deleteObjectFile(ObjectSystemData osd, String repository) {
+        Logger log = LoggerFactory.getLogger(ContentStore.class);
+        Conf conf = ConfThreadLocal.getConf();
+        String contentPath = osd.getContentPath();
+        if (contentPath != null && contentPath.length() > 0) {
+            File contentFile = new File(conf.getDataRoot() + File.separator +
+                    repository + File.separator + contentPath);
+            log.debug("deleteContent: " + contentFile.getAbsolutePath());
+
+            if (contentFile.exists()) {
+                log.debug("content exists, setting file up for later deletion.");
+                FileKeeper fileKeeper = FileKeeper.getInstance();
+                fileKeeper.addFileForDeletion(contentFile);
+                contentFile.deleteOnExit();
+            }
+            else {
+                log.warn("content file " + contentFile.getAbsolutePath() + "does not exist.");
+            }
         }
     }
 

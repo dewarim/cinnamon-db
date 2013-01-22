@@ -384,25 +384,10 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      * @param repository the name of the repository that contains the file.
      */
     public void deleteContent(String repository) {
-        Conf conf = ConfThreadLocal.getConf();
-        String contentPath = getContentPath();
-        if (contentPath != null && contentPath.length() > 0) {
-            File contentFile = new File(conf.getDataRoot() + File.separator +
-                    repository + File.separator + contentPath);
-            log.debug("deleteContent: " + contentFile.getAbsolutePath());
-
-            if (contentFile.exists()) {
-                log.debug("content exists, setting file up for later deletion.");
-                FileKeeper fileKeeper = FileKeeper.getInstance();
-                fileKeeper.addFileForDeletion(contentFile);
-            }
-            else {
-                log.warn("content file " + contentFile.getAbsolutePath() + "does not exist.");
-            }
-            setContentSize(null);
-            setContentPath(null);
-            setFormat(null);
-        }
+        ContentStore.deleteObjectFile(this, repository)
+        setContentSize(null);
+        setContentPath(null);
+        setFormat(null);
     }
 
     public void setContentPathAndFormat(String contentPath, String formatName, String repositoryName) {
