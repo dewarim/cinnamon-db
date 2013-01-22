@@ -1,5 +1,6 @@
 package cinnamon;
 
+import cinnamon.exceptions.CinnamonException;
 import cinnamon.global.Conf;
 import cinnamon.global.ConfThreadLocal;
 import cinnamon.utils.FileKeeper;
@@ -147,6 +148,71 @@ public class ContentStore {
                 log.warn("content file " + contentFile.getAbsolutePath() + "does not exist.");
             }
         }
+    }
+    
+    /**
+     * Delete a file from a repository. 
+     *
+     * @param contentPath the name of the file which is going to be deleted (as reported by osd.getContentPath)
+     */
+    public static void deleteFileInRepository(String contentPath, String repository) {
+        Logger log = LoggerFactory.getLogger(ContentStore.class);
+        Conf conf = ConfThreadLocal.getConf();
+        if (contentPath != null && contentPath.length() > 0) {
+            File contentFile = new File(conf.getDataRoot() + File.separator +
+                    repository + File.separator + contentPath);
+            log.debug("deleteContent: " + contentFile.getAbsolutePath());
+
+            if (contentFile.exists()) {
+                log.debug("content exists, setting file up for later deletion.");
+                FileKeeper fileKeeper = FileKeeper.getInstance();
+                fileKeeper.addFileForDeletion(contentFile);
+                contentFile.deleteOnExit();
+            }
+            else {
+                log.warn("content file " + contentFile.getAbsolutePath() + "does not exist.");
+            }
+        }
+    }
+
+    /**
+     * Replace the content of an OSD by importing a new file into the repository.
+     * Note: this method will set the contentPath on the OSD and also the contentSize, but
+     * will not touch the osd.format field.
+     * @param osd the OSD into which the new content will be installed.
+     * @param file the file containing the new content to copy into the repository.
+     * @param repository the repository where the content will be stored.
+     */
+    public static void replaceContent(ObjectSystemData osd, File file, String repository, UserAccount user){
+        Logger log = LoggerFactory.getLogger(ContentStore.class);
+        Boolean removeLock = false;
+        String contentPath = osd.getContentPath();
+        try{
+            if(osd.getLocker() == null){
+                osd.setLocker(user);
+                removeLock = true; 
+            }
+            if(osd.getLocker().equals(user)){
+                String newFilename = copyToContentStore(file.getAbsolutePath(), repository);
+                osd.setContentPath(newFilename);
+            }
+            else{
+                throw new CinnamonException("error.cannot.acquire.lock");
+            }
+            deleteFileInRepository(contentPath, repository);
+        }
+        catch (IOException e){
+            log.error("Failed to replace content file on #"+osd.getId()+" with " +file.getAbsolutePath(),e);
+            osd.setContentPath(contentPath);
+            throw new CinnamonException(e);
+        }
+        finally {
+            if(removeLock){
+                // only remove lock if the client has not already locked this object.
+                osd.setLocker(null);
+            }
+        }
+        
     }
 
     /**
