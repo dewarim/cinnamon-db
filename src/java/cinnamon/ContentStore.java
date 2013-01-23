@@ -183,17 +183,18 @@ public class ContentStore {
      * @param file the file containing the new content to copy into the repository.
      * @param repository the repository where the content will be stored.
      */
-    public static void replaceContent(ObjectSystemData osd, File file, String repository, UserAccount user){
+    public static String replaceContent(ObjectSystemData osd, File file, String repository, UserAccount user){
         Logger log = LoggerFactory.getLogger(ContentStore.class);
         Boolean removeLock = false;
         String contentPath = osd.getContentPath();
+        String newFilename;
         try{
             if(osd.getLocker() == null){
                 osd.setLocker(user);
                 removeLock = true; 
             }
             if(osd.getLocker().equals(user)){
-                String newFilename = copyToContentStore(file.getAbsolutePath(), repository);
+                newFilename = copyToContentStore(file.getAbsolutePath(), repository);
                 osd.setContentPath(newFilename);
             }
             else{
@@ -212,7 +213,7 @@ public class ContentStore {
                 osd.setLocker(null);
             }
         }
-        
+        return newFilename;
     }
 
     /**
