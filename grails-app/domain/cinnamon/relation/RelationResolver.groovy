@@ -42,6 +42,7 @@ class RelationResolver implements Serializable, IXmlDumper {
         try {
             resolverClass = (Class<? extends IRelationResolver>) Class.forName(className);
             // test if we can instantiate the resolver class:
+            //noinspection GroovyUnusedAssignment
             IRelationResolver resolverClassTest = resolverClass.newInstance();
         } catch (InstantiationException e) {
             throw new CinnamonException("error.instantiating.class", className);

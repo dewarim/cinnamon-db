@@ -28,7 +28,7 @@ public interface ITransformer {
 	/**
 	 * Transform the content of an OSD and send it back as a temporary file,
 	 * either for a HTTP-response to the client or to be used as content for another OSD.
-	 * @param source
+	 * @param source the source OSD that contains the content from which the transformed output file will be generated
 	 * @param params additional parameters, for example output dimensions in XML format for
 	 * an image transformer.
 	 * @param repositoryName the name of the OSD's repository. Needed to find the contentPath.

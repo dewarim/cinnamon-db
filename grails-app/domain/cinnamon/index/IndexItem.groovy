@@ -159,7 +159,7 @@ class IndexItem implements Serializable  {
                 }
             }
             catch (Exception e) {
-                log.debug("checkCondition: ",e.getMessage());
+                log.debug("checkCondition: "+e.message);
             }
         }
         return result;

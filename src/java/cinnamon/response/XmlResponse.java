@@ -83,8 +83,8 @@ public class XmlResponse implements Response {
 	/**
 	 * Add a text node to the document root. This is useful for methods which
 	 * only return one field like {@code <success>it works</success>}.
-	 * @param nodeName
-	 * @param text
+	 * @param nodeName name of the text node
+	 * @param text text content of the new node
 	 */
 	public void addTextNode(String nodeName, String text){
 		doc.addElement(nodeName).addText(text);

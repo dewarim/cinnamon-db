@@ -36,7 +36,7 @@ public class FileKeeper {
         return localFileKeeper.get();
     }
 
-    private Set<File> files = new HashSet<File>();
+    private Set<File> files = new HashSet<>();
 
     /**
      * Add a file which will be deleted later on if no

@@ -169,34 +169,37 @@ public class Conf{
 
     public static String createDatabaseConnectionURL(String repository, String dbType, String protocol, String host, String user, String password){
         String connString;
-       		if (dbType.equals("mysql")) {
-			connString="jdbc:"+ protocol+"://" + host +
-			"/" + repository +
-			"?user=" + user +
-			"&password=" + password;
-		} else if(dbType.equals("mssql")) {
-			connString="jdbc:"+protocol+"://" + host +
-			";databaseName=" + repository +
-			";user=" + user +
-			";password=" + password;
-		} else if(dbType.equals("mssql2000")) {
-			connString="jdbc:jtds:"+protocol+"://" + host +
-			"/" + repository +
-			";user=" + user +
-			";password=" + password +
-			";TDS=8.0";
-		}
-		else if(dbType.equals("postgresql")){
-			connString = "jdbc:"+protocol+"://" + host +
-			"/" + repository +
-			"?user=" + user +
-			"&password=" + password;
-			//"&ssl=true";
-		}
-		else{
-			throw new CinnamonConfigurationException("unknown db_type in config found!" +
-					" Currently, Cinnamon only connects to MySQL, PostgreSQL or MS-SQL dbs");
-		}
+        switch (dbType) {
+            case "mysql":
+                connString = "jdbc:" + protocol + "://" + host +
+                        "/" + repository +
+                        "?user=" + user +
+                        "&password=" + password;
+                break;
+            case "mssql":
+                connString = "jdbc:" + protocol + "://" + host +
+                        ";databaseName=" + repository +
+                        ";user=" + user +
+                        ";password=" + password;
+                break;
+            case "mssql2000":
+                connString = "jdbc:jtds:" + protocol + "://" + host +
+                        "/" + repository +
+                        ";user=" + user +
+                        ";password=" + password +
+                        ";TDS=8.0";
+                break;
+            case "postgresql":
+                connString = "jdbc:" + protocol + "://" + host +
+                        "/" + repository +
+                        "?user=" + user +
+                        "&password=" + password;
+                //"&ssl=true";
+                break;
+            default:
+                throw new CinnamonConfigurationException("unknown db_type in config found!" +
+                        " Currently, Cinnamon only connects to MySQL, PostgreSQL or MS-SQL dbs");
+        }
         return connString;
     }
 
@@ -216,7 +219,7 @@ public class Conf{
 	public Collection<String> getRepositoryList() {						
 		List<Node> nodeList = xml.selectNodes("/cinnamon_config/repositories/repository");
 		log.debug("number of repositories found:"+nodeList.size());
-		Collection<String> list = new LinkedList<String>();
+		Collection<String> list = new LinkedList<>();
 		for(Node n : nodeList){
 			String name = n.selectSingleNode("name").getText();
 			log.debug("found repository in config: '" + name + "'");
@@ -356,7 +359,7 @@ public class Conf{
 	public List<String> getApiClasses(String repository){
 		Node repo = xml.selectSingleNode("//repository[name='"+repository+"']/apiClasses");
 		List<Node> apiNodes = repo.selectNodes("apiClass");
-		List<String> apiClasses = new ArrayList<String>();
+		List<String> apiClasses = new ArrayList<>();
 		for(Node n : apiNodes){
 			apiClasses.add(n.getText());
 		}

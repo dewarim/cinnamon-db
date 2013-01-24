@@ -33,7 +33,7 @@ public class FieldAccessHibernateConfiguration extends DefaultGrailsDomainConfig
             return;
         }
 
-        for (PersistentClass pc : (Collection<PersistentClass>)classes.values()) {
+        for (PersistentClass pc : classes.values()) {
 
             // pc.getIdentifierProperty().setPropertyAccessorName("field");
 

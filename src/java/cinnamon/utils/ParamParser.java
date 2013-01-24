@@ -42,14 +42,13 @@ public class ParamParser {
         
         try{
             String p = param.trim().toLowerCase();
-			if(p.equals("true")){
-                return true;
-            }
-            else if(p.equals("false")){
-                return false;
-            }
-            else{
-                throw new RuntimeException("error.param");
+            switch (p) {
+                case "true":
+                    return true;
+                case "false":
+                    return false;
+                default:
+                    throw new RuntimeException("error.param");
             }
 		} catch (RuntimeException e) {
 			throw new RuntimeException(message);

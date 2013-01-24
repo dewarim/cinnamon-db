@@ -25,8 +25,8 @@ public class SearchResult {
     Integer startingResults;
     Integer pageSize;
 
-    Map<Document, Float> docScoreMap = new HashMap<Document, Float>();
-    Map<XmlConvertable, Float> xmlScoreMap = new HashMap<XmlConvertable, Float>();
+    Map<Document, Float> docScoreMap = new HashMap<>();
+    Map<XmlConvertable, Float> xmlScoreMap = new HashMap<>();
 
     public SearchResult(TopDocs hits, IndexSearcher searcher, Integer startingResult, Integer pageSize) throws IOException {
         this.startingResults = startingResult;
@@ -78,7 +78,7 @@ public class SearchResult {
     }
 
     public SearchResult filterDocuments(ResultValidator validator) {
-        Set<Document> filteredDocs = new HashSet<Document>();
+        Set<Document> filteredDocs = new HashSet<>();
         for (Map.Entry<Document, Float> entry : docScoreMap.entrySet()) {
             Document doc = entry.getKey();
             Float score = entry.getValue();
