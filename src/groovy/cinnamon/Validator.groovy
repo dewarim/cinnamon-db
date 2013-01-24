@@ -46,10 +46,10 @@ class Validator implements ResultValidator {
     }
 
     public List<ObjectSystemData> filterUnbrowsableObjects(Collection<ObjectSystemData> objects) {
-        if(objects == null || objects.size() == 0){
+        if (objects == null || objects.size() == 0) {
             return []
         }
-        List<ObjectSystemData> allowedObjects = new ArrayList<ObjectSystemData>();        
+        List<ObjectSystemData> allowedObjects = new ArrayList<ObjectSystemData>();
         if (user.verifySuperuserStatus()) {
             allowedObjects.addAll(objects);
             return allowedObjects;
@@ -86,7 +86,7 @@ class Validator implements ResultValidator {
     }
 
     public List<cinnamon.Folder> filterUnbrowsableFolders(Collection<cinnamon.Folder> folders) {
-        if(folders == null || folders.size() == 0){
+        if (folders == null || folders.size() == 0) {
             return []
         }
         List<cinnamon.Folder> allowedFolders = new ArrayList<cinnamon.Folder>();
@@ -99,7 +99,8 @@ class Validator implements ResultValidator {
         for (cinnamon.Folder folder : folders) {
             if (check_acl_entries(folder.getAcl(), browseFolder, folder)) {
                 allowedFolders.add(folder);
-            } else {
+            }
+            else {
                 log.debug(String.format("No browse permission found for folder %d", folder.getId()));
             }
         }
@@ -111,7 +112,7 @@ class Validator implements ResultValidator {
             validateAgainstAcl(osd, fetchPermission(perm));
         }
     }
-    
+
     public void validatePermissions(Folder folder, List permissions) {
         for (String perm : permissions) {
             validateFolderAgainstAcl(folder, fetchPermission(perm));
@@ -145,7 +146,6 @@ class Validator implements ResultValidator {
         validateAgainstAcl(osd, deleteObject);
         log.debug("after validate");
 
-        // TODO: use DAO
         log.debug("before set param");
         def relations = Relation.findAll("""select r from Relation r where 
             (r.leftOSD=:osd1 and r.type.leftobjectprotected=true) or
@@ -579,8 +579,6 @@ class Validator implements ResultValidator {
             while (parent != null) {
                 // look if the parent has a relevant aclentry for this acl:
                 AclEntry a = AclEntry.find("from AclEntry ae where ae.group=:parent and acl=:acl", [group: parent, acl: acl])
-
-                a = (AclEntry) q.getSingleResult();
                 if (!aclentries.add(a)) {
                     break; // break circular parent-child-parent relations.
                 }
