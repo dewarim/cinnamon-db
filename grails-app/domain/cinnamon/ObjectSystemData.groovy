@@ -971,4 +971,16 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         return formatListNode.getText();
     }
 
+    /**
+     * Determine the extension for file content in this OSD.
+     * @return the extension as defined by the format. Empty string if no format is set or
+     * format.extension is 'unknown'
+     */
+    String determineExtension(){
+        if (format){
+            return format?.name == 'format.unknown' ? '' : '.'+format.extension
+        }
+        return ''
+    }
+
 }
