@@ -13,6 +13,7 @@ class Format implements Serializable  {
         name(size: 1..Constants.NAME_LENGTH, blank: false, unique: true)
         extension(size: 1..64, blank: false)
         contenttype(size: 1..128, blank: false)
+        defaultObjectType nullable: true
     }
 
     static mapping = {
@@ -25,6 +26,7 @@ class Format implements Serializable  {
     String description
     String extension
     String contenttype
+    ObjectType defaultObjectType
 
     /**
      * Add the Format's fields as child-elements to a new element with the given name.
@@ -48,7 +50,8 @@ class Format implements Serializable  {
             e.addElement("sysName").addText(format.getName());
             e.addElement("description").addText(  LocalMessage.loc(format.getDescription()));
             e.addElement("contentType").addText(format.getContenttype());
-            e.addElement("extension").addText(format.getExtension());
+            e.addElement("extension").addText(format.getExtension());            
+            e.addElement("defaultObjectType").addText(format.defaultObjectType?.name ?: '')
 //            format.xmlNode = e;
             e = (Element) ParamParser.parseXml(e.asXML(), null);
         }
@@ -79,6 +82,11 @@ class Format implements Serializable  {
         if(description != null){
             setDescription(description);
         }
+        
+        if (cmd.containsKey('default_object_type_id')){
+            ObjectType objectType = ObjectType.get(cmd.get('default_object_type_id'))
+            setDefaultObjectType(objectType)
+        }
     }
 
     boolean equals(o) {
@@ -88,6 +96,7 @@ class Format implements Serializable  {
         Format format = (Format) o
 
         if (contenttype != format.contenttype) return false
+        if (defaultObjectType != format.defaultObjectType) return false
         if (description != format.description) return false
         if (extension != format.extension) return false
         if (name != format.name) return false
@@ -98,9 +107,7 @@ class Format implements Serializable  {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (description != null ? description.hashCode() : 0)
         result = 31 * result + (extension != null ? extension.hashCode() : 0)
-        result = 31 * result + (contenttype != null ? contenttype.hashCode() : 0)
         return result
     }
 }

@@ -20,8 +20,8 @@ package cinnamon.global;
 
 public class Constants {
 
-    public static final String SERVER_VERSION = "3.0.0.2";
-
+    public static final String SERVER_VERSION = "3.0.0.3";
+    
 	public static final String PS_LABEL_CREATED="_created";
 	public static final String ACL_DEFAULT="_default_acl";
 
@@ -90,7 +90,7 @@ public class Constants {
     public static final String RENDERSERVER_RENDER_TASK_FINISHED = "finishedRenderTask";
     public static final String RENDERSERVER_RENDER_TASK_FAILED = "failedRenderTask";
     public static final String OBJECT_TYPE_RENDER_TASK = "_render_task";
-
+    
     /**
      * Metaset type for thumbnail images embedded in custom xml data. 
      */
