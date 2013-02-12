@@ -127,21 +127,21 @@ class IndexItem implements Serializable  {
         }
         log.debug("checkCondition returned true");
         log.debug("searchString: "+searchString);
-        log.debug("fieldname: "+fieldname);
+        log.debug("fieldName: "+fieldname);
         if(forContent){
-            indexType.indexContent(content, doc, fieldname, searchString, multipleResults);
+            indexType.indexContent(content, doc, fieldname, searchString, multipleResults, storeField);
         }
         if(forSysMeta){
 //            log.debug("sysMeta:\n "+systemMetadata.asString());
             try{
-            indexType.indexSysMeta(systemMetadata, doc, fieldname, searchString, multipleResults);
+            indexType.indexSysMeta(systemMetadata, doc, fieldname, searchString, multipleResults, storeField);
             }
             catch (Exception e){
                 log.debug("failed to index sysmeta:",e)
             }
         }
         if(forMetadata){
-            indexType.indexMetadata(metadata, doc, fieldname, searchString, multipleResults);
+            indexType.indexMetadata(metadata, doc, fieldname, searchString, multipleResults, storeField);
         }
     }
 

@@ -1,6 +1,7 @@
 package cinnamon.index
 
 import cinnamon.global.Constants
+import org.apache.lucene.document.Field
 import org.dom4j.Element
 import org.apache.lucene.document.Document
 import cinnamon.exceptions.CinnamonException
@@ -55,12 +56,14 @@ class IndexType implements Serializable  {
         type.addElement("dataType").addText(dataType.toString());
         type.addElement("vaProviderClass").addText(vaProviderClass.getName());
     }
-
-    public Indexer getIndexer() {
+    
+    public Indexer getIndexer(Boolean storeField) {
         Indexer indexer;
         try {
             log.debug("indexerClass: $indexerClass")
+            indexerClass.getConstructor()
             indexer = indexerClass.newInstance();
+            indexer.store = storeField ? Field.Store.YES : Field.Store.NO
         }
         catch (InstantiationException e) {
             throw new CinnamonException("error.instantiating.class", e, indexerClass.getName());
@@ -71,17 +74,17 @@ class IndexType implements Serializable  {
     }
 
 
-    public void indexContent(ContentContainer content, Document doc, String fieldname, String searchString, Boolean multipleResults) {
-        getIndexer().indexObject(content, doc, fieldname, searchString, multipleResults);
+    public void indexContent(ContentContainer content, Document doc, String fieldName, String searchString, Boolean multipleResults, Boolean storeField) {
+        getIndexer(storeField).indexObject(content, doc, fieldName, searchString, multipleResults);
     }
 
-    public void indexSysMeta(ContentContainer sysMeta, Document doc, String fieldname, String searchString, Boolean multipleResults) {
+    public void indexSysMeta(ContentContainer sysMeta, Document doc, String fieldName, String searchString, Boolean multipleResults, Boolean storeField) {
         log.debug("starting indexSysMeta")
-        getIndexer().indexObject(sysMeta, doc, fieldname, searchString, multipleResults);
+        getIndexer(storeField).indexObject(sysMeta, doc, fieldName, searchString, multipleResults);
     }
 
-    public void indexMetadata(ContentContainer metadata, Document doc, String fieldname, String searchString, Boolean multipleResults) {
-        getIndexer().indexObject(metadata, doc, fieldname, searchString, multipleResults);
+    public void indexMetadata(ContentContainer metadata, Document doc, String fieldName, String searchString, Boolean multipleResults, Boolean storeField) {
+        getIndexer(storeField).indexObject(metadata, doc, fieldName, searchString, multipleResults);
     }
 
     boolean equals(o) {
