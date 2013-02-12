@@ -1,6 +1,7 @@
 package cinnamon.index
 
 import cinnamon.global.Constants
+import org.apache.lucene.document.Field
 import org.dom4j.Element
 import org.apache.lucene.document.Document
 import cinnamon.i18n.LocalMessage
@@ -43,6 +44,7 @@ class IndexItem implements Serializable  {
     Boolean forContent = false
     Boolean forMetadata = false
     Boolean forSysMeta = false
+    Boolean storeField = false
 
     /**
      * If an indexItem can generate multiple distinct results, you should set this
@@ -79,11 +81,12 @@ class IndexItem implements Serializable  {
         forContent = fields.get("for_content").equals("true");
         forMetadata = fields.get("for_metadata").equals("true");
         forSysMeta = fields.get("for_sys_meta").equals("true");
+        storeField = fields.get('store_field').equals('true')
     }
 
     public IndexItem(String name, String xpath, String searchCondition, String fieldname, IndexType indexType,
                      Boolean multipleResults, String vaParams, Boolean systemic, IndexGroup indexGroup,
-                     Boolean forContent, Boolean forMetadata, Boolean forSysMeta){
+                     Boolean forContent, Boolean forMetadata, Boolean forSysMeta, Boolean storeField){
         this.name = name;
         this.searchString = xpath;
         this.searchCondition = searchCondition;
@@ -96,6 +99,7 @@ class IndexItem implements Serializable  {
         this.forContent = forContent;
         this.forMetadata = forMetadata;
         this.forSysMeta = forSysMeta
+        this.storeField = storeField
     }
     public void toXmlElement(Element root){
         Element item = root.addElement("indexItem");
@@ -111,6 +115,7 @@ class IndexItem implements Serializable  {
         item.addElement("forMetadata").addText(forMetadata.toString());
         item.addElement("forContent").addText(forContent.toString());
         item.addElement("forSysMeta").addText(forSysMeta.toString());
+        item.addElement("storeField").addText(storeField.toString());
         indexGroup.toXmlElement(item);
     }
 
@@ -181,6 +186,7 @@ class IndexItem implements Serializable  {
         if (name != indexItem.name) return false
         if (searchCondition != indexItem.searchCondition) return false
         if (searchString != indexItem.searchString) return false
+        if (storeField != indexItem.storeField) return false
         if (systemic != indexItem.systemic) return false
         if (vaProviderParams != indexItem.vaProviderParams) return false
 
@@ -190,17 +196,7 @@ class IndexItem implements Serializable  {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (searchString != null ? searchString.hashCode() : 0)
-        result = 31 * result + (searchCondition != null ? searchCondition.hashCode() : 0)
-        result = 31 * result + (systemic != null ? systemic.hashCode() : 0)
         result = 31 * result + (fieldname != null ? fieldname.hashCode() : 0)
-        result = 31 * result + (forContent != null ? forContent.hashCode() : 0)
-        result = 31 * result + (forMetadata != null ? forMetadata.hashCode() : 0)
-        result = 31 * result + (forSysMeta != null ? forSysMeta.hashCode() : 0)
-        result = 31 * result + (multipleResults != null ? multipleResults.hashCode() : 0)
-        result = 31 * result + (vaProviderParams != null ? vaProviderParams.hashCode() : 0)
-        result = 31 * result + (indexType != null ? indexType.hashCode() : 0)
-        result = 31 * result + (indexGroup != null ? indexGroup.hashCode() : 0)
         return result
     }
 }

@@ -93,3 +93,10 @@ update change_trigger_types set trigger_class='cinnamon.trigger.impl.LifecycleSt
 --- the references to LifeCycle are turned into life_cycle because of camel case:
 alter table lifecycle_states rename lifecycle_id to life_cycle_id;
 alter table lifecycle_states alter column life_cycle_id drop NOT NULL;
+
+--- add defaultObjectType to Format table:
+alter table formats add column default_object_type_id bigint;
+alter table formats add constraint defaultObjectType foreign key (default_object_type_id) references objtypes;
+
+--- add store_field value to IndexItem table:
+alter table index_items add column store_field boolean not null default false;
