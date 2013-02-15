@@ -75,14 +75,15 @@ class Relation implements Serializable  {
     }
 
     public void toXmlElement(Element root, Boolean includeMetadata){
-        Element relation = root.addElement("relation");
-        relation.addElement("id").addText(String.valueOf(getId()) );
-        relation.addElement("leftId").addText( String.valueOf(leftOSD.getId()));
-        relation.addElement("rightId").addText( String.valueOf(rightOSD.getId()));
-        relation.addElement("type").addText(type.getName());
+        Element relation = root.addElement("relation")
+        relation.addElement("id").addText(String.valueOf(getId()) )
+        relation.addElement("leftId").addText( String.valueOf(leftOSD.getId()))
+        relation.addElement("rightId").addText( String.valueOf(rightOSD.getId()))
+        relation.addElement("type").addText(type.getName())
+        relation.addElement("typeId").addText(String.valueOf(type.id))
         if(includeMetadata){
-            Node metadata = ParamParser.parseXml(getMetadata(), null);
-            relation.add(metadata);
+            Node metadata = ParamParser.parseXml(getMetadata(), null)
+            relation.add(metadata)
         }
     }
 
