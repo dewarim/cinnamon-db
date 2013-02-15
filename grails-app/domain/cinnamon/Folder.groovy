@@ -163,12 +163,11 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     /**
-     * // TODO: move XML serialization to a service class 
+     * // TODO: move XML serialization to a service class? 
      * Add the folder as XML Element "folder" to the parameter Element.
      * @param root
      */
     public void toXmlElement(Element root) {
-
         Element folder = root.addElement("folder");
         folder.addElement("id").addText(String.valueOf(getId()));
         folder.addElement("name").addText(getName());
@@ -238,7 +237,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     @Override
-    public String getSystemMetadata() {
+    public String getSystemMetadata(Boolean withRelations) {    
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("sysMeta");
         String className = getClass().getName();
@@ -246,6 +245,10 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         root.addAttribute("hibernateId", String.valueOf(getId()));
         root.addAttribute("id", className + "@" + getId());
         toXmlElement(root);
+        // note: Folders currently do not have relations, so the parameter is set to an empty node if required.
+        if (withRelations){
+            ((Element )root.selectSingleNode('folder')).addElement('relations')
+        }
         return doc.asXML();
     }
 

@@ -7,6 +7,7 @@ import cinnamon.i18n.Language
 import cinnamon.lifecycle.LifeCycleState
 import cinnamon.global.Constants
 import cinnamon.exceptions.CinnamonException
+import cinnamon.relation.Relation
 import cinnamon.utils.ParamParser
 import org.dom4j.Document
 import org.dom4j.DocumentHelper
@@ -429,7 +430,15 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     public void toXmlElement(Element root) {
         root.add(convert2domElement());
     }
-
+    
+    public Element addRelationsToElement(Element root){
+        def data = root.addElement("relations")
+        Relation.findAllByLeftOSDOrRightOSD(this,this).each{ relation ->
+            relation.toXmlElement(data, true)
+        }
+        return root
+    }
+    
     public Element convert2domElement() {
         Element data = DocumentHelper.createElement("object");
         data.addElement("id").addText(String.valueOf(getId()));
@@ -548,7 +557,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     @Override
-    public String getSystemMetadata() {
+    public String getSystemMetadata(Boolean withRelations) {
         log.debug("getsystemMeta");
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("sysMeta");
@@ -557,7 +566,11 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         root.addAttribute("hibernateId", String.valueOf(getId()));
         root.addAttribute("id", className + "@" + getId()); // for a given repository, it's unique.
         log.debug("convert2domElement");
-        root.add(convert2domElement());
+        Element sysMeta = convert2domElement()
+        if (withRelations){
+            addRelationsToElement(sysMeta)
+        }
+        root.add(sysMeta);
         return doc.asXML();
     }
 
