@@ -1,0 +1,11 @@
+*.idea/**
+*.svn*
+*.settings*
+*.class
+target/**
+*~
+.svn*
+.svn
+.classpath
+plugin.xml
+grails-cinnamon-db*
