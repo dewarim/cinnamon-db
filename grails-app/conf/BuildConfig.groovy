@@ -41,6 +41,7 @@ grails.project.dependency.resolution = {
         runtime('org.apache.lucene:lucene-queries:3.6.2')
         runtime 'postgresql:postgresql:9.1-901.jdbc4'
         runtime 'org.mindrot:jbcrypt:0.3m'
+        test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
     }
 
     plugins {
@@ -51,5 +52,8 @@ grails.project.dependency.resolution = {
         runtime(":hibernate:$grailsVersion")
         compile(':webxml:1.4.1')
         compile(':resources:1.1.6')
+        test (':spock:0.7'){
+            exclude "spock-grails-support"
+        }
     }
 }

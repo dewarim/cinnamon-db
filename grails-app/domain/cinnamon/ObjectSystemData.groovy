@@ -996,4 +996,50 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         return ''
     }
 
+
+    /**
+     * Set the latestHead and latestBranch flags on this object and fix the direct predecessor as well,
+     * if necessary.
+     *
+     * Under normal circumstances, the code should always set the correct version and derived from the
+     * relationships of child and predecessor objects the latestHead and latestBranch flags as well.
+     * But in the case of complex copy operations of whole or partial object trees, 
+     * this is sometimes difficult to figure out, so this method sets the flags to their correct settings.
+     * @param children the children of this object 
+     *        (for easier testability they are not fetched from the database
+     *        but have to submitted as params)
+     */
+    void fixLatestHeadAndBranch(List<ObjectSystemData> children) {
+        ObjectSystemData predecessor = predecessor
+        Boolean hasChildren = children.size() > 0
+        if (hasChildren) {
+            // if target has children: it is not latestBranch.
+            latestBranch = false
+            // target *may* be latestHead if the previous head has been deleted 
+            // and only child branches remain.
+            Boolean isHead = true
+            for (ObjectSystemData child : children) {
+                if (child.cmnVersion.matches('^\\d+$')) {
+                    isHead = false
+                    break
+                }
+            }
+            latestHead = isHead
+        }
+        else {
+            // target no children: it is latestBranch
+            latestBranch = true
+            if (cmnVersion.matches('^\\d+$')) {
+                latestHead = true
+                if (predecessor != null && predecessor.getLatestHead()) {
+                    predecessor.latestHead = false
+                }
+            }
+        }
+
+        // the predecessor cannot be latest branch, that has to be this (or a descendant) node.
+        if (predecessor != null && predecessor.latestBranch) {
+            predecessor.latestBranch = false
+        }
+    }
 }
