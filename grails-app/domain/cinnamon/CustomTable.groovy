@@ -69,9 +69,6 @@ class CustomTable implements Serializable {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (connstring != null ? connstring.hashCode() : 0)
-        result = 31 * result + (acl != null ? acl.hashCode() : 0)
-        result = 31 * result + (jdbcDriver != null ? jdbcDriver.hashCode() : 0)
         return result
     }
 }

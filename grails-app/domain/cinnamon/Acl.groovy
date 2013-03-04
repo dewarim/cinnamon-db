@@ -96,7 +96,6 @@ class Acl  implements Serializable {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (description != null ? description.hashCode() : 0)
         return result
     }
 
