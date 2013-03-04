@@ -423,14 +423,13 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * @return List of parent folders excluding root folder.
      */
     public List<Folder> getParentFolders(Folder folder) {
-        List<Folder> folders = new ArrayList<Folder>();
-        Folder root = folderService.findRootFolder();
-        folder = folder.getParent();
-        while (folder != null && folder != root) {
-            folders.add(folder);
-            folder = folder.getParent();
+        List<Folder> folders = new ArrayList<Folder>()
+        folder = folder.parent
+        while (folder != null && folder != folder.parent) {
+            folders.add(folder)
+            folder = folder.parent
         }
-        return folders;
+        return folders
     }
 
     /**
