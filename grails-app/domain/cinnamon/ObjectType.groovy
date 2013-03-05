@@ -9,7 +9,6 @@ import cinnamon.utils.ParamParser
 class ObjectType implements Serializable  {
 
     static constraints = {
-        description( size: 0..Constants.DESCRIPTION_SIZE, blank: true)
         name(size: 1..Constants.NAME_LENGTH, blank: false, unique: true)
         config size: 1..Constants.METADATA_SIZE, blank: false
     }
@@ -25,14 +24,12 @@ class ObjectType implements Serializable  {
 
     ObjectType(String name, String description, String config) {
         this.name = name
-        this.description = description
         if(config){
             this.config = config
         }
     }
 
     String name
-    String description
     String config = '<meta />'
 
     /**
@@ -46,15 +43,9 @@ class ObjectType implements Serializable  {
         Element e = DocumentHelper.createElement(elementName);
         // TODO: perhaps add cache-field xmlNode for XML serialized version.
         if(type != null){
-//            if(type.xmlNode != null){
-//                type.xmlNode.setName(elementName);
-//                return (Element) ParamParser.parseXml(type.xmlNode.asXML(), null);
-//            }
             e.addElement("id").addText(String.valueOf(type.getId()));
             e.addElement("name").addText( LocalMessage.loc(type.getName()));
             e.addElement("sysName").addText(type.getName());
-            e.addElement("description").addText(  LocalMessage.loc(type.getDescription()));
-//            type.xmlNode = e;
             e = (Element) ParamParser.parseXml(e.asXML(), null);
         }
         return e;
@@ -67,7 +58,6 @@ class ObjectType implements Serializable  {
         ObjectType that = (ObjectType) o
 
         if (config != that.config) return false
-        if (description != that.description) return false
         if (name != that.name) return false
 
         return true
@@ -76,12 +66,11 @@ class ObjectType implements Serializable  {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (description != null ? description.hashCode() : 0)
         result = 31 * result + (config != null ? config.hashCode() : 0)
         return result
     }
 
     String toString(){
-        return "ObjectType #"+id+": name="+name+" description="+description;
+        return "ObjectType #"+id+": name="+name;
     }
 }
