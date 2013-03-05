@@ -100,3 +100,10 @@ alter table formats add constraint defaultObjectType foreign key (default_object
 
 --- add store_field value to IndexItem table:
 alter table index_items add column store_field boolean not null default false;
+
+alter table metaset_types drop column description;
+alter table objtypes drop column description;
+alter table relationtypes drop column description;
+alter table folder_types drop column description;
+alter table acls drop column description;
+alter table objtypes alter column config set default '<meta />';
