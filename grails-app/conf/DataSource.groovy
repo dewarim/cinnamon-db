@@ -5,12 +5,35 @@ dataSource {
     password = ""
 }
 hibernate {
-    cache.use_second_level_cache = true
-    cache.use_query_cache = true
+    cache.use_second_level_cache = false
+    cache.use_query_cache = false
     cache.region.factory_class = 'net.sf.ehcache.hibernate.EhCacheRegionFactory'
 }
 // environment specific settings
 environments {
+       
+    initialize {     
+        dataSource {
+            dbCreate = 'create'
+            configClass = cinnamon.hibernate.FieldAccessHibernateConfiguration
+            dialect = org.hibernate.dialect.PostgreSQLDialect
+            driverClassName = 'org.postgresql.Driver'
+            username = 'cinnamon'
+            password = 'cinnamon'
+            url = 'jdbc:postgresql://localhost/demo'
+            properties {
+                maxActive = -1
+                minEvictableIdleTimeMillis = 1800000
+                timeBetweenEvictionRunsMillis = 1800000
+                numTestsPerEvictionRun = 3
+                testOnBorrow = true
+                testWhileIdle = true
+                testOnReturn = true
+                validationQuery = "SELECT 1"
+            }
+        }
+    }
+    
     development {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
