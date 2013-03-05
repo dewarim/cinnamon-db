@@ -8,7 +8,6 @@ import cinnamon.global.Constants
 class FolderType {
 
     static constraints = {
-        description( size: 0..Constants.DESCRIPTION_SIZE, blank: true)
         name(size: 1..Constants.NAME_LENGTH, blank: false, unique: true)
         config size: 1..Constants.METADATA_SIZE, blank: false
     }
@@ -22,17 +21,15 @@ class FolderType {
     FolderType() {
     }
 
-    FolderType(String name, String description, String config) {
+    FolderType(String name, String config) {
         this.name = name
-        this.description = description
         if(config){
             this.config = config
         }
     }
 
     String name
-    String description
-    String config = '<config />'
+    String config = '<meta />'
 
 
     /**
@@ -48,13 +45,12 @@ class FolderType {
             e.addElement("id").addText(String.valueOf(type.getId()));
             e.addElement("name").addText( LocalMessage.loc(type.getName()));
             e.addElement("sysName").addText(type.getName());
-            e.addElement("description").addText( LocalMessage.loc(type.getDescription()));
         }
         return e;
     }  
 
     public String toString(){
-        return "FolderType #"+id+" "+name+" ("+description+")";
+        return "FolderType #"+id+" "+name
     }
 
     boolean equals(o) {
@@ -64,17 +60,12 @@ class FolderType {
         FolderType that = (FolderType) o
 
         if (config != that.config) return false
-        if (description != that.description) return false
         if (name != that.name) return false
 
         return true
     }
 
     int hashCode() {
-        int result
-        result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (description != null ? description.hashCode() : 0)
-        result = 31 * result + (config != null ? config.hashCode() : 0)
-        return result
+        return (name != null ? name.hashCode() : 0)
     }
 }
