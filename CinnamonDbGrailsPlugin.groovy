@@ -1,47 +1,31 @@
 class CinnamonDbGrailsPlugin {
 
-//    def packaging = "binary"
-    def groupId = 'cinnamon'
-    // the plugin version
-    def version = "0.3.1.13"
-    // the version or versions of Grails the plugin is designed for
+    def version = "0.3.1.14"
     def grailsVersion = "2.1 > *"
-    // the other plugins this plugin depends on
     def dependsOn = [:]
-    // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/views/error.gsp"
     ]
 
     def title = "Cinnamon Db Plugin" // Headline display name of the plugin
     def author = "Ingo Wiarda"
-    def authorEmail = ""
+    def authorEmail = "ingo.wiarda@horner-project.eu"
     def description = '''\
 Domain and base classes for the Cinnamon CMS.
 '''
 
-    // URL to the plugin's documentation
     def documentation = "http://cinnamon-cms.de"
-
-    // Extra (optional) plugin metadata
-
-    // License: one of 'APACHE', 'GPL2', 'GPL3'
     def license = "LGPL 2.1"
+    def organization = [ name: "Horner GmbH", url: "http://www.horner-project.eu/" ]
+    def developers = [ 
+//            [ name: "", email: "" ]
+    ]
 
-    // Details of company behind the plugin (if there is one)
-//    def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
-
-    // Any additional developers beyond the author specified above.
-//    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
-
-    // Location of the plugin's issue tracker.
-//    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
-
-    // Online location of the plugin's browseable source code.
+    def issueManagement = [ system: "Github", url: "https://github.com/dewarim/cinnamon-db/issues" ]
     def scm = [ url: "https://github.com/dewarim/cinnamon-db" ]
 
     def doWithWebDescriptor = { xml ->
-        // TODO Implement additions to web.xml (optional), this event occurs before
+        
     }
 
     def doWithSpring = {
@@ -49,25 +33,22 @@ Domain and base classes for the Cinnamon CMS.
     }
 
     def doWithDynamicMethods = { ctx ->
-        // TODO Implement registering dynamic methods to classes (optional)
+    
     }
 
     def doWithApplicationContext = { applicationContext ->
-        // TODO Implement post initialization spring config (optional)
+    
     }
 
     def onChange = { event ->
-        // TODO Implement code that is executed when any artefact that this plugin is
-        // watching is modified and reloaded. The event contains: event.source,
-        // event.application, event.manager, event.ctx, and event.plugin.
+    
     }
 
     def onConfigChange = { event ->
-        // TODO Implement code that is executed when the project configuration changes.
-        // The event is the same as for 'onChange'.
+    
     }
 
     def onShutdown = { event ->
-        // TODO Implement code that is executed when the application shuts down (optional)
+    
     }
 }
