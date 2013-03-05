@@ -14,26 +14,22 @@ class Acl  implements Serializable {
 
     static constraints = {
         name unique: true, blank: false, size: 1..Constants.NAME_LENGTH
-        description size: 0..Constants.DESCRIPTION_SIZE, blank: true
     }
 
     static hasMany = [aclEntries: AclEntry, customTables: CustomTable]
     private transient Map<UserAccount, List<AclEntry>> userEntries = new HashMap<UserAccount, List<AclEntry>>();
 
     String name
-    String description
 
     public Acl() {
     }
 
     public Acl(Map<String, String> cmd) {
         name = cmd.get("name");
-        description = cmd.get("description");
     }
 
     public Acl(String name, String description) {
         this.name = name;
-        this.description = description;
     }
 
     /**
@@ -45,7 +41,6 @@ class Acl  implements Serializable {
         acl.addElement("id").addText(String.valueOf(getId()) );
         acl.addElement("name").addText( LocalMessage.loc(getName()));
         acl.addElement("sysName").addText(getName());
-        acl.addElement("description").addText( LocalMessage.loc(getDescription()));
     }
 
     /**
@@ -71,14 +66,11 @@ class Acl  implements Serializable {
         if (cmd.containsKey("name")) {
             setName(cmd.get("name"));
         }
-        if (cmd.containsKey("description")) {
-            setDescription(cmd.get("description"));
-        }
     }
 
 
     public String toString(){
-        return "Acl #"+id+": "+name+" ("+description+")";
+        return "Acl #"+id+": "+name
     }
 
     boolean equals(o) {
@@ -87,15 +79,13 @@ class Acl  implements Serializable {
 
         Acl acl = (Acl) o
 
-        if (description != acl.description) return false
         if (name != acl.name) return false
 
         return true
     }
 
     int hashCode() {
-        int result
-        result = (name != null ? name.hashCode() : 0)
+        int result = (name != null ? name.hashCode() : 0)
         return result
     }
 
