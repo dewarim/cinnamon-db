@@ -55,5 +55,8 @@ grails.project.dependency.resolution = {
         test (':spock:0.7'){
             exclude "spock-grails-support"
         }
+        test(':fixtures:1.2'){
+            export = false
+        }
     }
 }
