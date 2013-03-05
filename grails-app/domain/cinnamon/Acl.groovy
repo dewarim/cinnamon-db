@@ -28,7 +28,7 @@ class Acl  implements Serializable {
         name = cmd.get("name");
     }
 
-    public Acl(String name, String description) {
+    public Acl(String name) {
         this.name = name;
     }
 
