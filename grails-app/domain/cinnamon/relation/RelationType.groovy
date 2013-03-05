@@ -12,7 +12,6 @@ import cinnamon.relation.resolver.RelationSide
 class RelationType implements IXmlDumper {
 
     static constraints = {
-        description( size: 0..Constants.DESCRIPTION_SIZE, blank: true)
         name(size: 1..Constants.NAME_LENGTH, blank: false, unique: true)
     }
 
@@ -23,7 +22,6 @@ class RelationType implements IXmlDumper {
     }
 
     String name
-    String description
     Boolean leftobjectprotected
     Boolean rightobjectprotected
     Boolean cloneOnRightCopy = false
@@ -33,23 +31,21 @@ class RelationType implements IXmlDumper {
 
     public RelationType(){}
     
-    public RelationType(name, description, 
+    public RelationType(name,
                         leftProtected, rightProtected,
                         leftResolver, rightResolver,
                         cloneLeftCopy, cloneRightCopy){
         this.name = name
-        this.description = description
         this.leftobjectprotected = leftProtected
         this.rightobjectprotected = rightProtected
         this.leftResolver = leftResolver
         this.rightResolver = rightResolver
         this.cloneOnLeftCopy = cloneLeftCopy
-        this.cloneOnRightCopy = cloneOnRightCopy
+        this.cloneOnRightCopy = cloneRightCopy
     }
     
     public RelationType(Map<String, String> cmd) {
         name = cmd.get("name");
-        description = cmd.get("description");
         leftobjectprotected = cmd.get("leftobjectprotected").equals("true");
         rightobjectprotected = cmd.get("rightobjectprotected").equals("true");
         cloneOnLeftCopy = cmd.get("cloneOnLeftCopy").equals("true");
@@ -92,7 +88,6 @@ class RelationType implements IXmlDumper {
         rt.addElement("id").addText(String.valueOf(getId()));
         rt.addElement("name").addText(LocalMessage.loc(getName()));
         rt.addElement("sysName").addText(getName());
-        rt.addElement("description").addText(LocalMessage.loc(getDescription()));
         rt.addElement("rightobjectprotected").addText(rightobjectprotected.toString());
         rt.addElement("leftobjectprotected").addText(leftobjectprotected.toString());
         rt.addElement("cloneOnLeftCopy").addText(cloneOnLeftCopy.toString());
@@ -131,7 +126,6 @@ class RelationType implements IXmlDumper {
 
         if (cloneOnLeftCopy != that.cloneOnLeftCopy) return false
         if (cloneOnRightCopy != that.cloneOnRightCopy) return false
-        if (description != that.description) return false
         if (leftResolver != that.leftResolver) return false
         if (leftobjectprotected != that.leftobjectprotected) return false
         if (name != that.name) return false
