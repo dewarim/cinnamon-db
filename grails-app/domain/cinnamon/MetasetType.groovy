@@ -9,7 +9,6 @@ class MetasetType {
 
     static constraints = {
         name unique: true, size: 1..Constants.NAME_LENGTH
-        description size: 0..Constants.DESCRIPTION_SIZE
         config size: 1..Constants.XML_PARAMS
     }
 
@@ -20,25 +19,14 @@ class MetasetType {
     }
     
     String name
-    @Deprecated // not used in production scenarios.
-    String description
     String config = '<metaset />'
 
     public MetasetType(){
 
     }
 
-    public MetasetType(Map<String, String> cmd){
-        name		= cmd.get("name");
-        description = cmd.get("description");
-        if(cmd.containsKey("config")){
-            config = cmd.get("config");
-        }
-    }
-
-    public MetasetType(String name, String description, String config){
+    public MetasetType(String name, String config){
         this.name = name;
-        this.description = description;
         if(config != null){
             this.config = config;
         }
@@ -58,7 +46,6 @@ class MetasetType {
             e.addElement("name").addText( LocalMessage.loc(type.getName()));
             e.addElement("sysName").addText(type.getName());
             e.addElement("config").addText(type.getConfig());
-            e.addElement("description").addText( LocalMessage.loc(type.getDescription()));
         }
         return e;
     }
@@ -70,7 +57,6 @@ class MetasetType {
         MetasetType that = (MetasetType) o
 
         if (config != that.config) return false
-        if (description != that.description) return false
         if (name != that.name) return false
 
         return true
@@ -79,8 +65,6 @@ class MetasetType {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (description != null ? description.hashCode() : 0)
-        result = 31 * result + (config != null ? config.hashCode() : 0)
         return result
     }
 }
