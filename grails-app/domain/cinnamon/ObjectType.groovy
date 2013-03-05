@@ -22,7 +22,7 @@ class ObjectType implements Serializable  {
     ObjectType() {
     }
 
-    ObjectType(String name, String description, String config) {
+    ObjectType(String name, String config) {
         this.name = name
         if(config){
             this.config = config
