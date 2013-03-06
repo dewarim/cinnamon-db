@@ -15,7 +15,6 @@ class CmnGroup implements Serializable  {
 
     static constraints = {
         name unique: true , size: 1..Constants.NAME_LENGTH
-        description size:  0..Constants.DESCRIPTION_SIZE, blank: true
         parent nullable: true
     }
 
@@ -24,7 +23,6 @@ class CmnGroup implements Serializable  {
     public static final String[] defaultGroups = [ALIAS_EVERYONE, ALIAS_OWNER];
 
     String name
-    String description
     Boolean groupOfOne = false // formerly known as is_user
     CmnGroup parent
 
@@ -32,16 +30,8 @@ class CmnGroup implements Serializable  {
 
     }
 
-    public CmnGroup(Map<String, String> cmd){
-        name = cmd.get("name");
-        description = cmd.get("description");
-        groupOfOne = Boolean.parseBoolean(cmd.get("is_user"));
-        parent = null; // TODO: extend API to set parent here.
-    }
-
     public CmnGroup(String name, String description, Boolean is_user, CmnGroup parent){
         this.name = name;
-        this.description = description;
         this.groupOfOne = is_user;
         this.parent = parent;
     }
@@ -79,7 +69,6 @@ class CmnGroup implements Serializable  {
 
         CmnGroup cmnGroup = (CmnGroup) o
 
-        if (description != cmnGroup.description) return false
         if (groupOfOne != cmnGroup.groupOfOne) return false
         if (name != cmnGroup.name) return false
         if (parent != cmnGroup.parent) return false
@@ -90,9 +79,6 @@ class CmnGroup implements Serializable  {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (description != null ? description.hashCode() : 0)
-        result = 31 * result + (groupOfOne != null ? groupOfOne.hashCode() : 0)
-        result = 31 * result + (parent != null ? parent.hashCode() : 0)
         return result
     }
 }
