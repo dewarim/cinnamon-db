@@ -18,8 +18,6 @@ class ChangeTrigger  implements Serializable {
         config size: 1..Constants.METADATA_SIZE
     }
 
-    static belongsTo = [triggerType:ChangeTriggerType]
-    
     static mapping = {
         cache true
         table('change_triggers')
@@ -34,12 +32,9 @@ class ChangeTrigger  implements Serializable {
     Boolean preTrigger = false
     Boolean postTrigger = false
     String config = "<config />"
+    ChangeTriggerType triggerType
 
     public ChangeTrigger() {
-    }
-
-    public ChangeTrigger(String controller, ChangeTriggerType ctt) {
-        triggerType = ctt;
     }
 
     public ChangeTrigger(Map<String, String> fields) {
@@ -64,6 +59,7 @@ class ChangeTrigger  implements Serializable {
         triggerType = ctt;
         this.ranking = ranking;
         this.controller = controller;
+        this.action = action
         this.active = active;
         this.preTrigger = preTrigger;
         this.postTrigger = postTrigger;
