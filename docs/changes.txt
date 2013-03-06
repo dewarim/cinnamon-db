@@ -109,3 +109,4 @@ alter table acls drop column description;
 alter table objtypes alter column config set default '<meta />';
 alter table change_trigger_types drop column description ;
 alter table customtables rename column jdbcdriver to jdbc_driver;
+alter table permissions drop description;
