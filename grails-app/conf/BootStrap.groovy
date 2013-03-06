@@ -11,7 +11,7 @@ class BootStrap {
              * To initialize an empty database, use:
              * grails -Dgrails.env=initialize run-app
              */
-            initialize{
+            initializeDb{
                 log.debug("run: initializeDatabase()")
                 initializeDatabase()
             }
