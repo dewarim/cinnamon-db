@@ -42,6 +42,8 @@ grails.project.dependency.resolution = {
         runtime 'postgresql:postgresql:9.1-901.jdbc4'
         runtime 'org.mindrot:jbcrypt:0.3m'
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+        runtime 'dom4j:dom4j:1.6.1'
+        runtime 'jaxen:jaxen:1.1.4'
     }
 
     plugins {
