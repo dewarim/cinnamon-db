@@ -12,7 +12,7 @@ hibernate {
 // environment specific settings
 environments {
        
-    initialize {     
+    initializeDb {     
         dataSource {
             dbCreate = 'create'
             configClass = cinnamon.hibernate.FieldAccessHibernateConfiguration
