@@ -22,7 +22,6 @@ class Transformer  implements Serializable {
         version 'obj_version'
     }
     String name
-    String description
     Class<? extends ITransformer> transformerClass;
     Format sourceFormat;
     Format targetFormat;
@@ -31,25 +30,9 @@ class Transformer  implements Serializable {
 
     }
 
-    @SuppressWarnings("unchecked")
-    public Transformer(Map<String,String> cmd){
-        Logger log=LoggerFactory.getLogger(this.getClass());log.debug("ctor");
-        name		= cmd.get("name");
-        description = cmd.get("description");
-        try{
-            transformerClass = (Class<? extends ITransformer>) Class.forName(cmd.get("transformer_class"));
-        }
-        catch (ClassNotFoundException e) {
-            throw new CinnamonException("error.loading.class",e);
-        }
-        sourceFormat = Format.get(Long.parseLong(cmd.get("source_format_id")));
-        targetFormat = Format.get(Long.parseLong(cmd.get("target_format_id")));
-    }
-
-    public Transformer(String name, String description, Class<? extends ITransformer> transformerClass,
+    public Transformer(String name, Class<? extends ITransformer> transformerClass,
                        Format sourceFormat, Format targetFormat){
         this.name = name;
-        this.description = description;
         this.transformerClass = transformerClass;
         this.sourceFormat = sourceFormat;
         this.targetFormat = targetFormat;
@@ -71,7 +54,6 @@ class Transformer  implements Serializable {
         if(transformer != null){
             e.addElement("id").addText(String.valueOf(transformer.getId()));
             e.addElement("name").addText( LocalMessage.loc(transformer.getName()));
-            e.addElement("description").addText( LocalMessage.loc(transformer.getDescription()));
             e.addElement("transformerClass").addText(transformer.transformerClass.getName());
             e.add(Format.asElement("sourceFormat", transformer.getSourceFormat()));
             e.add(Format.asElement("targetFormat", transformer.getSourceFormat()));
@@ -85,7 +67,6 @@ class Transformer  implements Serializable {
 
         Transformer that = (Transformer) o
 
-        if (description != that.description) return false
         if (name != that.name) return false
         if (sourceFormat != that.sourceFormat) return false
         if (targetFormat != that.targetFormat) return false
@@ -97,10 +78,7 @@ class Transformer  implements Serializable {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (description != null ? description.hashCode() : 0)
-        result = 31 * result + (transformerClass != null ? transformerClass.hashCode() : 0)
-        result = 31 * result + (sourceFormat != null ? sourceFormat.hashCode() : 0)
-        result = 31 * result + (targetFormat != null ? targetFormat.hashCode() : 0)
+        result = 31 * result + (transformerClass != null ? transformerClass.hashCode() : 0)      
         return result
     }
 }
