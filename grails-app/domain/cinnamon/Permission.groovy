@@ -27,7 +27,6 @@ class Permission  implements Serializable {
 
 
     static constraints = {
-        description( size: 0..Constants.DESCRIPTION_SIZE, blank: true)
         name(size: 1..Constants.NAME_LENGTH, blank: false)
     }
     
@@ -53,7 +52,6 @@ class Permission  implements Serializable {
         if (!(o instanceof Permission)) return false
 
         Permission that = (Permission) o
-
         if (name != that.name) return false
 
         return true
