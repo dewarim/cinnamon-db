@@ -9,7 +9,6 @@ import cinnamon.i18n.LocalMessage
 class Format implements Serializable  {
 
     static constraints = {
-        description( size: 0..Constants.DESCRIPTION_SIZE, blank: true)
         name(size: 1..Constants.NAME_LENGTH, blank: false, unique: true)
         extension(size: 1..64, blank: false)
         contenttype(size: 1..128, blank: false)

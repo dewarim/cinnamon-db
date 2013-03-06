@@ -30,7 +30,7 @@ class CmnGroup implements Serializable  {
 
     }
 
-    public CmnGroup(String name, String description, Boolean is_user, CmnGroup parent){
+    public CmnGroup(String name, Boolean is_user, CmnGroup parent){
         this.name = name;
         this.groupOfOne = is_user;
         this.parent = parent;
