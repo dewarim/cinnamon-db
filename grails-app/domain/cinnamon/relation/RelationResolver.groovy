@@ -24,7 +24,7 @@ class RelationResolver implements Serializable, IXmlDumper {
     }
 
     String name = ""
-    String config = "<config />"
+    String config = "<meta />"
     Class<? extends IRelationResolver> resolverClass
 
     RelationResolver() { }
