@@ -23,7 +23,6 @@ class Format implements Serializable  {
     }
 
     String name
-    String description
     String extension
     String contenttype
     ObjectType defaultObjectType
@@ -48,7 +47,6 @@ class Format implements Serializable  {
             e.addElement("id").addText(String.valueOf(format.getId()));
             e.addElement("name").addText( LocalMessage.loc(format.getName()));
             e.addElement("sysName").addText(format.getName());
-            e.addElement("description").addText(  LocalMessage.loc(format.getDescription()));
             e.addElement("contentType").addText(format.getContenttype());
             e.addElement("extension").addText(format.getExtension());            
             e.addElement("defaultObjectType").addText(format.defaultObjectType?.name ?: '')
@@ -78,11 +76,6 @@ class Format implements Serializable  {
             setContenttype(contenttype);
         }
 
-        String description = cmd.get("description");
-        if(description != null){
-            setDescription(description);
-        }
-        
         if (cmd.containsKey('default_object_type_id')){
             ObjectType objectType = ObjectType.get(cmd.get('default_object_type_id'))
             setDefaultObjectType(objectType)
@@ -97,7 +90,6 @@ class Format implements Serializable  {
 
         if (contenttype != format.contenttype) return false
         if (defaultObjectType != format.defaultObjectType) return false
-        if (description != format.description) return false
         if (extension != format.extension) return false
         if (name != format.name) return false
 
