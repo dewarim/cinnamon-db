@@ -36,6 +36,7 @@ class BootStrap {
             fixtureLoader.load('system/objectTypes')
             fixtureLoader.load('system/acls')
             fixtureLoader.load('system/folderTypes')
+            fixtureLoader.load('system/users') // includes groups
             
         }
         catch (Exception e) {
