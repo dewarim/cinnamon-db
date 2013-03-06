@@ -1,3 +1,5 @@
+import cinnamon.Acl
+import cinnamon.AclEntry
 import cinnamon.CmnGroup
 import cinnamon.CmnGroupUser
 import cinnamon.UserAccount
@@ -22,4 +24,5 @@ fixture{
     adminsOwnGroup(CmnGroup, name:name, groupOfOne:true)
     adminOwnGroupUser(CmnGroupUser, cmnGroup: adminsOwnGroup, userAccount: adminUser)
     adminSuperuser(CmnGroupUser, cmnGroup:superusers, userAccount:adminUser)
+    adminAclDefaultEntry(AclEntry, group:adminsOwnGroup, acl:Acl.findByName(Constants.ACL_DEFAULT) )
 }
