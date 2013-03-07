@@ -1,5 +1,8 @@
 import cinnamon.Permission
 import cinnamon.UserAccount
+import cinnamon.global.Constants
+import cinnamon.lifecycle.LifeCycle
+import cinnamon.lifecycle.LifeCycleState
 
 class BootStrap {
 
@@ -48,6 +51,11 @@ class BootStrap {
             fixtureLoader.load('system/uiLanguages')
             fixtureLoader.load('system/languages')
             fixtureLoader.load('system/configEntries')
+            fixtureLoader.load('system/lifeCycleStates')
+            // set circular dependency:
+            def renderLc = LifeCycle.findByName(Constants.RENDER_SERVER_LIFECYCLE)
+            renderLc.defaultState = LifeCycleState.findByName(Constants.RENDERSERVER_RENDER_TASK_NEW)
+            
         }
         catch (Exception e) {
             log.error("Failed to initialize repository", e)
