@@ -1,3 +1,4 @@
+import cinnamon.Permission
 import cinnamon.UserAccount
 
 class BootStrap {
@@ -37,7 +38,12 @@ class BootStrap {
             fixtureLoader.load('system/acls')
             fixtureLoader.load('system/folderTypes')
             fixtureLoader.load('system/users') // includes groups
-            
+
+            for (String name : Permission.defaultPermissions) {
+                Permission p = new Permission(name:name)
+                p.save()
+            }            
+            fixtureLoader.load('system/relationTypes')
         }
         catch (Exception e) {
             log.error("Failed to initialize repository", e)
