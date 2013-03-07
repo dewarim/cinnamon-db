@@ -72,22 +72,6 @@ class ChangeTrigger  implements Serializable {
         }
     }
 
-    // TODO implement and rename
-    public static List<ChangeTrigger> findAllByCommandAndPostAndActiveOrderByRanking(String command) {
-//        Query q = getSession().createNamedQuery("findAllChangeTriggersByCommandAndPostAndActiveOrderByRanking");
-//        q.setParameter("controller", controller);
-//        return q.getResultList();
-        return null
-    }
-
-    // TODO: implement and rename
-    public static List<ChangeTrigger> findAllByCommandAndPreAndActiveOrderByRanking(String command) {
-//        Query q = getSession().createNamedQuery("findAllChangeTriggersByCommandAndPreAndActiveOrderByRanking");
-//        q.setParameter("controller", controller);
-//        return q.getResultList();
-        return null
-    }
-
     boolean equals(o) {
         if (this.is(o)) return true
         if (!(o instanceof ChangeTrigger)) return false
@@ -108,13 +92,8 @@ class ChangeTrigger  implements Serializable {
 
     int hashCode() {
         int result
-        result = (ranking != null ? ranking.hashCode() : 0)
-        result = 31 * result + (controller != null ? controller.hashCode() : 0)
+        result = (controller != null ? controller.hashCode() : 0)
         result = 31 * result + (action != null ? action.hashCode() : 0)
-        result = 31 * result + (active != null ? active.hashCode() : 0)
-        result = 31 * result + (preTrigger != null ? preTrigger.hashCode() : 0)
-        result = 31 * result + (postTrigger != null ? postTrigger.hashCode() : 0)
-        result = 31 * result + (config != null ? config.hashCode() : 0)
         result = 31 * result + (triggerType != null ? triggerType.hashCode() : 0)
         return result
     }
