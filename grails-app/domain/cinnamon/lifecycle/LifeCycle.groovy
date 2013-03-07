@@ -10,7 +10,9 @@ class LifeCycle implements Serializable  {
         name unique: true, size: 1..Constants.NAME_LENGTH
         defaultState(nullable: true)
     }
-
+    
+    static hasMany = [states:LifeCycleState]
+    
     static mapping = {
         cache true
         table('lifecycles')
