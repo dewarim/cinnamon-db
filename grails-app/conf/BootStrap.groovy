@@ -54,6 +54,8 @@ class BootStrap {
             fixtureLoader.load('system/lifeCycleStates')
             fixtureLoader.load('system/formats')
             fixtureLoader.load('system/folders')
+            fixtureLoader.load('system/indexTypes')
+            
             // set circular dependency:
             def renderLc = LifeCycle.findByName(Constants.RENDER_SERVER_LIFECYCLE)
             renderLc.defaultState = LifeCycleState.findByName(Constants.RENDERSERVER_RENDER_TASK_NEW)
