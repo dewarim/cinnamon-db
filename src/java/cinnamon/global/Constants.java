@@ -184,7 +184,10 @@ public class Constants {
     public static final String FIELD_LATEST_BRANCH = "latestbranch";
     public static final String INDEX_PATH = "index.path";
     public static final String FIELD_PATH = "folderpath";
-
+    public static final String INDEX_TIKA = "index.tika";
+    public static final String FIELD_TIKA = "content";
+    
+    
     public static void main(String... args){
         System.out.print(Constants.SERVER_VERSION);
     }
