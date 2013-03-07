@@ -55,7 +55,7 @@ class RelationResolver implements Serializable, IXmlDumper {
 
     void setConfig(String config) {
         if (config == null || config.trim().length() == 0) {
-            this.config = "<config />";
+            this.config = "<meta />";
         }
         else {
             ParamParser.parseXmlToDocument(config, "error.param.config");

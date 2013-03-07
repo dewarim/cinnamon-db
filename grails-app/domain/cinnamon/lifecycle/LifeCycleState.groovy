@@ -25,7 +25,7 @@ class LifeCycleState implements Serializable  {
     String name
     Class<? extends IState> stateClass
     LifeCycle lifeCycle
-    String config = '<config />'
+    String config = '<meta />'
     LifeCycleState lifeCycleStateForCopy
 
     LifeCycleState() {
@@ -176,13 +176,13 @@ class LifeCycleState implements Serializable  {
 
     /**
      * Set parameter for stateClass to the given value. If this method's parameter is null, set the field
-     * to "{@code <config />}".
+     * to "{@code <meta />}".
      *
      * @param config the new value for the parameter which will be given to stateClass when needed.
      */
     public void setConfig(String config) {
         if (config == null || config.trim().length() == 0) {
-            this.config = "<config />";
+            this.config = "<meta />";
         }
         else {
             ParamParser.parseXmlToDocument(config, "error.param.config");
