@@ -47,6 +47,7 @@ class BootStrap {
             fixtureLoader.load('system/changeTriggers')
             fixtureLoader.load('system/uiLanguages')
             fixtureLoader.load('system/languages')
+            fixtureLoader.load('system/configEntries')
         }
         catch (Exception e) {
             log.error("Failed to initialize repository", e)
