@@ -44,45 +44,6 @@ class RelationType implements IXmlDumper {
         this.cloneOnRightCopy = cloneRightCopy
     }
     
-    public RelationType(Map<String, String> cmd) {
-        name = cmd.get("name");
-        leftobjectprotected = cmd.get("leftobjectprotected").equals("true");
-        rightobjectprotected = cmd.get("rightobjectprotected").equals("true");
-        cloneOnLeftCopy = cmd.get("cloneOnLeftCopy").equals("true");
-        cloneOnRightCopy = cmd.get("cloneOnRightCopy").equals("true");
-
-        /*
-         * Design note: resolve by name is intended to make it easier for testing
-         * as you can create a test relation type without having to look up the id of the
-         * default (or to-be-tested) relation resolver.
-         */
-        if (cmd.containsKey("right_resolver")) {
-            rightResolver = RelationResolver.findByName(cmd.get("right_resolver"));
-        } else if (cmd.containsKey("right_resolver_id")) {
-            rightResolver = RelationResolver.get(ParamParser.parseLong(cmd.get("right_resolver_id"), "error.param.right_resolver_id"));
-        } else {
-            rightResolver = RelationResolver.findByName(Constants.RELATION_RESOLVER_FIXED);
-        }
-        if (cmd.containsKey("left_resolver")) {
-            leftResolver = RelationResolver.findByName(cmd.get("left_resolver"));
-        } else if (cmd.containsKey("left_resolver_id")) {
-            rightResolver = RelationResolver.get(ParamParser.parseLong(cmd.get("left_resolver_id"), "error.param.left_resolver_id"));
-        } else {
-            leftResolver = RelationResolver.findByName(Constants.RELATION_RESOLVER_FIXED);
-        }
-
-        if (rightResolver == null) {
-            throw new CinnamonException("error.param.right_resolver_id");
-        }
-        if (leftResolver == null){
-            throw new CinnamonException("error.param.left_resolver_id");
-        }
-
-        log.debug("leftResolver: " + leftResolver);
-        log.debug("rightResolver: " + rightResolver);
-    }
-
-
     public void toXmlElement(Element root) {
         Element rt = root.addElement("relationType");
         rt.addElement("id").addText(String.valueOf(getId()));
