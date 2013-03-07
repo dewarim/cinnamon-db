@@ -31,7 +31,7 @@ fixture {
     dateIndexer(IndexType, name:'xpath.date_indexer', dataType: DataType.DATE_TIME,
             indexerClass: DateXPathIndexer, vaProviderClass: provider
     )
-    intIntexer(IndexType, name: 'xpath.integer_indexer', dataType: DataType.INTEGER,
+    intIndexer(IndexType, name: 'xpath.integer_indexer', dataType: DataType.INTEGER,
             indexerClass: IntegerXPathIndexer, vaProviderClass: provider,
     )
     dateTimeIndexer(IndexType, name:'xpath.date_time_indexer', dataType: DataType.INTEGER,
