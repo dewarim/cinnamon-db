@@ -44,6 +44,7 @@ class BootStrap {
                 p.save()
             }            
             fixtureLoader.load('system/relationTypes')
+            fixtureLoader.load('system/changeTriggers')
         }
         catch (Exception e) {
             log.error("Failed to initialize repository", e)
