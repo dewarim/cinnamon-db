@@ -6,9 +6,20 @@
         <datasource-map />
       </configuration>
     </facet>
+    <facet type="web" name="GrailsWeb">
+      <configuration>
+        <webroots>
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/fixtures-1.2/web-app" relative="/" />
+        </webroots>
+        <sourceRoots />
+      </configuration>
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/fixtures-1.2">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/fixtures-1.2/src/groovy" isTestSource="false" />
+    </content>
     <content url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/hibernate-2.2.1">
       <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/hibernate-2.2.1/grails-app/i18n" isTestSource="false" />
     </content>
@@ -32,7 +43,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="grails-2.2.0" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="grails-2.2.1" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (cinnamonBase-grailsPlugins)">
@@ -70,6 +80,7 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.hamcrest/hamcrest-core/jars/hamcrest-core-1.3.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/junit/junit-dep/jars/junit-dep-4.10.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.spockframework/spock-core/jars/spock-core-0.7-groovy-2.0.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/jaxen/jaxen/jars/jaxen-1.1.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
