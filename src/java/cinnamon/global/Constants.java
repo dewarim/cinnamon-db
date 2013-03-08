@@ -186,7 +186,10 @@ public class Constants {
     public static final String FIELD_PATH = "folderpath";
     public static final String INDEX_TIKA = "index.tika";
     public static final String FIELD_TIKA = "content";
-    
+    public static final String INDEX_ACTIVE_WORKFLOW = "index.workflow.active_workflow";
+    public static final String FIELD_ACTIVE_WORKFLOW = "active_workflow";
+    public static final String INDEX_WORKFLOW_DEADLINE = "index.workflow_deadline";
+    public static final String FIELD_WORKFLOW_DEADLINE = "workflow_deadline";
     
     public static void main(String... args){
         System.out.print(Constants.SERVER_VERSION);

@@ -87,19 +87,19 @@ fixture {
             indexGroup: defGroup, forContent: false, forMetadata: false, forSysMeta: true,
             searchString: '/sysMeta/object/objectType/id', fieldname: Constants.FIELD_OBJECT_TYPE,
     )
-     language(IndexItem, name: Constants.INDEX_LANGUAGE, indexType: intIndexer, systemic: true,
+    language(IndexItem, name: Constants.INDEX_LANGUAGE, indexType: intIndexer, systemic: true,
             indexGroup: defGroup, forContent: false, forMetadata: false, forSysMeta: true,
             searchString: '/sysMeta/object/language/id', fieldname: Constants.FIELD_LANGUAGE,
     )
-     acl(IndexItem, name: Constants.INDEX_ACL, indexType: intIndexer, systemic: true,
+    acl(IndexItem, name: Constants.INDEX_ACL, indexType: intIndexer, systemic: true,
             indexGroup: defGroup, forContent: false, forMetadata: false, forSysMeta: true,
             searchString: '/sysMeta/object/aclId', fieldname: Constants.FIELD_ACL,
     )
-     lcs(IndexItem, name: Constants.INDEX_LIFECYCLE_STATE, indexType: intIndexer, systemic: true,
+    lcs(IndexItem, name: Constants.INDEX_LIFECYCLE_STATE, indexType: intIndexer, systemic: true,
             indexGroup: defGroup, forContent: false, forMetadata: false, forSysMeta: true,
             searchString: '/sysMeta/object/lifeCycleState', fieldname: Constants.FIELD_LIFECYCLE_STATE,
     )
-     osdCreatedDate(IndexItem, name: Constants.INDEX_CREATED_DATE, indexType: dateIndexer, systemic: true,
+    osdCreatedDate(IndexItem, name: Constants.INDEX_CREATED_DATE, indexType: dateIndexer, systemic: true,
             indexGroup: defGroup, forContent: false, forMetadata: false, forSysMeta: true,
             searchString: '/sysMeta/object/created', fieldname: Constants.FIELD_CREATED_DATE,
     )
@@ -115,11 +115,11 @@ fixture {
             indexGroup: defGroup, forContent: false, forMetadata: false, forSysMeta: true,
             searchString: '/sysMeta/object/modified', fieldname: Constants.FIELD_MODIFIED_TIME,
     )
-    latestHead(IndexItem, name: Constants.INDEX_LATEST_HEAD, indexType: booleanIndexer, systemic:true,
+    latestHead(IndexItem, name: Constants.INDEX_LATEST_HEAD, indexType: booleanIndexer, systemic: true,
             indexGroup: defGroup, forContent: false, forMetadata: false, forSysMeta: true,
             searchString: '/sysMeta/folder/latestHead', fieldname: Constants.FIELD_LATEST_HEAD,
-    )  
-    latestBranch(IndexItem, name: Constants.INDEX_LATEST_BRANCH, indexType: booleanIndexer, systemic:true,
+    )
+    latestBranch(IndexItem, name: Constants.INDEX_LATEST_BRANCH, indexType: booleanIndexer, systemic: true,
             indexGroup: defGroup, forContent: false, forMetadata: false, forSysMeta: true,
             searchString: '/sysMeta/folder/latestBranch', fieldname: Constants.FIELD_LATEST_BRANCH,
     )
@@ -129,9 +129,20 @@ fixture {
     )
 
     // Tika Metaset:
-    procState(IndexItem, name: Constants.INDEX_TIKA , indexType: descIndexer, systemic: true,
+    procState(IndexItem, name: Constants.INDEX_TIKA, indexType: descIndexer, systemic: true,
             indexGroup: defGroup, forContent: false, forMetadata: true, forSysMeta: false,
             searchString: "/meta/metaset[@type='tika']/html/body", fieldname: Constants.FIELD_TIKA
-    )   
+    )
 
+    // Workflow:
+    activeWorkflow(IndexItem, name: Constants.INDEX_ACTIVE_WORKFLOW, indexType: booleanIndexer,
+            indexGroup: defGroup, forContent: false, forMetadata: true, forSysMeta: false,
+            searchString: "/meta/metaset[@type='workflow_template']/active_workflow", systemic: true,
+            fieldname: Constants.FIELD_ACTIVE_WORKFLOW
+    )
+    workflowTimer(IndexItem, name:Constants.INDEX_WORKFLOW_DEADLINE,indexType: dateTimeIndexer,
+            indexGroup: defGroup, forContent: false, forMetadata: true, forSysMeta: false,
+            searchString: "/meta/metaset[@type='task_definition' or @type='workflow_template']/deadline", 
+            systemic: true, fieldname: Constants.FIELD_WORKFLOW_DEADLINE
+    )
 }
