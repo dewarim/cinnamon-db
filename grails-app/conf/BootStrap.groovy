@@ -1,3 +1,5 @@
+import cinnamon.Folder
+import cinnamon.ObjectSystemData
 import cinnamon.Permission
 import cinnamon.UserAccount
 import cinnamon.global.Constants
@@ -60,7 +62,9 @@ class BootStrap {
             // set circular dependency:
             def renderLc = LifeCycle.findByName(Constants.RENDER_SERVER_LIFECYCLE)
             renderLc.defaultState = LifeCycleState.findByName(Constants.RENDERSERVER_RENDER_TASK_NEW)
-            
+
+            Folder.executeUpdate('update Folder f set f.indexOk = NULL')
+            ObjectSystemData.executeUpdate('update ObjectSystemData o set o.indexOk = NULL')
         }
         catch (Exception e) {
             log.error("Failed to initialize repository", e)
