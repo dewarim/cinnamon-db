@@ -36,34 +36,6 @@ class Relation implements Serializable  {
         setMetadata(metadata);
     }
 
-    // TODO: change api to receive relationtype_id instead of name.
-    public Relation(Map<String,String> cmd){
-
-        String name = cmd.get("name");
-        type = RelationType.findByName(name);
-        if(type == null){
-            log.debug("Could not find RelationType");
-            throw new CinnamonException("error.relation_type.not_found");
-        }
-        if(cmd.containsKey("metadata")){
-            setMetadata(cmd.get("metadata"));
-        }
-
-        Long leftId=  ParamParser.parseLong(cmd.get("leftid"), "error.param.leftid");
-        Long rightId= ParamParser.parseLong(cmd.get("rightid"), "error.param.rightid");
-
-        rightOSD = ObjectSystemData.get(Long.parseLong( cmd.get("rightid")));
-        if(rightOSD == null){
-            log.debug("Could not find rightOSD with id " + rightId);
-            throw new CinnamonException("error.param.rightid");
-        }
-        leftOSD = ObjectSystemData.get(Long.parseLong( cmd.get("leftid")));
-        if(leftOSD == null){
-            log.debug("leftOSD with id " + leftId +"not found");
-            throw new CinnamonException("error.param.leftid");
-        }
-    }
-
     public void setMetadata(String metadata) {
         if(metadata == null || metadata.trim().length() == 0){
             this.metadata = "<meta/>";
