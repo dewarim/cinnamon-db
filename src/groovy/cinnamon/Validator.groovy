@@ -144,12 +144,9 @@ class Validator implements ResultValidator {
     public void validateDelete(ObjectSystemData osd) {
         Permission deleteObject = fetchPermission(PermissionName.DELETE_OBJECT);
         validateAgainstAcl(osd, deleteObject);
-        log.debug("after validate");
-
-        log.debug("before set param");
-        def relations = Relation.findAll("""select r from Relation r where 
+        def relations = Relation.executeQuery("""select r from Relation r where 
             (r.leftOSD=:osd1 and r.type.leftobjectprotected=true) or
-            (r.rightOSD=:osd2 and r.type.rightobjectprotected=true)""".replaceAll('\n', ' '),
+            (r.rightOSD=:osd2 and r.type.rightobjectprotected=true)""",
                 [osd1: osd, osd2: osd]
         )
         if (relations.size() > 0) {
