@@ -814,12 +814,19 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     public String getMetadata(List<String> metasetNames) {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("meta");
-        for (Metaset m : fetchMetasets()) {
-            root.add(Metaset.asElement("metaset", m));
+        if (metasetNames?.size() > 0){
+            metasetNames.each{name ->
+                root.add(Metaset.asElement("metaset", this.fetchMetaset(name)))
+            }
+        }
+        else{
+            for (Metaset m : fetchMetasets()) {
+                root.add(Metaset.asElement("metaset", m));
+            }
         }
         return root.asXML();
     }
-
+    
     /**
      * Set the Metadata on this object. Tries to parse the submitted string
      * and throws an exception if it is not valid XML.<br/>
