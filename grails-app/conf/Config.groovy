@@ -32,7 +32,7 @@ log4j = {
 
     warn   'org.mortbay.log'
     root {
-        debug 'stdout'
+        info 'stdout'
     }
 }
 
