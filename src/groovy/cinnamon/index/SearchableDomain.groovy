@@ -17,6 +17,8 @@
  */
 package cinnamon.index
 
+import cinnamon.global.PermissionName
+
 /**
  *
  * List of searchable domains - used to restrict search forms which apply only to a single domain class,
@@ -25,13 +27,28 @@ package cinnamon.index
  */
 public enum SearchableDomain {
 
-    OSD([name: 'cinnamon.ObjectSystemData']),
-    FOLDER([name: 'cinnamon.Folder'])
+    OSD([name: 'cinnamon.ObjectSystemData',
+            browsePermission: PermissionName.BROWSE_OBJECT,
+            xmlRoot: 'objects']),
+    FOLDER([name: 'cinnamon.Folder',
+            browsePermission: PermissionName.BROWSE_FOLDER,
+            xmlRoot: 'folders'])
 
     String name
+    /**
+     * Name of the required permission to use when 
+     * filtering search results which implement the Accessible interface.
+     */
+    String browsePermission
+
+    /**
+     * Name of the XML root element to use when 
+     * serializing a collection of objects of this domain
+     */
+    String xmlRoot
 
     SearchableDomain(Map map) {
-        map.each {k, v ->
+        map.each { k, v ->
             this."$k" = v
         }
     }
@@ -47,8 +64,8 @@ public enum SearchableDomain {
      * @param name the name of the domain enum instance.
      * @return the SearchableDomain by the given name or null.
      */
-    static SearchableDomain fetchDomainByName(String name){
-        return SearchableDomain.values().find{it.name == name}
+    static SearchableDomain fetchDomainByName(String name) {
+        return SearchableDomain.values().find { it.name == name }
     }
 
     /**
@@ -58,8 +75,8 @@ public enum SearchableDomain {
      * @param name the name of the domain enum instance.
      * @return the SearchableDomain by the given name or null.
      */
-    static SearchableDomain fetchEnum(String name){
-        return SearchableDomain.values().find{it.name() == name}
+    static SearchableDomain fetchEnum(String name) {
+        return SearchableDomain.values().find { it.name() == name }
     }
 
 }
