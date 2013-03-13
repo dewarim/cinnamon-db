@@ -1,6 +1,7 @@
 package cinnamon
 
 import cinnamon.index.Indexable
+import cinnamon.interfaces.Accessible
 import cinnamon.interfaces.Ownable
 import cinnamon.interfaces.XmlConvertable
 import cinnamon.i18n.Language
@@ -24,7 +25,7 @@ import cinnamon.interfaces.IMetasetJoin
 import cinnamon.exceptions.CinnamonConfigurationException
 import cinnamon.interfaces.IMetasetOwner
 
-class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner {
+class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner, Accessible {
 
     public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
 

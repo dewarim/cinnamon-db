@@ -1,5 +1,6 @@
 package cinnamon
 
+import cinnamon.interfaces.Accessible
 import cinnamon.interfaces.Ownable
 import cinnamon.index.Indexable
 import cinnamon.interfaces.XmlConvertable
@@ -23,7 +24,7 @@ import org.apache.commons.compress.utils.IOUtils
 import cinnamon.utils.ZippedFolder
 import cinnamon.global.ConfThreadLocal
 
-class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetasetOwner {
+class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetasetOwner, Accessible {
 
     static def folderService
     static def userService
