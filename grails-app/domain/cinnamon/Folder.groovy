@@ -317,14 +317,14 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     /**
-     * Update the fields of this folder objects from a parameter map (from HTTP requests)
+     * Update the fields of this folder objects from a parameter map 
+     * (build from HTTP requests in FolderController.updateFolder)
      * @param fields map of the fields to be set
      * @return the updated folder object
      */
-    public Folder update(Map<String, String> fields) {
-        if (fields.containsKey("parentid")) {
-            Long folderId = ParamParser.parseLong(fields.get("parentid"), "error.param.parent_id");
-            Folder newParentFolder = get(folderId);
+    public Folder update(Map fields) {
+        if (fields.parentid) {
+            Folder newParentFolder = get(fields.parentid);
             if (newParentFolder == null) {
                 throw new CinnamonException("error.param.parent_id");
             }
@@ -341,33 +341,30 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
                 resetIndexOnFolderContent();
             }
         }
-        if (fields.containsKey("ownerid")) {
-            Long ownerId = ParamParser.parseLong(fields.get("ownerid"), "error.param.owner_id");
-            UserAccount owner = UserAccount.get(ownerId);
+        if (fields.ownerid) {
+            UserAccount owner = UserAccount.get(fields.ownerid);
             if (owner == null) {
                 throw new CinnamonException("error.user.not_found");
             }
             setOwner(owner);
         }
-        if (fields.containsKey("name")) {
-            setName(fields.get("name"));
+        if (fields.name) {
+            setName(fields.name);
             resetIndexOnFolderContent();
         }
-        if (fields.containsKey("metadata")) {
-            setMetadata(fields.get("metadata"));
+        if (fields.metadata) {
+            setMetadata(fields.metadata);
         }
-        if (fields.containsKey("aclid")) {
-            Long aclId = ParamParser.parseLong(fields.get("aclid"), "error.param.acl_id");
-            Acl acl = Acl.get(aclId);
+        if (fields.aclid) {
+            Acl acl = Acl.get(fields.aclid);
             if (acl == null) {
                 throw new CinnamonException("error.param.acl_id");
             }
             setAcl(acl);
 
         }
-        if (fields.containsKey("typeid")) {
-            Long typeId = ParamParser.parseLong(fields.get("typeid"), "error.param.type_id");
-            FolderType ft = FolderType.get(typeId);
+        if (fields.typeid) {
+            FolderType ft = FolderType.get(fields.typeid);
             if (ft == null) {
                 throw new CinnamonException("error.param.type_id");
             }
