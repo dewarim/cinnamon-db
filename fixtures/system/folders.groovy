@@ -18,6 +18,7 @@ fixture{
     apps(Folder, name:'applications', owner:admin, acl:acl, type:type, parent:system)
     custom(Folder, name:'custom', owner:admin, acl:acl, type:type, parent:system)
     transientFolder(Folder, name:'transient', owner:admin, acl:acl, type:type, parent:system)
+    test(Folder, name:'test', owner:admin, acl:acl, type:type, parent:system)
     config(Folder, name:'config', owner:admin, acl:acl, type:type, parent:system)
     users(Folder, name:'users', owner:admin, acl:acl, type:type, parent:system)
     workflows(Folder, name:'workflows', owner:admin, acl:acl, type:type, parent:system)
