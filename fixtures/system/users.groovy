@@ -24,5 +24,6 @@ fixture{
     adminsOwnGroup(CmnGroup, name:name, groupOfOne:true)
     adminOwnGroupUser(CmnGroupUser, cmnGroup: adminsOwnGroup, userAccount: adminUser)
     adminSuperuser(CmnGroupUser, cmnGroup:superusers, userAccount:adminUser)
+    adminUserUserGroup(CmnGroupUser, cmnGroup: usersGroup, userAccount: adminUser)
     adminAclDefaultEntry(AclEntry, group:adminsOwnGroup, acl:Acl.findByName(Constants.ACL_DEFAULT) )
 }
