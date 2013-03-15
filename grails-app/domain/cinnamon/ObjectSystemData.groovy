@@ -428,8 +428,11 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         }
     }
 
-    public void toXmlElement(Element root) {
-        root.add(convert2domElement());
+    @Override
+    public Element toXmlElement(Element root) {
+        def obj = convert2domElement()
+        root.add(obj)
+        return obj
     }
     
     public Element addRelationsToElement(Element root){

@@ -168,7 +168,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * Add the folder as XML Element "folder" to the parameter Element.
      * @param root
      */
-    public void toXmlElement(Element root) {
+    @Override
+    public Element toXmlElement(Element root) {
         Element folder = root.addElement("folder");
         folder.addElement("id").addText(String.valueOf(getId()));
         folder.addElement("name").addText(getName());
@@ -187,6 +188,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         else {
             folder.addElement("hasChildren").addText("true");
         }
+        return folder
     }
 
     @Override

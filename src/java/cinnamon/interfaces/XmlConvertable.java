@@ -9,7 +9,13 @@ import org.dom4j.Element;
  */
 public interface XmlConvertable extends Comparable<XmlConvertable> {
 
-	void toXmlElement(Element root);
+    /**
+     * Serialize the object to a dom4j tree and add it to an element.
+     * Return the serialized object node (which is now a child of the root parameter element).
+     * @param root the root element to which this object will be added.
+     * @return the object node, now a child of the root parameter element.
+     */
+	Element toXmlElement(Element root);
     // getId() would be better, but runs into problems with dynamically generated GORM getId() method.
     Long myId();
 
