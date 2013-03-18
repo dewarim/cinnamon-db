@@ -1,8 +1,12 @@
 import cinnamon.Acl
 import cinnamon.global.Constants
 
+def names = [Constants.ACL_DEFAULT, 'authoring.acl', 'review.acl', 'released.acl']
+
 fixture{
     
-    defaultAcl(Acl, name:Constants.ACL_DEFAULT)
+    names.each{name ->
+        "$name"(Acl, name:name)
+    }
     
 }
