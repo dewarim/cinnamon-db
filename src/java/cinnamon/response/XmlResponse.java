@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Deprecated
 public class XmlResponse implements Response {
 	
     Logger log = LoggerFactory.getLogger(this.getClass());

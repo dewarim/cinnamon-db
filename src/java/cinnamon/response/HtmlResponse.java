@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@Deprecated
 public class HtmlResponse implements Response {
 
 	HttpServletResponse res;

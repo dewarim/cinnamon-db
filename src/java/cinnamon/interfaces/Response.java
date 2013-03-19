@@ -3,6 +3,7 @@ package cinnamon.interfaces;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Deprecated
 public interface Response {
 	void setServletResponse(HttpServletResponse resp);
 	HttpServletResponse getServletResponse();

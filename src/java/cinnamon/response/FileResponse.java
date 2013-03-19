@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+@Deprecated
 public class FileResponse implements Response {
 
 	HttpServletResponse res;
