@@ -30,7 +30,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 
     public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
     
-    static def luceneService
     static def metasetService
     static def folderService
 
@@ -1051,7 +1050,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 latestHead = true
                 if (predecessor != null && predecessor.getLatestHead()) {
                     predecessor.latestHead = false
-                    luceneService.updateIndex(predecessor)
+                    predecessor.indexOk = null
                 }
             }
         }
@@ -1059,7 +1058,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         // the predecessor cannot be latest branch, that has to be this (or a descendant) node.
         if (predecessor != null && predecessor.latestBranch) {
             predecessor.latestBranch = false
-            luceneService.updateIndex(predecessor)
+            predecessor.indexOk = null
         }
     }
 }
