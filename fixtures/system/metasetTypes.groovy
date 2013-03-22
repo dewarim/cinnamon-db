@@ -10,5 +10,6 @@ fixture{
     testMs(MetasetType, name:'test', config: '<metaset />')
     tikaMs(MetasetType, name:'tika', config: '<metaset />')
     taskDefMs(MetasetType, name:'task_definition', config: '<metaset />')
+    transitionMs(MetasetType, name:'transition', config: '<metaset />')
     
 }
