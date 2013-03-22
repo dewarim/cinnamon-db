@@ -1,15 +1,14 @@
 import cinnamon.MetasetType
 
+def types = ['search', 'cart', 'translation_extension', 'test',
+        'render_input', 'render_output',
+        'tika', 'task_definition', 'transition', 'workflow_template'
+]
+
 fixture{
     
-    searchMs(MetasetType, name:'search', config: '<metaset />')
-    cartMs(MetasetType, name:'cart', config: '<metaset />')
-    translationMs(MetasetType, name:'translation_extension',config: '<metaset />')
-    renderInputMs(MetasetType, name:'render_input', config: '<metaset />')
-    renderOutputMs(MetasetType, name:'render_output', config:'<metaset />')
-    testMs(MetasetType, name:'test', config: '<metaset />')
-    tikaMs(MetasetType, name:'tika', config: '<metaset />')
-    taskDefMs(MetasetType, name:'task_definition', config: '<metaset />')
-    transitionMs(MetasetType, name:'transition', config: '<metaset />')
+    types.each{name ->
+        "${name}"(MetasetType, name:name, config:'<metaset />')
+    }
     
 }
