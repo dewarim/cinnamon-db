@@ -197,8 +197,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
       * This is used to generate search results with a consistent ordering (where the
       * results are not ordered by any other parameter).
       *
-      */
-    public int compareTo(XmlConvertable o) {
+      */ public int compareTo(XmlConvertable o) {
         if (getId() > o.myId()) {
             return 1;
         }
@@ -240,7 +239,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     @Override
-    public String getSystemMetadata(Boolean withRelations) {    
+    public String getSystemMetadata(Boolean withRelations) {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("sysMeta");
         String className = getClass().getName();
@@ -249,8 +248,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         root.addAttribute("id", className + "@" + getId());
         toXmlElement(root);
         // note: Folders currently do not have relations, so the parameter is set to an empty node if required.
-        if (withRelations){
-            ((Element )root.selectSingleNode('folder')).addElement('relations')
+        if (withRelations) {
+            ((Element) root.selectSingleNode('folder')).addElement('relations')
         }
         return doc.asXML();
     }
@@ -464,7 +463,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         else {
             osds = ObjectSystemData.findAllByParent(this)
         }
-        if (recursive) {            
+        if (recursive) {
             List<Folder> subFolders = getSubfolders();
             for (Folder f : subFolders) {
                 log.debug("recurse into: ${f.name}")
@@ -486,7 +485,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     public String getMetadata() {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("meta");
-        for (Metaset m : metasets.collect{it.metaset}) {
+        for (Metaset m : metasets.collect { it.metaset }) {
             root.add(Metaset.asElement("metaset", m));
         }
         log.debug("metadata: ${doc.asXML()}")
@@ -515,7 +514,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     public void setMetadata(String metadata, WritePolicy writePolicy) {
         if (metadata == null || metadata.trim().length() < 9) {
             log.debug("delete obsolete metasets")
-            metasets.collect{it.metaset}.each {Metaset metaset->
+            metasets.collect { it.metaset }.each { Metaset metaset ->
                 metasetService.unlinkMetaset(this, metaset)
             }
         }
@@ -532,9 +531,9 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
                 }
                 return;
             }
-            
+
             Set<MetasetType> currentMetasetMap = new HashSet<MetasetType>();
-            fetchMetasets().each{
+            fetchMetasets().each {
                 // create a set of the currently existing metasets.
                 currentMetasetMap.add(it.type);
             }
@@ -550,16 +549,16 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
                 currentMetasetMap.remove(metasetType);
             }
 
-            currentMetasetMap.each{
+            currentMetasetMap.each {
                 // any metaset that was not found in the metadata parameter has to be deleted.                    
                 metasetService.unlinkMetaset(this, this.fetchMetaset(it.name)); // somewhat convoluted.
             }
         }
     }
 
-    public Set fetchMetasets() {        
+    public Set fetchMetasets() {
         FolderMetaset.findAll("from FolderMetaset fm where fm.folder=:folder",
-                [folder: this]).collect {it.metaset}
+                [folder: this]).collect { it.metaset }
     }
 
     /**
@@ -569,18 +568,33 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * @return the metaset or null
      */
     public Metaset fetchMetaset(String name) {
+        return fetchMetaset(name, false)
+    }
+
+    /**
+    * Fetch a metaset by its given name. Returns null in case there is no such metaset
+    * associated with this object.
+    * @param name the name of the metaset
+    * @param autocreate whether to create the metaset if it is missing or not 
+    * @return the metaset or null if autocreate is false and the metaset was not found
+    */
+    public Metaset fetchMetaset(String name, Boolean autocreate) {
         Metaset metaset = null;
+        MetasetType type = MetasetType.findByName(name)
         for (Metaset m : fetchMetasets()) {
-            if (m.getType().getName().equals(name)) {
+            if (m.getType() == type) {
                 metaset = m;
                 break;
             }
+        }
+        if (metaset == null) {
+            metaset = metasetService.createOrUpdateMetaset(this, type, null, WritePolicy.BRANCH)
         }
         return metaset;
     }
 
     public IMetasetJoin fetchMetasetJoin(MetasetType type) {
-        return (IMetasetJoin) FolderMetaset.find("from FolderMetaset o where o.metaset.type=:metasetType and o.folder=:folder",
+        return FolderMetaset.find("from FolderMetaset o where o.metaset.type=:metasetType and o.folder=:folder",
                 [folder: this, metasetType: type]);
     }
 
@@ -699,5 +713,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         return zippedFolder;
     }
 
+    public void updateIndex() {
+        indexOk = null;
+    }
 
 }

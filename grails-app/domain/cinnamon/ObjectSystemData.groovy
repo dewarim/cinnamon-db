@@ -921,7 +921,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             throw new CinnamonConfigurationException("Found two metasets of the same type in osd #" + getId());
         }
         else {
-            return (IMetasetJoin) metasetList.get(0);
+            return metasetList.get(0);
         }
     }
 
@@ -950,13 +950,27 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      * @return the metaset or null
      */
     public Metaset fetchMetaset(String name) {
+       return fetchMetaset(name, false)
+    }
+    
+    /**
+     * Fetch a metaset by its given name. Returns null in case there is no such metaset
+     * associated with this object.
+     * @param name the name of the metaset
+     * @param autocreate whether to create the metaset if it is missing or not 
+     * @return the metaset or null if autocreate is false and the metaset was not found
+     */
+    public Metaset fetchMetaset(String name, Boolean autocreate) {
         Metaset metaset = null;
+        MetasetType type = MetasetType.findByName(name)
         for (Metaset m : fetchMetasets()) {
-//            log.debug("check "+name+" vs. "+m.getType().getName());
-            if (m.getType().getName().equals(name)) {
+            if (m.getType() == type) {
                 metaset = m;
                 break;
             }
+        }
+        if(metaset == null){
+            metaset = metasetService.createOrUpdateMetaset(this,type, null, WritePolicy.BRANCH)
         }
         return metaset;
     }
@@ -1050,7 +1064,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 latestHead = true
                 if (predecessor != null && predecessor.getLatestHead()) {
                     predecessor.latestHead = false
-                    predecessor.indexOk = null
+                    predecessor.updateIndex()
                 }
             }
         }
@@ -1058,7 +1072,12 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         // the predecessor cannot be latest branch, that has to be this (or a descendant) node.
         if (predecessor != null && predecessor.latestBranch) {
             predecessor.latestBranch = false
-            predecessor.indexOk = null
+            predecessor.updateIndex()
         }
     }
+    
+    public void updateIndex(){
+        indexOk = null;
+    }
+    
 }

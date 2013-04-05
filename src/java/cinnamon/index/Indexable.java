@@ -68,4 +68,10 @@ public interface Indexable {
     Boolean hasXmlContent();
     
     Long myId();
+
+    /**
+     * Schedule the object to be updated by the background index thread at the next opportunity.
+     */
+    void updateIndex();
+    
 }
