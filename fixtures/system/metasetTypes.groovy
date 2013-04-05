@@ -2,7 +2,8 @@ import cinnamon.MetasetType
 
 def types = ['search', 'cart', 'translation_extension', 'test',
         'render_input', 'render_output',
-        'tika', 'task_definition', 'transition', 'workflow_template'
+        'tika', 'task_definition', 'transition', 'workflow_template',
+        'log'
 ]
 
 fixture{
