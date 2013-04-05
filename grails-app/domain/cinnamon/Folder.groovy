@@ -561,23 +561,10 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
                 [folder: this]).collect { it.metaset }
     }
 
-    /**
-     * Fetch a metaset by its given name. Returns null in case there is no such metaset
-     * associated with this object.
-     * @param name the name of the metaset
-     * @return the metaset or null
-     */
     public Metaset fetchMetaset(String name) {
         return fetchMetaset(name, false)
     }
 
-    /**
-    * Fetch a metaset by its given name. Returns null in case there is no such metaset
-    * associated with this object.
-    * @param name the name of the metaset
-    * @param autocreate whether to create the metaset if it is missing or not 
-    * @return the metaset or null if autocreate is false and the metaset was not found
-    */
     public Metaset fetchMetaset(String name, Boolean autocreate) {
         Metaset metaset = null;
         MetasetType type = MetasetType.findByName(name)
