@@ -1,5 +1,6 @@
 package cinnamon
 
+import cinnamon.index.IndexJob
 import cinnamon.interfaces.Accessible
 import cinnamon.interfaces.Ownable
 import cinnamon.index.Indexable
@@ -34,8 +35,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         name unique: ['parent'], size: 1..Constants.NAME_LENGTH
         metadata(size: 1..Constants.METADATA_SIZE)
         parent nullable: true
-        indexOk nullable: true
-        indexed nullable: true
     }
 
     static mapping = {
@@ -49,10 +48,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     String metadata = "<meta />"
     UserAccount owner
     Folder parent
-    Boolean indexOk = true
     FolderType type
     Acl acl
-    Date indexed = new Date()
 
     Set<FolderMetaset> metasets = []
 
@@ -82,8 +79,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         parent = that.parent;
         type = that.type;
         acl = that.acl;
-        indexed = null;
-        indexOk = null;
 //        setMetadata(that.getMetadata())
     }
 
@@ -294,8 +289,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         Folder folder = (Folder) o
 
         if (acl != folder.acl) return false
-        if (indexOk != folder.indexOk) return false
-        if (indexed != folder.indexed) return false
         if (metadata != folder.metadata) return false
         if (name != folder.name) return false
         if (owner != folder.owner) return false
@@ -310,10 +303,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         result = (name != null ? name.hashCode() : 0)
         result = 31 * result + (metadata != null ? metadata.hashCode() : 0)
         result = 31 * result + (owner != null ? owner.hashCode() : 0)
-        result = 31 * result + (indexOk != null ? indexOk.hashCode() : 0)
         result = 31 * result + (type != null ? type.hashCode() : 0)
         result = 31 * result + (acl != null ? acl.hashCode() : 0)
-        result = 31 * result + (indexed != null ? indexed.hashCode() : 0)
         return result
     }
 
@@ -376,14 +367,13 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
     /**
      * After a folder was moved, the folderPath index is invalid for all its content.
-     * To correct this, the index_ok column is set to null so the IndexServer will
-     * index each object anew.
+     * To correct this, all contained objects and folders must be scheduled for re-indexing. 
      * @param folder a folder who will be re-indexed along with its content (recursively).
      */
     void resetIndexOnFolderContent() {
-        setIndexOk(null);
+        updateIndex()
         for (ObjectSystemData osd : fetchFolderContent(false)) {
-            osd.setIndexOk(null);
+            osd.updateIndex()
         }
         for (Folder childFolder : fetchSubfolders(true)) {
             childFolder.resetIndexOnFolderContent();
@@ -574,8 +564,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
                 break;
             }
         }
-        if (metaset == null) {
-            metaset = metasetService.createOrUpdateMetaset(this, type, null, WritePolicy.BRANCH)
+        if (metaset == null && autocreate) {
+            metaset = metasetService.createMetaset(this, type, null)
         }
         return metaset;
     }
@@ -700,8 +690,9 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         return zippedFolder;
     }
 
-    public void updateIndex() {
-        indexOk = null;
+    public void updateIndex(){
+        IndexJob indexJob = new IndexJob(this)
+        indexJob.save()
     }
 
 }

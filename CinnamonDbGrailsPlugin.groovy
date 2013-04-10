@@ -1,6 +1,6 @@
 class CinnamonDbGrailsPlugin {
 
-    def version = "3.0.0.20"
+    def version = "3.0.0.23"
     def grailsVersion = "2.1 > *"
     def dependsOn = [:]
     def pluginExcludes = [
@@ -9,7 +9,6 @@ class CinnamonDbGrailsPlugin {
 
     def title = "Cinnamon Db Plugin" // Headline display name of the plugin
     def author = "Ingo Wiarda"
-    def authorEmail = "ingo.wiarda@horner-project.eu"
     def description = '''\
 Domain and base classes for the Cinnamon CMS.
 '''
@@ -17,8 +16,8 @@ Domain and base classes for the Cinnamon CMS.
     def documentation = "http://cinnamon-cms.de"
     def license = "LGPL 2.1"
     def organization = [ name: "Horner GmbH", url: "http://www.horner-project.eu/" ]
-    def developers = [ 
-//            [ name: "", email: "" ]
+    def developers = [
+            [name:'Ingo Wiarda', email: "ingo.wiarda@texolution.eu"]
     ]
 
     def issueManagement = [ system: "Github", url: "https://github.com/dewarim/cinnamon-db/issues" ]

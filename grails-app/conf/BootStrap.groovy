@@ -62,9 +62,13 @@ class BootStrap {
             // set circular dependency:
             def renderLc = LifeCycle.findByName(Constants.RENDER_SERVER_LIFECYCLE)
             renderLc.defaultState = LifeCycleState.findByName(Constants.RENDERSERVER_RENDER_TASK_NEW)
-
-            Folder.executeUpdate('update Folder f set f.indexOk = NULL')
-            ObjectSystemData.executeUpdate('update ObjectSystemData o set o.indexOk = NULL')
+            
+            Folder.list().each{
+                it.updateIndex()
+            }
+            ObjectSystemData.list().each {
+                it.updateIndex()
+            }
         }
         catch (Exception e) {
             log.error("Failed to initialize repository", e)

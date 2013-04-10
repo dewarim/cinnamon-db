@@ -44,27 +44,6 @@ public interface Indexable {
 	 */
 	String getSystemMetadata(Boolean withRelations);
 	
-	/**
-	 * <p>If indexing was successful, set indexOk to true, otherwise to false.</p>
-	 * <p>If this field is null, the item in question has not been indexed yet.<p>
-	 * @return true if indexing was successful, false if unsuccessful, null if the object needs to be indexed.
-	 */
-	Boolean getIndexOk();
-
-    /**
-     * Set the indexOk-flag.
-     * @param indexOk set to true if index operation was successful, false if unsuccessful, null if the IndexServer
-     * should index this item again. Note: the IndexServer has to be configured to run asynchronously for the null
-     * parameter to work.
-     */
-	void setIndexOk(Boolean indexOk);
-
-    /**
-     * Set the date on which the object was last indexed.
-     * @param date Java date object which defines moment of the last update event.
-     */
-	void setIndexed(Date date);
-    
     Boolean hasXmlContent();
     
     Long myId();

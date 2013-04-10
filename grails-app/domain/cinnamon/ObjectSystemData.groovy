@@ -1,5 +1,6 @@
 package cinnamon
 
+import cinnamon.index.IndexJob
 import cinnamon.index.Indexable
 import cinnamon.interfaces.Accessible
 import cinnamon.interfaces.Ownable
@@ -18,6 +19,8 @@ import org.dom4j.Element
 import cinnamon.global.Conf
 import cinnamon.global.ConfThreadLocal
 import cinnamon.utils.FileKeeper
+
+import javax.persistence.EntityManager
 import javax.persistence.NoResultException
 import cinnamon.utils.ContentReader
 import org.dom4j.Node
@@ -37,8 +40,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         contentPath(size: 0..255, nullable: true)
         contentSize(nullable: true)
         name(name: 1..Constants.NAME_LENGTH)
-        indexOk nullable: true
-        indexed nullable: true
         predecessor(nullable: true)
         root(nullable: true) // TODO: can we switch to OSD.root:non-nullable?
         locker(nullable: true)
@@ -61,7 +62,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     String name
     String contentPath
     Long contentSize
-    Boolean indexOk
     ObjectSystemData predecessor
     ObjectSystemData root
     UserAccount creator
@@ -69,7 +69,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     UserAccount owner
     UserAccount locker
     Date created = new Date()
-    Date indexed = null
     Date modified = new Date()
     Language language
     Acl acl
@@ -349,7 +348,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         twin.setCreated(Calendar.getInstance().getTime());
         twin.setCreator(creator);
         twin.setFormat(format);
-        //		twin.setIndexed(null); // must be "now()", or IndexServer will do bad things.
         twin.setLanguage(language);
         twin.setLatestBranch(latestBranch);
         twin.setLatestHead(latestHead);
@@ -600,20 +598,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         return fullContentPath;
     }
 
-    /**
-     * Set the index status, true means indexing was completed successfully, false means
-     * indexing has failed. If indexOk is null, this object has not been indexed yet (or
-     * it is scheduled to be indexed as soon as possible, provided the IndexServer is running,
-     * which can be configured by setting {@code <startIndexServer>true</startIndexServer>}
-     * in the cinnamon_config.xml).
-     *
-     * @param indexOk the index status
-     */
-    public void setIndexOk(Boolean indexOk) {
-        this.indexOk = indexOk;
-    }
-
-
     @SuppressWarnings("unchecked")
     public String createNewVersionLabel() {
 
@@ -739,8 +723,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         if (created != that.created) return false
         if (creator != that.creator) return false
         if (format != that.format) return false
-        if (indexOk != that.indexOk) return false
-        if (indexed != that.indexed) return false
         if (language != that.language) return false
         if (latestBranch != that.latestBranch) return false
         if (latestHead != that.latestHead) return false
@@ -760,21 +742,19 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 
         return true
     }
-
+    
+    // TODO: simplify hashCode - name, folder, version are enough.
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
         result = 31 * result + (contentPath != null ? contentPath.hashCode() : 0)
         result = 31 * result + (contentSize != null ? contentSize.hashCode() : 0)
-        result = 31 * result + (indexOk != null ? indexOk.hashCode() : 0)
         result = 31 * result + (predecessor != null ? predecessor.hashCode() : 0)
-//        result = 31 * result + (root != null ? root.hashCode() : 0)
         result = 31 * result + (creator != null ? creator.hashCode() : 0)
         result = 31 * result + (modifier != null ? modifier.hashCode() : 0)
         result = 31 * result + (owner != null ? owner.hashCode() : 0)
         result = 31 * result + (locker != null ? locker.hashCode() : 0)
         result = 31 * result + (created != null ? created.hashCode() : 0)
-        result = 31 * result + (indexed != null ? indexed.hashCode() : 0)
         result = 31 * result + (modified != null ? modified.hashCode() : 0)
         result = 31 * result + (language != null ? language.hashCode() : 0)
         result = 31 * result + (acl != null ? acl.hashCode() : 0)
@@ -782,7 +762,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         result = 31 * result + (format != null ? format.hashCode() : 0)
         result = 31 * result + (type != null ? type.hashCode() : 0)
         result = 31 * result + (appName != null ? appName.hashCode() : 0)
-//        result = 31 * result + (metadata != null ? metadata.hashCode() : 0)
         result = 31 * result + (procstate != null ? procstate.hashCode() : 0)
         result = 31 * result + (latestHead != null ? latestHead.hashCode() : 0)
         result = 31 * result + (latestBranch != null ? latestBranch.hashCode() : 0)
@@ -956,8 +935,8 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 break;
             }
         }
-        if(metaset == null){
-            metaset = metasetService.createOrUpdateMetaset(this,type, null, WritePolicy.BRANCH)
+        if(metaset == null && autocreate){
+            metaset = metasetService.createMetaset(this, type, null)
         }
         return metaset;
     }
@@ -1064,7 +1043,8 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
     
     public void updateIndex(){
-        indexOk = null;
+        IndexJob indexJob = new IndexJob(this)
+        indexJob.save()
     }
     
 }

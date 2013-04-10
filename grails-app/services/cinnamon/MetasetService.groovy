@@ -120,15 +120,19 @@ public class MetasetService {
         }
     }
 
+    public Metaset createMetaset(owner, metasetType, content){
+        log.debug("create new metaset")
+        def metaset = new Metaset(content, metasetType);
+        owner.save() // we need the Hibernate Id to add a Metaset
+        metaset.save()
+        owner.addMetaset(metaset);
+        return metaset
+    }
+    
     public Metaset createOrUpdateMetaset(IMetasetOwner owner, MetasetType metasetType, String content, WritePolicy writePolicy) {
         Metaset metaset = owner.fetchMetaset(metasetType.getName());
         if (metaset == null) {
-            // create new metaset
-            log.debug("create new metaset")
-            metaset = new Metaset(content, metasetType);
-            owner.save() // we need the Hibernate Id to add a Metaset
-            metaset.save()
-            owner.addMetaset(metaset);
+            metaset = createMetaset(owner, metasetType, content)
         } else {
             // update metaset            
             switch (writePolicy) {
