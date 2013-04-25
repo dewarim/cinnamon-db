@@ -1,34 +1,10 @@
-API changes
-
-Group.is_user => Group.groupOfOne
-User => UserAccount ("user" is a reserved word in several database dialects)
-Group => CmnGroup ("group" is a reserved word in SQL, and always having to escape table names gets old very quickly,
-    to say nothing about automatically generated code which sometimes cannot do this properly.)
+--- API changes
+---
+--- User => UserAccount ("user" is a reserved word in several database dialects)
+--- Group => CmnGroup ("group" is a reserved word in SQL, and always having to escape table names gets old very quickly,
+---    to say nothing about automatically generated code which sometimes cannot do this properly.)
     
-Database changes
-groups: rename is_user to group_of_one   
-formats: add obj_version column   
-objtypes: add obj_version column   
-messages: add obj_version column
-objects: rename lang_id to language_id
-
---- create metaset_types-table: see Server/docs/migration-2.2.sql
---- create lifecycle_logs table: see Server/docs/migration-2.2.2.sql
--- substitute with your local connection:
- insert into customtables values(1,'jdbc:postgresql://127.0.0.1/demo?user=cinnamon&password=cinnamon',
- 'org.postgresql.Driver','audit.connection', 0, 3)
-
---- insert default metaset_types 
-COPY metaset_types (id, config, description, name, obj_version) FROM stdin WITH DELIMITER ',';
-1,<metaset />,search,search,0
-2,<metaset />,cart,cart,0
-3,<metaset />,translation_extension,translation_extension,0
-4,<metaset />,render_input,render_input,0
-5,<metaset />,render_output,render_output,0
-6,<metaset />,test,test,0
-7,<metaset />,tika,tika,0
-8,<metaset />,translation_folder,translation_folder,0
-\.
+--- Database changes: you should start with a database @ Cinnamon 2.5.1 
 
 alter table users rename ui_language_id to language_id;
 alter table objects rename column lifecycle_state_id to state_id;
@@ -76,9 +52,8 @@ alter table change_triggers rename column command to action;
 alter table change_triggers add column controller character varying(255) not null default 'cinnamon';
 update change_trigger_types set trigger_class='cinnamon.trigger.impl.RelationChangeTrigger';
 
-alter table lifecycle_states add column life_cycle_state_for_copy_id bigint;
 --- test insert:
-insert into change_triggers values(6,true,0,100,1,'newVersion',true,true,'<config />', 'osd');
+--- insert into change_triggers values(6,true,0,100,1,'newVersion',true,true,'<config />', 'osd');
 
 update lifecycle_states set state_class='cinnamon.lifecycle.state.NopState' where state_class like '%NopState';
 update lifecycle_states set state_class='cinnamon.lifecycle.state.ChangeAclState' where state_class like '%ChangeAclState';
@@ -112,3 +87,13 @@ alter table customtables rename column jdbcdriver to jdbc_driver;
 alter table permissions drop column description;
 alter table formats drop column description;
 alter table groups drop column description;
+alter table links add column version bigint not null default 0;
+
+
+-- in case your current db is missing some object types:
+-- insert into objtypes values(1000,'_object_reference',0,'<config />');
+-- insert into objtypes values(1001,'_workflow_template',0,'<config />');
+-- insert into objtypes values(1002,'_task_definition',0,'<config />');
+-- insert into objtypes values(1003,'_workflow',0,'<config />');
+-- insert into objtypes values(1003,'_notification',0,'<config />');
+-- insert into objtypes values(1004,'_notification',0,'<config />');
