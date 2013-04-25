@@ -15,7 +15,7 @@ Domain and base classes for the Cinnamon CMS.
 
     def documentation = "http://cinnamon-cms.de"
     def license = "LGPL 2.1"
-    def organization = [ name: "Horner GmbH", url: "http://www.horner-project.eu/" ]
+    def organization = [ name: "Texolution GmbH", url: "http://texolution.eu/" ]
     def developers = [
             [name:'Ingo Wiarda', email: "ingo.wiarda@texolution.eu"]
     ]
