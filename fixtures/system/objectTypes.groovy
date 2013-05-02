@@ -18,5 +18,6 @@ fixture {
     taskDefinitionType(ObjectType, name: Constants.OBJTYPE_TASK_DEFINITION, config: '<meta/>')
     defaultType(ObjectType, name:Constants.OBJTYPE_DEFAULT, config:'<meta/>')
     notificationType(ObjectType, name:Constants.OBJTYPE_NOTIFICATION, config:'<meta/>')
+    referenceType(ObjectType, name:Constants.OBJTYPE_REFERENCE, config:'<meta/>')
     
 }
