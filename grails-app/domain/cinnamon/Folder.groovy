@@ -1,5 +1,6 @@
 package cinnamon
 
+import cinnamon.index.IndexAction
 import cinnamon.index.IndexJob
 import cinnamon.interfaces.Accessible
 import cinnamon.interfaces.Ownable
@@ -16,6 +17,7 @@ import cinnamon.interfaces.IMetasetOwner
 import org.dom4j.Node
 
 import cinnamon.interfaces.IMetasetJoin
+import org.hibernate.Hibernate
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
@@ -695,4 +697,28 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         indexJob.save()
     }
 
+    def afterInsert(){
+        LocalRepository.addIndexable(this, IndexAction.ADD)
+    }
+
+    def afterUpdate(){
+        LocalRepository.addIndexable(this, IndexAction.UPDATE)
+    }
+
+    def afterDelete(){
+        LocalRepository.addIndexable(this, IndexAction.REMOVE)
+    }
+
+    @Override
+    public String uniqueId() {
+        String className = Hibernate.getClass(this).getName();
+        return className + "@" + getId();
+    }
+
+    @Override
+    public Indexable reload(){
+        def folder = Folder.get(this.getId());
+        log.debug("Folder.get for "+id+" returned: "+folder);
+        return folder;
+    }
 }

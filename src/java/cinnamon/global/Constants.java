@@ -42,7 +42,9 @@ public class Constants {
 	public static final String OBJTYPE_IMAGE = "image";
 	public static final String OBJTYPE_DOCUMENT = "document";
     public static final String OBJTYPE_NOTIFICATION = "_notification";
-
+    public static final String OBJTYPE_REFERENCE = "_object_reference";
+    
+    public static final String FOLDER_TYPE_REFERENCE = "_folder_reference";
 	public static final String FOLDER_TYPE_DEFAULT = "_default_folder_type";
 	public static final String INDEX_GROUP_DEFAULT = "_default_index_group";
 	

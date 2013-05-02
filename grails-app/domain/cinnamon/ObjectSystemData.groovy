@@ -1,5 +1,6 @@
 package cinnamon
 
+import cinnamon.index.IndexAction
 import cinnamon.index.IndexJob
 import cinnamon.index.Indexable
 import cinnamon.interfaces.Accessible
@@ -19,6 +20,7 @@ import org.dom4j.Element
 import cinnamon.global.Conf
 import cinnamon.global.ConfThreadLocal
 import cinnamon.utils.FileKeeper
+import org.hibernate.Hibernate
 
 import javax.persistence.EntityManager
 import javax.persistence.NoResultException
@@ -916,6 +918,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         OsdMetaset om = new OsdMetaset(this, metaset);
         log.debug("persist metaset");
         om.save()
+        LocalRepository.addIndexable(this, IndexAction.UPDATE)
     }
 
     public Set<Metaset> fetchMetasets() {
@@ -1030,7 +1033,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 latestHead = true
                 if (predecessor != null && predecessor.getLatestHead()) {
                     predecessor.latestHead = false
-                    predecessor.updateIndex()
                 }
             }
         }
@@ -1038,7 +1040,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         // the predecessor cannot be latest branch, that has to be this (or a descendant) node.
         if (predecessor != null && predecessor.latestBranch) {
             predecessor.latestBranch = false
-            predecessor.updateIndex()
         }
     }
     
@@ -1047,4 +1048,28 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         indexJob.save()
     }
     
+    def afterInsert(){
+        LocalRepository.addIndexable(this, IndexAction.ADD)
+    }
+    
+    def afterUpdate(){
+        LocalRepository.addIndexable(this, IndexAction.UPDATE)
+    }
+    
+    def afterDelete(){
+        LocalRepository.addIndexable(this, IndexAction.REMOVE)
+    }
+    
+    @Override
+    public String uniqueId() {
+        String className = Hibernate.getClass(this).getName();
+        return className + "@" + getId();
+    }
+
+    @Override
+    public Indexable reload(){
+        def osd = ObjectSystemData.get(this.getId());
+        log.debug("OSD.get for "+id+" returned: "+osd);
+        return osd;
+    }
 }

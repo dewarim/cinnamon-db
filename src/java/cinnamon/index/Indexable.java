@@ -52,5 +52,17 @@ public interface Indexable {
      * Schedule the object to be updated by the background index thread at the next opportunity.
      */
     void updateIndex();
+
+    /**
+     * Load this indexable again from the database. Required because an indexable may have become detached 
+     * from its Hibernate session when the LuceneActor tries to index it.
+     * You should only use this inside a valid transaction.
+     */
+    Indexable reload();
+
+    /**
+     * @return a String composed of the Java class name and the Hibernate id, for example "server.Folder@123"
+     */
+    String uniqueId();
     
 }
