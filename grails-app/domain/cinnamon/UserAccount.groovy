@@ -6,7 +6,6 @@ import cinnamon.i18n.UiLanguage
 import org.dom4j.DocumentHelper
 import cinnamon.utils.ParamParser
 import cinnamon.utils.security.HashMaker
-import cinnamon.global.ConfThreadLocal
 
 class UserAccount  implements Serializable {
 
@@ -27,6 +26,7 @@ class UserAccount  implements Serializable {
 
     private transient Element xmlNode = null;
     private transient Boolean userIsSuperuser = null;
+    def grailsApplication
     
     String name
     String pwd
@@ -82,8 +82,8 @@ class UserAccount  implements Serializable {
         }
     }
 
-    protected void encodePassword() {
-        if( ConfThreadLocal.getConf().getField("encryptPassword", "true") == 'true'){
+    protected void encodePassword() {        
+        if( grailsApplication.config.encryptPasswords){
             pwd = HashMaker.createDigest(pwd)
         }       
     }

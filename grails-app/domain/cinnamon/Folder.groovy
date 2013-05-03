@@ -12,20 +12,16 @@ import cinnamon.exceptions.CinnamonException
 import org.dom4j.Element
 import org.dom4j.Document
 import org.dom4j.DocumentHelper
-import cinnamon.exceptions.CinnamonConfigurationException
 import cinnamon.interfaces.IMetasetOwner
 import org.dom4j.Node
 
 import cinnamon.interfaces.IMetasetJoin
 import org.hibernate.Hibernate
-import org.slf4j.LoggerFactory
-import org.slf4j.Logger
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import org.apache.commons.compress.archivers.ArchiveStreamFactory
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.utils.IOUtils
 import cinnamon.utils.ZippedFolder
-import cinnamon.global.ConfThreadLocal
 
 class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetasetOwner, Accessible {
 
@@ -45,7 +41,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     static hasMany = [metasets: FolderMetaset]
-
+    
     String name
     String metadata = "<meta />"
     UserAccount owner
@@ -55,6 +51,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
     Set<FolderMetaset> metasets = []
 
+    def grailsApplication
+    
     public Folder() {
 
     }
@@ -640,7 +638,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
             final OutputStream out = new FileOutputStream(zipFile);
             ZipArchiveOutputStream zos = (ZipArchiveOutputStream) new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP, out);
-            String encoding = ConfThreadLocal.getConf().getField("zipFileEncoding", "Cp437");
+            String encoding = grailsApplication.config.zipFileEncoding ?: "Cp437"
 
             log.debug("current file.encoding: " + System.getProperty("file.encoding"));
             log.debug("current Encoding for ZipArchive: " + zos.getEncoding() + "; will now set: " + encoding);

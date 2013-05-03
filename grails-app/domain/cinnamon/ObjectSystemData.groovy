@@ -18,11 +18,8 @@ import org.dom4j.DocumentHelper
 
 import org.dom4j.Element
 import cinnamon.global.Conf
-import cinnamon.global.ConfThreadLocal
-import cinnamon.utils.FileKeeper
 import org.hibernate.Hibernate
 
-import javax.persistence.EntityManager
 import javax.persistence.NoResultException
 import cinnamon.utils.ContentReader
 import org.dom4j.Node
@@ -34,6 +31,8 @@ import cinnamon.interfaces.IMetasetOwner
 class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner, Accessible {
 
     public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
+    
+    def grailsApplication
     
     static def metasetService
     static def folderService
@@ -589,14 +588,12 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      * @return the complete path to this OSD's content - or null, if no content exists.
      */
     public String getFullContentPath(String repositoryName) {
-        Conf conf = ConfThreadLocal.getConf();
         if (contentPath == null) {
 //            log.debug("ContentPath is null");
             return null;
         }
-        String fullContentPath = conf.getDataRoot() + File.separator +
+        String fullContentPath = grailsApplication.config.data_root + File.separator +
                 repositoryName + File.separator + getContentPath();
-//        log.debug("fullContentPath: "+fullContentPath);
         return fullContentPath;
     }
 

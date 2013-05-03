@@ -219,9 +219,8 @@ public class ContentStore {
         // TODO: buffered streaming
         def b = new byte[fileSize];
         res.setContentLength(fileSize);
-        res.setContentType("binary/octet-stream"); // TODO: softcode with
-        // detailed type info
-        res.setHeader("Content-Disposition", "attachment; filename=${osd.name}");
+        res.setContentType("binary/octet-stream"); // TODO: softcode with detailed type info
+        res.setHeader("Content-Disposition", "attachment; filename=${osd.name}}");
         return b;
     }
 

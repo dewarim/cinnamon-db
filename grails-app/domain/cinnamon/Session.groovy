@@ -1,15 +1,15 @@
 package cinnamon
 
 import cinnamon.i18n.UiLanguage
-import cinnamon.global.ConfThreadLocal
 import cinnamon.exceptions.CinnamonException
 import cinnamon.global.Constants
+import humulus.EnvironmentHolder
 
 /*
  * Design Note: it may be easier in the long run to use session cookies or ids,
  * but then we may lose the feature to have multiple sessions from one user.
  */
-class Session  implements Serializable {
+class Session implements Serializable {
 
     static constraints = {
         ticket(size: 1..255)
@@ -37,30 +37,13 @@ class Session  implements Serializable {
     }
 
     public Session(String repository, UserAccount user, String machinename, UiLanguage language) {
-        long expirationTime = ConfThreadLocal.getConf().getSessionExpirationTime(repository);
+        long expirationTime = sessionExpirationTime(repository)
         ticket = UUID.randomUUID().toString() + "@" + repository;
         this.user = user;
         this.machinename = machinename;
         this.language = language;
         username = user.getName(); // while we still have direct SQL queries.
         expires.setTime(expires.getTime() + expirationTime); // for testing
-    }
-
-    /**
-     * Copy a session, but assign a new UUID.
-     * @param repository This session's repository's name.
-     * @return the copy of the Session, with new UUID and extended expiration time.
-     */
-    public Session copy(String repository){
-        // TODO: is this used anywhere?
-        Session session = new Session();
-        long expirationTime = ConfThreadLocal.getConf().getSessionExpirationTime(repository);
-        session.ticket = UUID.randomUUID().toString()+"@"+repository;
-        session.user = user;
-        session.machinename = getMachinename();
-        session.language = session.getLanguage();
-        session.expires.setTime(expires.getTime() + expirationTime );
-        return session;
     }
 
     void checkForExpiration() {
@@ -109,4 +92,20 @@ class Session  implements Serializable {
     public String toString(){
         return "Session#"+id+" "+username +" "+ticket+" "+expires.toString();
     }
+
+    Long sessionExpirationTime(String repositoryName){
+        if(! repositoryName){
+            repositoryName = EnvironmentHolder.environment.dbName
+        }
+        // cannot use "def grailsApplication", because this method is used in a constructor
+        def grailsConfig = domainClass.grailsApplication.config
+        def repo = grailsConfig.repositories.repository.find{
+            it.key == repositoryName
+        }
+        Long expTime = repo?.sessionExpirationTime
+        log.debug("sessionExpirationTime for ${repositoryName}: ${expTime}")
+        return expTime ?: 3600000
+
+    }
+
 }
