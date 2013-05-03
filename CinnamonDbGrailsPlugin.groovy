@@ -1,19 +1,18 @@
 class CinnamonDbGrailsPlugin {
 
-    def version = "3.0.0.26"
+    def version = "3.0.0.27"
     def grailsVersion = "2.1 > *"
     def dependsOn = [:]
     def pluginExcludes = [
             "grails-app/views/error.gsp"
     ]
 
-    def title = "Cinnamon Db Plugin" // Headline display name of the plugin
+    def title = "Cinnamon Db Plugin" 
     def author = "Ingo Wiarda"
-    def description = '''\
-Domain and base classes for the Cinnamon CMS.
-'''
+    def authorEmail = "ingo.wiarda@texolution.eu"
+    def description = "Domain and base classes for the Cinnamon CMS."
 
-    def documentation = "http://cinnamon-cms.de"
+    def documentation = "http://cinnamon-cms.com"
     def license = "LGPL 2.1"
     def organization = [ name: "Texolution GmbH", url: "http://texolution.eu/" ]
     def developers = [

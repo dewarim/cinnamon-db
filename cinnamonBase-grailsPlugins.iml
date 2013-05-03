@@ -1,56 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
   <component name="FacetManager">
+    <facet type="web" name="GrailsWeb">
+      <configuration>
+        <webroots />
+        <sourceRoots />
+      </configuration>
+    </facet>
     <facet type="hibernate" name="Hibernate">
       <configuration>
         <datasource-map />
       </configuration>
     </facet>
-    <facet type="web" name="GrailsWeb">
-      <configuration>
-        <webroots>
-          <root url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/fixtures-1.2/web-app" relative="/" />
-        </webroots>
-        <sourceRoots />
-      </configuration>
-    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/fixtures-1.2">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/fixtures-1.2/src/groovy" isTestSource="false" />
+    <content url="file://$USER_HOME$/.grails/2.2.2/projects/cinnamonDb/plugins/hibernate-2.2.2">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.2/projects/cinnamonDb/plugins/hibernate-2.2.2/grails-app/i18n" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/hibernate-2.2.1">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/hibernate-2.2.1/grails-app/i18n" isTestSource="false" />
-    </content>
-    <content url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/release-2.2.1">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/release-2.2.1/src/java" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/release-2.2.1/src/groovy" isTestSource="false" />
-    </content>
-    <content url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/resources-1.1.6">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/resources-1.1.6/src/java" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/resources-1.1.6/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/resources-1.1.6/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/resources-1.1.6/grails-app/taglib" isTestSource="false" />
-    </content>
-    <content url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/rest-client-builder-1.0.3">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/rest-client-builder-1.0.3/src/groovy" isTestSource="false" />
-    </content>
-    <content url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/spock-0.7" />
-    <content url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3/src/java" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3/grails-app/services" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3/grails-app/taglib" isTestSource="false" />
-    </content>
-    <content url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/tomcat-2.2.1" />
-    <content url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/webxml-1.4.1">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/cinnamonDb/plugins/webxml-1.4.1/src/groovy" isTestSource="false" />
-    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.2/projects/cinnamonDb/plugins/tomcat-2.2.2" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="grails-2.2.1" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="grails-2.2.2" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (cinnamonBase-grailsPlugins)">
         <CLASSES>
@@ -90,7 +61,8 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/jaxen/jaxen/jars/jaxen-1.1.4.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-web/jars/spring-security-web-3.0.7.RELEASE.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-core/jars/spring-security-core-3.0.7.RELEASE.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/cinnamon/cinnamon-humulus/jars/cinnamon-humulus-0.2.3.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/cinnamon-humulus/jars/cinnamon-humulus-0.2.5.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.eclipse.jdt.core.compiler/ecj/jars/ecj-3.7.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
