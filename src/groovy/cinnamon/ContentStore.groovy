@@ -1,19 +1,21 @@
 package cinnamon;
 
 import cinnamon.exceptions.CinnamonException;
-import cinnamon.global.Conf;
-import cinnamon.global.ConfThreadLocal;
 import cinnamon.utils.FileKeeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.UUID;
 
 public class ContentStore {
 
     static final String sep = File.separator;
+    
+    static String getDataRoot(){
+        def grailsApplication = new Acl().domainClass.grailsApplication        
+        return grailsApplication.config.data_root
+    }
 
     /**
      * Create a 3-tier folder hierarchy named after the first 6 letters of the file's UUID
@@ -23,21 +25,17 @@ public class ContentStore {
      * @param sourcePath path to the file to copy
      * @param repository the repository to which the file belongs
      * @return String
-     * @throws java.io.IOException if something IO-related goes wrong (like disk full)
      */
     // TODO: find a better method name
     public static String copyToContentStore(String sourcePath, String repository) throws IOException {
         Logger log = LoggerFactory.getLogger(ContentStore.class);
-        Conf conf = ConfThreadLocal.getConf();
 
         File source = new File(sourcePath);
-        String targetName = UUID.randomUUID().toString(); // GUID
+        String targetName = UUID.randomUUID().toString();
         String subfolderName = getSubFolderName(targetName);
 
         // TODO: refactor identical code between upload&copy-tocontentstore.
-
-        String subfolderPath = conf.getDataRoot() + repository + sep
-                + subfolderName;
+        String subfolderPath = getDataRoot() + repository + sep + subfolderName;
         File subfolder = new File(subfolderPath);
         boolean result = subfolder.mkdirs();
         log.debug("Result of mkdir: " + result);
@@ -69,8 +67,7 @@ public class ContentStore {
     }
 
     private static String getSubFolderName(String f) {
-        return f.substring(0, 2) + sep
-                + f.substring(2, 4) + sep + f.substring(4, 6);
+        return f.substring(0, 2) + sep + f.substring(2, 4) + sep + f.substring(4, 6);
     }
 
     /**
@@ -84,38 +81,30 @@ public class ContentStore {
      * @param file       the uploaded file
      * @param repository the repository to which the file belongs
      * @return String
-     * @throws java.io.IOException if something unexpected and fatal happens (like missing write
-     *                     permissions)
      */
     public static String upload(UploadedFile file,
-                                String repository) throws IOException {
+                                String repository) {
         Logger log = LoggerFactory.getLogger(ContentStore.class);
-        Conf conf = ConfThreadLocal.getConf();
-
         File f = new File(file.getFileBufferPath());
         String subfolderName = getSubFolderName(file.getName());
 
-        String subfolderPath = conf.getDataRoot() + repository
-                + sep + subfolderName;
+        String subfolderPath = getDataRoot() + repository
+        + sep + subfolderName;
         File subfolder = new File(subfolderPath);
 
-        boolean result = subfolder.mkdirs();    
+        boolean result = subfolder.mkdirs();
         log.debug("Result of mkdir: " + result);
 
         String contentPath = subfolderPath + sep + file.getName();
 
-        result = f.renameTo(new File(contentPath));               
+        result = f.renameTo(new File(contentPath));
         log.debug("Result of renameTo: " + contentPath + ": " + result);
         if(!result){
             log.debug("renameTo failed. Trying to copy.");
-//            if(new File(subfolderPath).canWrite()){
-//                log.warn("cannot write to "+subfolderPath);
-//                throw new IOException(subfolderPath+" is not writable.");
-//            }
             copyFile(f, new File(contentPath));
             log.debug("contentPath after copy: "+contentPath);
         }
-                
+
         if (!result && !subfolder.isDirectory()) {
             throw new IOException("Could not rename uploaded file " + contentPath);
         } else {
@@ -131,10 +120,9 @@ public class ContentStore {
      */
     public static void deleteObjectFile(ObjectSystemData osd, String repository) {
         Logger log = LoggerFactory.getLogger(ContentStore.class);
-        Conf conf = ConfThreadLocal.getConf();
         String contentPath = osd.getContentPath();
         if (contentPath != null && contentPath.length() > 0) {
-            File contentFile = new File(conf.getDataRoot() + File.separator +
+            File contentFile = new File(getDataRoot() + File.separator +
                     repository + File.separator + contentPath);
             log.debug("deleteContent: " + contentFile.getAbsolutePath());
 
@@ -149,7 +137,7 @@ public class ContentStore {
             }
         }
     }
-    
+
     /**
      * Delete a file from a repository. 
      *
@@ -157,9 +145,8 @@ public class ContentStore {
      */
     public static void deleteFileInRepository(String contentPath, String repository) {
         Logger log = LoggerFactory.getLogger(ContentStore.class);
-        Conf conf = ConfThreadLocal.getConf();
         if (contentPath != null && contentPath.length() > 0) {
-            File contentFile = new File(conf.getDataRoot() + File.separator +
+            File contentFile = new File(getDataRoot() + File.separator +
                     repository + File.separator + contentPath);
             log.debug("deleteContent: " + contentFile.getAbsolutePath());
 
@@ -187,13 +174,13 @@ public class ContentStore {
         Logger log = LoggerFactory.getLogger(ContentStore.class);
         Boolean removeLock = false;
         String contentPath = osd.getContentPath();
-        String newFilename;
+        String newFilename = null;
         try{
-            if(osd.getLocker() == null){
-                osd.setLocker(user);
-                removeLock = true; 
+            if(osd.locker == null){
+                osd.locker = user
+                removeLock = true;
             }
-            if(osd.getLocker().equals(user)){
+            if(osd.locker.equals(user)){
                 newFilename = copyToContentStore(file.getAbsolutePath(), repository);
                 osd.setContentPath(newFilename);
             }
@@ -203,7 +190,7 @@ public class ContentStore {
             deleteFileInRepository(contentPath, repository);
         }
         catch (IOException e){
-            log.error("Failed to replace content file on #"+osd.myId()+" with " +file.getAbsolutePath(),e);
+            log.error("Failed to replace content file on #${osd.myId()} with ${file.getAbsolutePath()}",e);
             osd.setContentPath(contentPath);
             throw new CinnamonException(e);
         }
@@ -230,13 +217,13 @@ public class ContentStore {
         Long contentSize = osd.getContentSize();
         int fileSize = contentSize.intValue();
         // TODO: buffered streaming
-        byte b[] = new byte[fileSize];
+        def b = new byte[fileSize];
         res.setContentLength(fileSize);
         res.setContentType("binary/octet-stream"); // TODO: softcode with
         // detailed type info
-        res.setHeader("Content-Disposition", "attachment; filename="
-                + osd.getName());
+        res.setHeader("Content-Disposition", "attachment; filename=${osd.name}");
         return b;
     }
 
 }
+
