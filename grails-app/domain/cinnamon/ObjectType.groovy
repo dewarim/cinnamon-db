@@ -43,10 +43,11 @@ class ObjectType implements Serializable  {
         Element e = DocumentHelper.createElement(elementName);
         // TODO: perhaps add cache-field xmlNode for XML serialized version.
         if(type != null){
-            e.addElement("id").addText(String.valueOf(type.getId()));
-            e.addElement("name").addText( LocalMessage.loc(type.getName()));
-            e.addElement("sysName").addText(type.getName());
-            e = (Element) ParamParser.parseXml(e.asXML(), null);
+            e.addElement("id").addText(type.id.toString())
+            e.addElement("name").addText( LocalMessage.loc(type.name))
+            e.addElement("sysName").addText(type.name)
+            e.addElement("config").addText(type.config)
+            e = (Element) ParamParser.parseXml(e.asXML(), null)
         }
         return e;
     }
@@ -66,7 +67,6 @@ class ObjectType implements Serializable  {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (config != null ? config.hashCode() : 0)
         return result
     }
 
