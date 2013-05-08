@@ -42,9 +42,10 @@ class FolderType {
     public static Element asElement(String elementName, FolderType type){
         Element e = DocumentHelper.createElement(elementName);
         if(type != null){
-            e.addElement("id").addText(String.valueOf(type.getId()));
-            e.addElement("name").addText( LocalMessage.loc(type.getName()));
-            e.addElement("sysName").addText(type.getName());
+            e.addElement("id").addText(type.id.toString())
+            e.addElement("name").addText( LocalMessage.loc(type.name))
+            e.addElement("sysName").addText(type.name)
+            e.addElement("config").addText(type.config)
         }
         return e;
     }  
