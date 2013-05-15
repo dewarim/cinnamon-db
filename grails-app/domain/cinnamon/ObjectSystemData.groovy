@@ -13,6 +13,7 @@ import cinnamon.exceptions.CinnamonException
 import cinnamon.relation.Relation
 import cinnamon.utils.ParamParser
 import humulus.EnvironmentHolder
+import org.codehaus.groovy.grails.plugins.support.aware.GrailsConfigurationAware
 import org.dom4j.Document
 import org.dom4j.DocumentHelper
 
@@ -28,11 +29,11 @@ import cinnamon.interfaces.IMetasetJoin
 import cinnamon.exceptions.CinnamonConfigurationException
 import cinnamon.interfaces.IMetasetOwner
 
-class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner, Accessible {
+class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner, Accessible, GrailsConfigurationAware {
 
     public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
     
-    def grailsApplication
+    transient ConfigObject configuration
     
     static def metasetService
     static def folderService
@@ -592,7 +593,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 //            log.debug("ContentPath is null");
             return null;
         }
-        String fullContentPath = grailsApplication.config.data_root + File.separator +
+        String fullContentPath = configuration.data_root + File.separator +
                 repositoryName + File.separator + getContentPath();
         return fullContentPath;
     }
@@ -1068,5 +1069,10 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         def osd = ObjectSystemData.get(this.getId());
         log.debug("OSD.get for "+id+" returned: "+osd);
         return osd;
+    }
+
+    @Override
+    void setConfiguration(ConfigObject co) {
+        configuration = co
     }
 }
