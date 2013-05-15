@@ -88,8 +88,7 @@ public class ContentStore {
         File f = new File(file.getFileBufferPath());
         String subfolderName = getSubFolderName(file.getName());
 
-        String subfolderPath = getDataRoot() + repository
-        + sep + subfolderName;
+        String subfolderPath = getDataRoot() + repository + sep + subfolderName;
         File subfolder = new File(subfolderPath);
 
         boolean result = subfolder.mkdirs();
