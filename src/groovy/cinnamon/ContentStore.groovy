@@ -14,7 +14,11 @@ public class ContentStore {
     
     static String getDataRoot(){
         def grailsApplication = new Acl().domainClass.grailsApplication        
-        return grailsApplication.config.data_root
+        def dataRoot = grailsApplication.config.data_root
+        if(dataRoot.endsWith('/')){
+            return dataRoot
+        }
+        return dataRoot + '/'
     }
 
     /**

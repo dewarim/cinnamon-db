@@ -676,7 +676,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
                     zipEntryPath = zipEntryPath.replaceAll("\\\\", "/");
                     zos.putArchiveEntry(new ZipArchiveEntry(zipEntryPath));
-                    String contentFileName = osd.getFullContentPath(repositoryName)
+                    String contentFileName = osd.getFullContentPath()
                     log.debug("copy data from ${contentFileName} into archive.")
                     IOUtils.copy(new FileInputStream(contentFileName), zos);
                     zos.closeArchiveEntry();

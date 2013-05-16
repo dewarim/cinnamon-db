@@ -13,12 +13,10 @@ import cinnamon.exceptions.CinnamonException
 import cinnamon.relation.Relation
 import cinnamon.utils.ParamParser
 import humulus.EnvironmentHolder
-import org.codehaus.groovy.grails.plugins.support.aware.GrailsConfigurationAware
 import org.dom4j.Document
 import org.dom4j.DocumentHelper
 
 import org.dom4j.Element
-import cinnamon.global.Conf
 import org.hibernate.Hibernate
 
 import javax.persistence.NoResultException
@@ -29,12 +27,11 @@ import cinnamon.interfaces.IMetasetJoin
 import cinnamon.exceptions.CinnamonConfigurationException
 import cinnamon.interfaces.IMetasetOwner
 
-class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner, Accessible, GrailsConfigurationAware {
+class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner, Accessible {
 
     public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
     
-    transient ConfigObject configuration
-    
+    static def infoService    
     static def metasetService
     static def folderService
 
@@ -416,9 +413,8 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     public void setContentPath(String contentPath, String repository) {
         this.contentPath = contentPath;
         log.debug("contentPath: $contentPath")
-        log.debug("repository: $repository")
         if (contentPath != null) {
-            def fullcp = getFullContentPath(repository)
+            def fullcp = getFullContentPath()
             log.debug("full contentpath: $fullcp")
             def fullcpLength = new File(fullcp).length()
             log.debug("fullCpLength: $fullcpLength")
@@ -543,7 +539,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         String fileContent;
         try {
             fileContent = ContentReader.readFileAsString(
-                    getFullContentPath(repository), encoding
+                    getFullContentPath(), encoding
             );
         } catch (Exception e) {
             throw new CinnamonException(e);
@@ -554,7 +550,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     public byte[] getContentAsBytes(String repository) {
         byte[] fileContent;
         try {
-            String path = getFullContentPath(repository);
+            String path = getFullContentPath();
             if (path == null) {
                 return "<empty />".getBytes();
             }
@@ -588,13 +584,13 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      * @param repositoryName the name of the repository where the object is stored.
      * @return the complete path to this OSD's content - or null, if no content exists.
      */
-    public String getFullContentPath(String repositoryName) {
+    public String getFullContentPath() {
         if (contentPath == null) {
 //            log.debug("ContentPath is null");
             return null;
         }
-        String fullContentPath = configuration.data_root + File.separator +
-                repositoryName + File.separator + getContentPath();
+        String fullContentPath = infoService.config.data_root + File.separator +
+                infoService.repositoryName + File.separator + contentPath
         return fullContentPath;
     }
 
@@ -1071,8 +1067,4 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         return osd;
     }
 
-    @Override
-    void setConfiguration(ConfigObject co) {
-        configuration = co
-    }
 }
