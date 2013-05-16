@@ -48,7 +48,7 @@ public class RelationChangeTrigger implements ITrigger {
         String action = poBox.action
 
         ObjectSystemData osd = null;
-        if(controller != 'osd'){
+        if(controller != 'osd' || controller != 'cinnamon'){
             // nothing to do.
             return poBox
         }

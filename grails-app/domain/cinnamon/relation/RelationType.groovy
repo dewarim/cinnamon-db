@@ -25,7 +25,9 @@ class RelationType implements IXmlDumper {
     Boolean leftobjectprotected
     Boolean rightobjectprotected
     Boolean cloneOnRightCopy = false
+    Boolean cloneOnRightVersion = false
     Boolean cloneOnLeftCopy = false
+    Boolean cloneOnLeftVersion = false
     RelationResolver leftResolver
     RelationResolver rightResolver
 
@@ -42,6 +44,17 @@ class RelationType implements IXmlDumper {
         this.rightResolver = rightResolver
         this.cloneOnLeftCopy = cloneLeftCopy
         this.cloneOnRightCopy = cloneRightCopy
+    } 
+    
+    public RelationType(name,
+                        leftProtected, rightProtected,
+                        leftResolver, rightResolver,
+                        cloneLeftCopy, cloneRightCopy,
+            cloneLeftVersion, cloneRightVersion
+    ){
+        this(name, leftProtected,rightProtected, leftResolver, rightResolver, cloneLeftCopy, cloneRightCopy)
+        this.cloneOnLeftVersion = cloneLeftVersion
+        this.cloneOnRightVersion = cloneRightVersion
     }
     
     public void toXmlElement(Element root) {
@@ -52,7 +65,9 @@ class RelationType implements IXmlDumper {
         rt.addElement("rightobjectprotected").addText(rightobjectprotected.toString());
         rt.addElement("leftobjectprotected").addText(leftobjectprotected.toString());
         rt.addElement("cloneOnLeftCopy").addText(cloneOnLeftCopy.toString());
+        rt.addElement("cloneOnLeftVersion").addText(cloneOnLeftVersion.toString());
         rt.addElement("cloneOnRightCopy").addText(cloneOnRightCopy.toString());
+        rt.addElement("cloneOnRightVersion").addText(cloneOnRightVersion.toString());
         rt.addElement("leftResolver").addText(leftResolver.getName());
         rt.addElement("rightResolver").addText(rightResolver.getName());
     }
@@ -86,7 +101,9 @@ class RelationType implements IXmlDumper {
         RelationType that = (RelationType) o
 
         if (cloneOnLeftCopy != that.cloneOnLeftCopy) return false
+        if (cloneOnLeftVersion != that.cloneOnLeftVersion) return false
         if (cloneOnRightCopy != that.cloneOnRightCopy) return false
+        if (cloneOnRightVersion != that.cloneOnRightVersion) return false
         if (leftResolver != that.leftResolver) return false
         if (leftobjectprotected != that.leftobjectprotected) return false
         if (name != that.name) return false
