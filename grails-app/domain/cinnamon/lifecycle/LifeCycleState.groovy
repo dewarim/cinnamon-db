@@ -127,8 +127,8 @@ class LifeCycleState implements Serializable  {
 
         log.debug("entering state of lifecycle-Class " + nextState.getName());
 
-        if (newState.checkEnteringObject(osd, config)) {
-            newState.enter(osd, config);
+        if (newState.checkEnteringObject(osd, nextState.config)) {
+            newState.enter(osd, nextState.config);
             osd.setState(nextState);
         }
         else {
