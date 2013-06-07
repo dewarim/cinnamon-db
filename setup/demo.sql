@@ -719,6 +719,7 @@ COPY change_triggers (id, obj_version, action, active, config, controller, post_
 
 COPY config_entries (id, obj_version, config, name) FROM stdin;
 97	0	<config><aclForTranslatedObjects>_default_acl</aclForTranslatedObjects></config>	translation.config
+98  0 <config><logEverything>false</logEverything></config> audit.trail.filter
 \.
 
 
