@@ -95,5 +95,4 @@ alter table links add column version bigint not null default 0;
 -- insert into objtypes values(1001,'_workflow_template',0,'<config />');
 -- insert into objtypes values(1002,'_task_definition',0,'<config />');
 -- insert into objtypes values(1003,'_workflow',0,'<config />');
--- insert into objtypes values(1003,'_notification',0,'<config />');
 -- insert into objtypes values(1004,'_notification',0,'<config />');
