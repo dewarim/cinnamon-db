@@ -31,7 +31,7 @@ class ChangeTrigger  implements Serializable {
     Boolean active = false
     Boolean preTrigger = false
     Boolean postTrigger = false
-    String config = "<meta />"
+    String config = "<config />"
     ChangeTriggerType triggerType
 
     public ChangeTrigger() {
@@ -65,7 +65,7 @@ class ChangeTrigger  implements Serializable {
      */
     public void setConfig(String config) {
         if (config == null || config.trim().length() == 0) {
-            this.config = "<meta />";
+            this.config = "<config />";
         } else {
             ParamParser.parseXmlToDocument(config, "error.param.config");
             this.config = config;
