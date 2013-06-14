@@ -834,6 +834,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      */
     public void setMetadata(String metadata, WritePolicy writePolicy) {
         try {
+            if(this.isDirty() ){
+                this.save(flush:true)
+            }
             if (metadata == null || metadata.trim().length() < 9) {
                 log.debug("delete obsolete metasets")
                 metasets.collect{it.metaset}.each {Metaset metaset ->
