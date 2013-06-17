@@ -1,5 +1,6 @@
 package cinnamon
 
+import cinnamon.exceptions.CinnamonConfigurationException
 import cinnamon.index.IndexAction
 import cinnamon.index.IndexJob
 import cinnamon.interfaces.Accessible
@@ -571,8 +572,24 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     public IMetasetJoin fetchMetasetJoin(MetasetType type) {
-        return FolderMetaset.find("from FolderMetaset o where o.metaset.type=:metasetType and o.folder=:folder",
+        // TODO: ensure that no duplicate metasets are created, then refactor this code.
+        List<FolderMetaset> metasetList =FolderMetaset.findAll("from FolderMetaset o where o.metaset.type=:metasetType and o.folder=:folder",
                 [folder: this, metasetType: type]);
+        log.debug("query for: " + type.name + " / osd: " + id + " returned #objects: " + metasetList.size());
+        if (metasetList.size() == 0) {
+            return null;
+        }
+        else if (metasetList.size() > 1) {
+            throw new CinnamonConfigurationException("Found two metasets of the same type in folder #" + getId());
+        }
+        else {
+            def msj = metasetList.get(0)
+            if(msj.isDirty()){
+                // removing a metaset with unpersisted changes is problematic.
+                msj.save(flush:true)
+            }
+            return msj
+        }
     }
 
     public void addMetaset(Metaset metaset) {

@@ -333,6 +333,12 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      * Note 2: the latestBranch and latestHead information are also copied, which may not be
      * what a new object needs (If you copy an object as version 1, it needs both fields to be true.
      * If you are rebuilding a version tree etc, the current behavior is correct).
+     * Note 3: this does not copy the metadata, because Metasets require a valid id which is
+     * only available after persisting the object. You should use
+     * {@code 
+     *  def copy = osd.createClone()
+     *  copy.save()
+     * metasetService.copyMetasets(osd,copy,metasets) 
      */
     // TODO: this method will currently not work as intended (because setMeta only works safely after osd.save())
     // (but atm this is not used in Cinnamon3, only in Cinnamon2. Still, needs refactoring if more C2-methods
@@ -351,7 +357,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         twin.setLatestBranch(latestBranch);
         twin.setLatestHead(latestHead);
         twin.setLocker(locker)
-        twin.setMetadata(metadata)
         twin.setModified(Calendar.getInstance().getTime())
         twin.setModifier(modifier)
         twin.setName(name)
@@ -834,9 +839,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      */
     public void setMetadata(String metadata, WritePolicy writePolicy) {
         try {
-            if(this.isDirty() ){
-                this.save(flush:true)
-            }
+//            if(this.isDirty() ){
+//                this.save(flush:true)
+//            }
             if (metadata == null || metadata.trim().length() < 9) {
                 log.debug("delete obsolete metasets")
                 metasets.collect{it.metaset}.each {Metaset metaset ->
@@ -899,7 +904,12 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             throw new CinnamonConfigurationException("Found two metasets of the same type in osd #" + getId());
         }
         else {
-            return metasetList.get(0);
+            def msj = metasetList.get(0)
+            if(msj.isDirty()){
+                // removing a metaset with unpersisted changes is problematic.
+                msj.save(flush:true) 
+            }
+            return msj
         }
     }
 

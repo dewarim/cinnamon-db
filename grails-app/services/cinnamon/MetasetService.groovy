@@ -28,6 +28,9 @@ public class MetasetService {
             // remove existing metaset:
             IMetasetJoin metasetJoin = owner.fetchMetasetJoin(metaset.type);
             if(metasetJoin != null){
+                if(metasetJoin.isDirty()){
+                    metasetJoin.save(flush:true)
+                }
                 metasetJoin.doDelete();
             }
             // create branch:

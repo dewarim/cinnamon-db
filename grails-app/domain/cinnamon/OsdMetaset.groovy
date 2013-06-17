@@ -37,8 +37,10 @@ class OsdMetaset implements IMetasetJoin {
      * (which changes the hashCode and thus confuses the HashSet-Implementation)
      */
     public void doDelete(){
-        metaset.osdMetasets.remove(this)
-        osd.metasets.remove(this)
+        metaset.osdMetasets.remove(
+                metaset.osdMetasets.find{it.id==this.id} ?: this // ?:this: to prevent "remove null"
+        )
+        osd.metasets.remove(osd.metasets.find{it.id==this.id} ?: this)
         this.delete(flush: true)
     }
 

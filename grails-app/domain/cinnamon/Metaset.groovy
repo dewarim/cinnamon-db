@@ -42,8 +42,8 @@ class Metaset {
      * @param type the type of this metaset
      */
     public Metaset(String content, MetasetType type) {
-        this.type = type;
-        this.content = content;
+        this.type = type
+        setContent(content)
     }
 
     /**
@@ -57,6 +57,9 @@ class Metaset {
     }
 
     public void setContent(String content) {
+        if(content == null){
+            content = '<metaset />'
+        }
         // fix id and type, in case the content is simply copied from some other metaset.
         Element c = (Element) ParamParser.parseXml(content, null);
         if( !c.hasContent() ){
