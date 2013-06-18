@@ -1,5 +1,6 @@
 package cinnamon
 
+import cinnamon.index.IndexAction
 import cinnamon.interfaces.IMetasetJoin
 
 class OsdMetaset implements IMetasetJoin {
@@ -42,6 +43,7 @@ class OsdMetaset implements IMetasetJoin {
         )
         osd.metasets.remove(osd.metasets.find{it.id==this.id} ?: this)
         this.delete(flush: true)
+        LocalRepository.addIndexable(osd, IndexAction.UPDATE)
     }
 
     boolean equals(o) {
