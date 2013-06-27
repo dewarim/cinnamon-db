@@ -94,7 +94,7 @@
         <jarDirectory url="file://$MODULE_DIR$/../cinnamonBase/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="grails-2.2.2" level="application" />
+    <orderEntry type="library" name="grails-2.2.3" level="application" />
     <orderEntry type="module" module-name="cinnamon-db-grailsPlugins" />
   </component>
 </module>
