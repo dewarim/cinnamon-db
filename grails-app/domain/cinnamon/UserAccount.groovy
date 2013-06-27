@@ -8,7 +8,9 @@ import cinnamon.utils.ParamParser
 import cinnamon.utils.security.HashMaker
 
 class UserAccount  implements Serializable {
-
+    
+    static def infoService
+    
     static hasMany = [groupUsers:CmnGroupUser]
     static mapping = {
         table 'users'
@@ -26,7 +28,6 @@ class UserAccount  implements Serializable {
 
     private transient Element xmlNode = null;
     private transient Boolean userIsSuperuser = null;
-    def grailsApplication
     
     String name
     String pwd
@@ -83,7 +84,7 @@ class UserAccount  implements Serializable {
     }
 
     protected void encodePassword() {        
-        if( grailsApplication.config.encryptPasswords){
+        if( infoService.config.encryptPasswords){
             pwd = HashMaker.createDigest(pwd)
         }       
     }
