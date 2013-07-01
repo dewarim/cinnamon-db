@@ -26,7 +26,6 @@ class UserAccount  implements Serializable {
         language nullable: true
     }
 
-    private transient Element xmlNode = null;
     private transient Boolean userIsSuperuser = null;
     
     String name
@@ -158,31 +157,14 @@ class UserAccount  implements Serializable {
         if (tokenAge != user.tokenAge) return false
         if (tokensToday != user.tokensToday) return false
         if (userIsSuperuser != user.userIsSuperuser) return false
-        if (xmlNode != user.xmlNode) return false
 
         return true
     }
 
     int hashCode() {
         int result
-        result = (xmlNode != null ? xmlNode.hashCode() : 0)
-        result = 31 * result + (userIsSuperuser != null ? userIsSuperuser.hashCode() : 0)
-        result = 31 * result + (name != null ? name.hashCode() : 0)
-        result = 31 * result + (pwd != null ? pwd.hashCode() : 0)
-        result = 31 * result + (fullname != null ? fullname.hashCode() : 0)
-        result = 31 * result + (description != null ? description.hashCode() : 0)
-        result = 31 * result + (activated != null ? activated.hashCode() : 0)
-        result = 31 * result + (sudoer != null ? sudoer.hashCode() : 0)
-        result = 31 * result + (sudoable != null ? sudoable.hashCode() : 0)
-        result = 31 * result + (accountExpired != null ? accountExpired.hashCode() : 0)
-        result = 31 * result + (accountLocked != null ? accountLocked.hashCode() : 0)
-        result = 31 * result + (passwordExpired != null ? passwordExpired.hashCode() : 0)
-        result = 31 * result + (tokenAge != null ? tokenAge.hashCode() : 0)
-        result = 31 * result + (tokensToday != null ? tokensToday.hashCode() : 0)
-        result = 31 * result + (token != null ? token.hashCode() : 0)
-        result = 31 * result + (email != null ? email.hashCode() : 0)
-        result = 31 * result + (language != null ? language.hashCode() : 0)
-        result = 31 * result + (id != null ? id.hashCode() : 0)
+        result = (name != null ? name.hashCode() : 0)
+        result = 31 * result + (pwd != null ? pwd.hashCode() : 0)      
         return result
     }
 
@@ -194,16 +176,8 @@ class UserAccount  implements Serializable {
      * @return the new dom4j element.
      */
      static public Element asElement(String elementName, UserAccount user) {
-//        log.debug("UserAsElement with element " + elementName);
-
         if (user != null) {
-//            if (user.xmlNode != null) {
-//                user.xmlNode.setName(elementName);
-//                return (Element) ParamParser.parseXml(user.xmlNode.asXML(), null);
-//            }
-//            else {
             Element e = DocumentHelper.createElement(elementName);
-//            log.debug("user is not null");
             e.addElement("id").addText(String.valueOf(user.getId()));
             e.addElement("name").addText(user.name)
             e.addElement("fullname").addText(user.fullname);
@@ -222,10 +196,7 @@ class UserAccount  implements Serializable {
             else {
                 e.addElement("language");
             }
-//            log.debug("finished adding elements.");
-//                user.xmlNode = e;
             return (Element) ParamParser.parseXml(e.asXML(), null);
-//            }
         }
         else {
             return DocumentHelper.createElement(elementName);
