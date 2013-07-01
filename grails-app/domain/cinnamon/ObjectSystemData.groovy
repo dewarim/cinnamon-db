@@ -744,30 +744,11 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         return true
     }
     
-    // TODO: simplify hashCode - name, folder, version are enough.
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (contentPath != null ? contentPath.hashCode() : 0)
-        result = 31 * result + (contentSize != null ? contentSize.hashCode() : 0)
-        result = 31 * result + (predecessor != null ? predecessor.hashCode() : 0)
-        result = 31 * result + (creator != null ? creator.hashCode() : 0)
-        result = 31 * result + (modifier != null ? modifier.hashCode() : 0)
-        result = 31 * result + (owner != null ? owner.hashCode() : 0)
-        result = 31 * result + (locker != null ? locker.hashCode() : 0)
         result = 31 * result + (created != null ? created.hashCode() : 0)
-        result = 31 * result + (modified != null ? modified.hashCode() : 0)
-        result = 31 * result + (language != null ? language.hashCode() : 0)
-        result = 31 * result + (acl != null ? acl.hashCode() : 0)
-        result = 31 * result + (parent != null ? parent.hashCode() : 0)
-        result = 31 * result + (format != null ? format.hashCode() : 0)
-        result = 31 * result + (type != null ? type.hashCode() : 0)
-        result = 31 * result + (appName != null ? appName.hashCode() : 0)
-        result = 31 * result + (procstate != null ? procstate.hashCode() : 0)
-        result = 31 * result + (latestHead != null ? latestHead.hashCode() : 0)
-        result = 31 * result + (latestBranch != null ? latestBranch.hashCode() : 0)
         result = 31 * result + (cmnVersion != null ? cmnVersion.hashCode() : 0)
-        result = 31 * result + (state != null ? state.hashCode() : 0)
         return result
     }
 
