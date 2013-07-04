@@ -9,14 +9,14 @@ class CinnamonDbGrailsPlugin {
 
     def title = "Cinnamon Db Plugin" 
     def author = "Ingo Wiarda"
-    def authorEmail = "ingo.wiarda@texolution.eu"
+    def authorEmail = "ingo_wiarda@dewarim.de"
     def description = "Domain and base classes for the Cinnamon CMS."
 
     def documentation = "http://cinnamon-cms.com"
     def license = "LGPL 2.1"
-    def organization = [ name: "Texolution GmbH", url: "http://texolution.eu/" ]
+//    def organization = [ name: "Texolution GmbH", url: "http://texolution.eu/" ]
     def developers = [
-            [name:'Ingo Wiarda', email: "ingo.wiarda@texolution.eu"]
+            [name:'Ingo Wiarda', email: "ingo_wiarda@dewarim.de"]
     ]
 
     def issueManagement = [ system: "Github", url: "https://github.com/dewarim/cinnamon-db/issues" ]
