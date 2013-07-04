@@ -24,6 +24,7 @@
           <unit-entry name="Gorm" />
           <unit-entry name="sessionFactory" />
         </datasource-map>
+        <naming-strategy-map />
       </configuration>
     </facet>
   </component>
@@ -49,7 +50,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (cinnamonDb)">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/lib" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.mindrot/jbcrypt/jars/jbcrypt-0.3m.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/postgresql/postgresql/jars/postgresql-9.1-901.jdbc4.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/jakarta-regexp/jakarta-regexp/jars/jakarta-regexp-1.4.jar!/" />
@@ -87,10 +87,11 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-web/jars/spring-security-web-3.0.7.RELEASE.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-core/jars/spring-security-core-3.0.7.RELEASE.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/cinnamon-humulus/jars/cinnamon-humulus-0.2.5.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.eclipse.jdt.core.compiler/ecj/jars/ecj-3.7.2.jar!/" />
+          <root url="file://$MODULE_DIR$/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/../cinnamonBase/lib" recursive="false" />
       </library>
     </orderEntry>
