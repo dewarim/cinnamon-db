@@ -24,6 +24,8 @@ class Session implements Serializable {
         language column: 'ui_language_id'
     }
     
+    static infoService
+    
     String ticket
     Date expires = new Date()
     Long lifetime = new Date().time+3600000
@@ -97,15 +99,28 @@ class Session implements Serializable {
         if(! repositoryName){
             repositoryName = EnvironmentHolder.environment.dbName
         }
-        // cannot use "def grailsApplication", because this method is used in a constructor
-        def grailsConfig = domainClass.grailsApplication.config
-        def repo = grailsConfig.repositories.repository.find{
-            it.key == repositoryName
-        }
-        Long expTime = repo?.sessionExpirationTime
+        def repo = infoService.config.repositories.values().find{it.get('name') == repositoryName}
+        Long expTime = repo.sessionExpirationTime.value ?: 3600000
         log.debug("sessionExpirationTime for ${repositoryName}: ${expTime}")
-        return expTime ?: 3600000
-
+        return expTime
     }
-
+    
+    /** Copy a session, but assign a new UUID.
+     * @param repository This session's repository's name.
+     * @return the copy of the Session, with new UUID and extended expiration time.
+     */
+    public Session copy(String repository){
+        Session session = new Session();
+        def repo = infoService.config.repositories.values().find{it.get('name') == repository}
+        long expirationTime = repo.sessionExpirationTime.value ?: 3600000
+        session.ticket = UUID.randomUUID().toString()+"@"+repository;
+        session.user = user;
+        session.username = username;
+        session.machinename = getMachinename();
+        session.language = session.getLanguage();
+        session.expires.setTime(expires.getTime() + expirationTime );
+        session.language = language
+        return session;
+    }
+  
 }
