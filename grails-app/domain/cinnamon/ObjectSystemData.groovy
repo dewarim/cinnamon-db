@@ -140,7 +140,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             if (initFromPredecessor) {
                 name = pred.getName();
                 parent = pred.getParent();
-                metadata = pred.getMetadata();
+
                 appName = pred.getAppName();
                 language = pred.getLanguage();
                 if (pred.getState() != null) {
@@ -177,9 +177,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         }
         if (cmd.containsKey("appname")) {
             setAppName((String) cmd.get("appname"));
-        }
-        if (cmd.containsKey("metadata")) {
-            setMetadata((String) cmd.get("metadata"));
         }
 
         /*
