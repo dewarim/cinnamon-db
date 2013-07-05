@@ -1,6 +1,6 @@
 class CinnamonDbGrailsPlugin {
 
-    def version = "3.0.0.46"
+    def version = "3.0.0.47"
     def grailsVersion = "2.1 > *"
     def dependsOn = [:]
     def pluginExcludes = [
