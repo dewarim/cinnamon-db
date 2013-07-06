@@ -2,8 +2,6 @@ package cinnamon.relation
 
 import cinnamon.global.Constants
 import cinnamon.interfaces.IXmlDumper
-import cinnamon.utils.ParamParser
-import cinnamon.exceptions.CinnamonException
 import org.dom4j.Element
 import cinnamon.i18n.LocalMessage
 import cinnamon.ObjectSystemData
