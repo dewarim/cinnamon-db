@@ -166,23 +166,42 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      */
     @Override
     public Element toXmlElement(Element root) {
-        Element folder = root.addElement("folder");
-        folder.addElement("id").addText(String.valueOf(getId()));
-        folder.addElement("name").addText(getName());
-        folder.add(UserAccount.asElement("owner", getOwner()));
-        folder.addElement("aclId").addText(String.valueOf(getAcl().getId()));
-        folder.addElement("typeId").addText(String.valueOf(type.getId()));
+        return toXmlElement(root, [])   
+    }
+    
+    /**
+     * // TODO: move XML serialization to a service class? 
+     * Add the folder as XML Element "folder" to the parameter Element.
+     * @param root
+     */
+    @Override
+    public Element toXmlElement(Element root, List metasets) {
+        Element folder = root.addElement("folder")
+        folder.addElement("id").addText(String.valueOf(id))
+        folder.addElement("name").addText(name)
+        folder.add(UserAccount.asElement("owner", owner))
+        folder.addElement("aclId").addText(String.valueOf(acl.id))
+        folder.addElement("typeId").addText(String.valueOf(type.id))
         if (folder.getParent() != null) {
-            folder.addElement("parentId").addText(String.valueOf(getParent().getId()));
+            folder.addElement("parentId").addText(String.valueOf(parent.id))
         }
         else {
-            folder.addElement("parentId");
+            folder.addElement("parentId")
         }
         if (folderService.getSubfolders(this).isEmpty()) {
-            folder.addElement("hasChildren").addText("false");
+            folder.addElement("hasChildren").addText("false")
         }
         else {
-            folder.addElement("hasChildren").addText("true");
+            folder.addElement("hasChildren").addText("true")
+        }
+        def metaElement = folder.addElement('meta')
+        if(metasets.size() > 0){
+            metasets.each{type ->
+                def metaset = fetchMetaset(type)
+                if(metaset){
+                    metaElement.add(Metaset.asElement('metaset', metaset))
+                }
+            }
         }
         return folder
     }

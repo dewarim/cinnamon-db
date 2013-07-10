@@ -429,7 +429,26 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 
     @Override
     public Element toXmlElement(Element root) {
+        return toXmlElement(root, [])
+    }
+    
+    @Override
+    public Element toXmlElement(Element root, List metasets) {        
         def obj = convert2domElement()
+
+        def metaElement = obj.addElement('meta')
+        if(metasets.size() > 0){
+            metasets.each{type ->
+                def metaset = fetchMetaset(type)
+                if(metaset){
+                    metaElement.add(Metaset.asElement('metaset', metaset))
+                }
+            }
+        }
+        else{
+            // adding a '-' because jQuery or Firefox seems to have problems with parsing empty <meta/>-tag.
+            metaElement.text = '-'
+        }
         root.add(obj)
         return obj
     }
