@@ -53,7 +53,7 @@ grails.project.dependency.resolution = {
         }
         runtime(":hibernate:$grailsVersion")
         compile(':webxml:1.4.1')
-        compile(':resources:1.2')
+        compile(':resources:1.2.RC2')
         test (':spock:0.7'){
             exclude "spock-grails-support"
         }

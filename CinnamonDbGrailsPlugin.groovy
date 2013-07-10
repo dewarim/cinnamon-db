@@ -1,6 +1,6 @@
 class CinnamonDbGrailsPlugin {
 
-    def version = "3.0.0.47"
+    def version = "3.0.1.2"
     def grailsVersion = "2.1 > *"
     def dependsOn = [:]
     def pluginExcludes = [
@@ -14,7 +14,6 @@ class CinnamonDbGrailsPlugin {
 
     def documentation = "http://cinnamon-cms.com"
     def license = "LGPL 2.1"
-//    def organization = [ name: "Texolution GmbH", url: "http://texolution.eu/" ]
     def developers = [
             [name:'Ingo Wiarda', email: "ingo_wiarda@dewarim.de"]
     ]
