@@ -90,7 +90,9 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/cinnamon-humulus/jars/cinnamon-humulus-0.2.6.2.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.ideaLibSources/spring-security-web-3.0.7.RELEASE-sources.jar!/" />
+        </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/../cinnamonBase/lib" recursive="false" />
       </library>

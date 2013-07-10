@@ -28,11 +28,11 @@
       <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/release-2.2.1/src/java" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/release-2.2.1/src/groovy" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/resources-1.2">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/resources-1.2/src/java" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/resources-1.2/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/resources-1.2/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/resources-1.2/grails-app/taglib" isTestSource="false" />
+    <content url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/resources-1.2.RC2">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/resources-1.2.RC2/src/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/resources-1.2.RC2/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/resources-1.2.RC2/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/resources-1.2.RC2/grails-app/taglib" isTestSource="false" />
     </content>
     <content url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/rest-client-builder-1.0.3">
       <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/rest-client-builder-1.0.3/src/groovy" isTestSource="false" />
@@ -94,7 +94,9 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/cinnamon-humulus/jars/cinnamon-humulus-0.2.6.2.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.ideaLibSources/spring-security-web-3.0.7.RELEASE-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
   </component>
