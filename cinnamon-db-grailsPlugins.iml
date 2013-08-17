@@ -4,19 +4,52 @@
     <facet type="web" name="GrailsWeb">
       <configuration>
         <webroots>
-          <root url="file://$USER_HOME$/.grails/2.2.3/projects/cinnamonDb/plugins/fixtures-1.2/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/fixtures-1.2/web-app" relative="/" />
         </webroots>
+        <sourceRoots />
       </configuration>
     </facet>
     <facet type="hibernate" name="Hibernate">
       <configuration>
-        <datasource-map />
+        <datasource-map>
+          <unit-entry name="Gorm" />
+          <unit-entry name="sessionFactory" />
+        </datasource-map>
         <naming-strategy-map />
       </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
+    <content url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/fixtures-1.2">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/fixtures-1.2/src/groovy" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/hibernate-2.2.4" />
+    <content url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/release-2.2.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/release-2.2.1/src/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/release-2.2.1/src/groovy" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/resources-1.2.RC2">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/resources-1.2.RC2/src/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/resources-1.2.RC2/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/resources-1.2.RC2/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/resources-1.2.RC2/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/rest-client-builder-1.0.3">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/rest-client-builder-1.0.3/src/groovy" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/spock-0.7" />
+    <content url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3/src/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/spring-security-core-1.2.7.3/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/tomcat-2.2.4" />
+    <content url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/webxml-1.4.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.4/projects/cinnamonDb/plugins/webxml-1.4.1/src/groovy" isTestSource="false" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="grails-2.2.4" level="application" />
@@ -59,7 +92,20 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/jaxen/jaxen/jars/jaxen-1.1.4.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-web/jars/spring-security-web-3.0.7.RELEASE.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-core/jars/spring-security-core-3.0.7.RELEASE.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/cinnamon-humulus/jars/cinnamon-humulus-0.2.6.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/cinnamon-humulus/jars/cinnamon-humulus-0.2.6.3.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat.embed/tomcat-embed-jasper/jars/tomcat-embed-jasper-7.0.42.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat.embed/tomcat-embed-logging-juli/jars/tomcat-embed-logging-juli-7.0.42.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat/tomcat-annotations-api/jars/tomcat-annotations-api-7.0.42.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat/tomcat-catalina/jars/tomcat-catalina-7.0.42.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat/tomcat-servlet-api/jars/tomcat-servlet-api-7.0.42.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat/tomcat-api/jars/tomcat-api-7.0.42.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat/tomcat-util/jars/tomcat-util-7.0.42.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat/tomcat-juli/jars/tomcat-juli-7.0.42.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat/tomcat-coyote/jars/tomcat-coyote-7.0.42.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat/tomcat-catalina-ant/jars/tomcat-catalina-ant-7.0.42.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.eclipse.jdt.core.compiler/ecj/jars/ecj-3.7.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat.embed/tomcat-embed-logging-log4j/jars/tomcat-embed-logging-log4j-7.0.42.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat.embed/tomcat-embed-core/jars/tomcat-embed-core-7.0.42.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
