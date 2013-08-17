@@ -82,12 +82,6 @@ class Session implements Serializable {
         int result
         result = (ticket != null ? ticket.hashCode() : 0)
         result = 31 * result + (expires != null ? expires.hashCode() : 0)
-        result = 31 * result + (lifetime != null ? lifetime.hashCode() : 0)
-        result = 31 * result + (username != null ? username.hashCode() : 0)
-        result = 31 * result + (machinename != null ? machinename.hashCode() : 0)
-        result = 31 * result + (message != null ? message.hashCode() : 0)
-        result = 31 * result + (language != null ? language.hashCode() : 0)
-        result = 31 * result + (user != null ? user.hashCode() : 0)
         return result
     }
 
@@ -99,8 +93,8 @@ class Session implements Serializable {
         if(! repositoryName){
             repositoryName = EnvironmentHolder.environment.dbName
         }
-        def repo = infoService.config.repositories.values().find{it.get('name') == repositoryName}
-        Long expTime = repo.sessionExpirationTime.value ?: 3600000
+        def repo = infoService?.config?.repositories?.values()?.find{it.get('name') == repositoryName}
+        Long expTime = repo?.sessionExpirationTime?.value ?: 3600000
         log.debug("sessionExpirationTime for ${repositoryName}: ${expTime}")
         return expTime
     }
@@ -111,8 +105,8 @@ class Session implements Serializable {
      */
     public Session copy(String repository){
         Session session = new Session();
-        def repo = infoService.config.repositories.values().find{it.get('name') == repository}
-        long expirationTime = repo.sessionExpirationTime.value ?: 3600000
+        def repo = infoService?.config?.repositories?.values()?.find{it.get('name') == repository}
+        long expirationTime = repo?.sessionExpirationTime?.value ?: 3600000
         session.ticket = UUID.randomUUID().toString()+"@"+repository;
         session.user = user;
         session.username = username;
