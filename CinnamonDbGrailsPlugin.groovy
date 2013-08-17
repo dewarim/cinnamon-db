@@ -1,6 +1,8 @@
+import cinnamon.Session
+
 class CinnamonDbGrailsPlugin {
 
-    def version = "3.0.1.2"
+    def version = "3.0.1.6"
     def grailsVersion = "2.1 > *"
     def dependsOn = [:]
     def pluginExcludes = [
@@ -34,7 +36,7 @@ class CinnamonDbGrailsPlugin {
     }
 
     def doWithApplicationContext = { applicationContext ->
-    
+        Session.infoService = applicationContext.infoService
     }
 
     def onChange = { event ->
