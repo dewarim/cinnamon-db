@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ParamParser {
 
@@ -63,12 +65,15 @@ public class ParamParser {
         return parseXmlToDocument(xml, null);
     }
 
+    public static final Pattern bomReplacer = Pattern.compile("^(?:\\xEF\\xBB\\xBF|\uFEFF)");
 	public static Document parseXmlToDocument(String xml, String message){
 		if(message == null){
 			 message = "error.parse.xml";
 		}
 		try{
-			xml = xml.replaceAll("^(?:\\xEF\\xBB\\xBF|\uFEFF)", ""); // remove BOM on UTF-8 Strings.
+            // remove BOM on UTF-8 Strings.
+            Matcher matcher = bomReplacer.matcher(xml);
+            xml = matcher.replaceAll("");
 			SAXReader reader = new SAXReader();
 			// ignore dtd-declarations
 			reader.setIncludeExternalDTDDeclarations(false);
