@@ -42,7 +42,7 @@ public class ConfThreadLocal extends Conf {
 				c = new ConfThreadLocal();
 			} catch (Exception e) {
 				LoggerFactory.getLogger(ConfThreadLocal.class).debug("", e);
-				throw new CinnamonConfigurationException("Could not initialize Config: "+e.getLocalizedMessage());
+				throw new CinnamonConfigurationException("Could not initialize Config: "+e.getLocalizedMessage(), e);
 			}
 			return c;
 		}

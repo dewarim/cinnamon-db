@@ -5,6 +5,7 @@ import cinnamon.interfaces.Response;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 @Deprecated
 public class TextResponse implements Response {
@@ -41,7 +42,7 @@ public class TextResponse implements Response {
 	}
 
 	@Override
-	public void write() throws IOException{
+	public void write() throws IOException, UnsupportedEncodingException {
 		res.setContentType("text/plain; charset=utf-8");
 		PrintWriter toClient= res.getWriter();
         String c = content.toString();

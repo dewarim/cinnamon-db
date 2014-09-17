@@ -636,7 +636,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 throw new NoResultException()
             }
             else {
-                lastDescendant = versions.get(0);
+                lastDescendant = versions[0];
             }
             lastDescendantVersion = lastDescendant.getCmnVersion();
         } catch (NoResultException e) {
@@ -901,7 +901,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             throw new CinnamonConfigurationException("Found two metasets of the same type in osd #" + getId());
         }
         else {
-            def msj = metasetList.get(0)
+            def msj = metasetList[0]
             if(msj.isDirty()){
                 // removing a metaset with unpersisted changes is problematic.
                 msj.save(flush:true) 

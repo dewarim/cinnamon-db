@@ -6,6 +6,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Deprecated
@@ -44,7 +45,7 @@ public class FileResponse implements Response {
 	}
 
 	@Override
-	public void write() throws IOException {
+	public void write() throws IOException, FileNotFoundException {
 		File file = new File(contentPath);
 		FileInputStream fin = new FileInputStream(file);
 
@@ -108,9 +109,9 @@ public class FileResponse implements Response {
 	}
 
 	public String getContent(){
-		return String.format("<response><file><filename>%s</filename>"+
+        return String.format("<response><file><filename>%s</filename>"+
 					"<size>%d</size><path>%s</path></file></response>",
-					getFilename(), getContentSize(), getContentPath());
+                filename, contentSize, contentPath);
 	}
 	
 }

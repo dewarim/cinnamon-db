@@ -45,15 +45,12 @@ public class Conf{
 			+ "cinnamon" + separator + configName;
 			configFile = new File(configPath);
 			if(! configFile.exists()){
-				throw new FileNotFoundException("Config file "+ configPath +" was not found.");
+                log.debug("Config file not found in "+configPath);
+                log.debug("Will try in CINNAMON_HOME_DIR='"+System.getenv().get("CINNAMON_HOME_DIR")+"'");
 			}
 		}
 		catch (AccessControlException ace) {
-			log.debug("AccessControlException: "+ace.getLocalizedMessage());			
-		}
-		catch (FileNotFoundException fnfe){
-			log.debug("Config file not found in "+configPath);
-			log.debug("Will try in CINNAMON_HOME_DIR='"+System.getenv().get("CINNAMON_HOME_DIR")+"'");
+			log.error("AccessControlException: "+ace.getLocalizedMessage(), ace);			
 		}
 		finally{
 			if(configFile == null || ! configFile.exists()){

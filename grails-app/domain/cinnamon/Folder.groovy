@@ -602,7 +602,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
             throw new CinnamonConfigurationException("Found two metasets of the same type in folder #" + getId());
         }
         else {
-            def msj = metasetList.get(0)
+            def msj = metasetList[0]
             if(msj.isDirty()){
                 // removing a metaset with unpersisted changes is problematic.
                 msj.save(flush:true)

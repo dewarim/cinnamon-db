@@ -1,9 +1,6 @@
 package cinnamon.i18n;
 
-import cinnamon.exceptions.CinnamonConfigurationException;
 import cinnamon.interfaces.ILocalizer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The LocalMessage stores a threadLocal MessageDAO. This way every class which needs

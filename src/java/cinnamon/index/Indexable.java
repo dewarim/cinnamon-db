@@ -1,7 +1,5 @@
 package cinnamon.index;
 
-import java.util.Date;
-
 public interface Indexable {
 
 	/**

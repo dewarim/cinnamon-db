@@ -17,7 +17,7 @@ public class ContentReader {
         return readFileAsString(filePath, null);
     }
 
-    public static String readFileAsString(String filePath, String encoding) throws IOException {
+    public static String readFileAsString(String filePath, String encoding) throws IOException, FileNotFoundException {
         if(filePath == null){
             throw new CinnamonException("error.path.is.null");
         }

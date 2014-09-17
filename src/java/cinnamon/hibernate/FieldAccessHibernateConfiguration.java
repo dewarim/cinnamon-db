@@ -5,7 +5,6 @@ import org.hibernate.MappingException;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
