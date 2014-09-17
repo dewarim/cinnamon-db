@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
  */
 public class BooleanXPathIndexer extends DefaultIndexer {
 
-	transient Logger log = LoggerFactory.getLogger(this.getClass());
-		
 	public String convertNodeToString(Node node){
 		return node.getText().trim().toLowerCase();
 	}

@@ -13,8 +13,6 @@ import java.text.DecimalFormat;
  */
 public class IntegerXPathIndexer extends DefaultIndexer{
 
-	transient Logger log = LoggerFactory.getLogger(this.getClass());
-
 	 /* 
 	  * length == 20, enough for 1 ExaByte
 	  * Just in case you need to index the national debt database.  

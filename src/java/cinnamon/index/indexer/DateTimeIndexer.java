@@ -15,8 +15,6 @@ import java.util.Date;
  */
 public class DateTimeIndexer extends DefaultIndexer{
 
-	transient Logger log = LoggerFactory.getLogger(this.getClass());
-	
 	public DateTimeIndexer(){
 	}
 	

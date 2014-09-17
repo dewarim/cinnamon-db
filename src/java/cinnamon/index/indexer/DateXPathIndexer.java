@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
  */
 public class DateXPathIndexer extends DefaultIndexer{
 
-	transient Logger log = LoggerFactory.getLogger(this.getClass());
-	
 	public DateXPathIndexer(){
 	}
 	

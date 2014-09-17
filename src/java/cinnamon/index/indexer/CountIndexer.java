@@ -57,7 +57,7 @@ public class CountIndexer implements Indexer {
     private static final DecimalFormat formatter =
 	    new DecimalFormat("00000000000000000000");
 
-	public static String pad(Integer n) {
+	public static String pad(int n) {
 	  return formatter.format(n);
 	}
 

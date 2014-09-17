@@ -11,9 +11,6 @@ import org.slf4j.LoggerFactory;
  */
 public class TimeXPathIndexer extends DefaultIndexer{
 
-	transient Logger log = LoggerFactory.getLogger(this.getClass());
-
-	
 	public TimeXPathIndexer(){
 	}
 	

@@ -21,8 +21,6 @@ import java.text.ParseException;
  */
 public class DecimalXPathIndexer extends DefaultIndexer{
 
-	transient Logger log = LoggerFactory.getLogger(this.getClass());
-
 	 /* 
 	  * length == 11,8
 	  */
