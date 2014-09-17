@@ -35,7 +35,7 @@ public class HashMaker {
      */
 	public static Boolean compareWithHash(String text, String hash){
         try{
-            return (hash != null) && ( BCrypt.checkpw(text, hash) );
+            return hash != null && BCrypt.checkpw(text, hash);
         }
         catch (Exception e){
             Logger log = LoggerFactory.getLogger(HashMaker.class);

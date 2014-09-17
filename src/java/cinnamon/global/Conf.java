@@ -40,7 +40,7 @@ public class Conf{
 		String separator = File.separator;
 		File configFile = null;
 		try{
-			String currentDir=(new File(".")).getAbsolutePath();
+			String currentDir= new File(".").getAbsolutePath();
 			configPath= currentDir.substring(0,currentDir.length()-1) + "webapps" + separator 
 			+ "cinnamon" + separator + configName;
 			configFile = new File(configPath);

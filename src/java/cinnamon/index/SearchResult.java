@@ -34,7 +34,7 @@ public class SearchResult {
         maxScore = hits.getMaxScore();
         totalResults = hits.totalHits;
         ScoreDoc[] scoreDocs = hits.scoreDocs;
-        for (int x = startingResult; (x < totalResults) && (x < scoreDocs.length); x++) {
+        for (int x = startingResult; x < totalResults && x < scoreDocs.length; x++) {
             // The searcher will be closed before result filtering, so it's a good idea to extract the documents now.
             Document doc = searcher.doc(scoreDocs[x].doc);
             Float score = scoreDocs[x].score;
@@ -49,7 +49,7 @@ public class SearchResult {
     public void addDocument(Document document, Float score) {
         Float s = docScoreMap.put(document, score);
         if(s != null){
-            log.debug("docScoreMap already contained document "+document.toString());
+            log.debug("docScoreMap already contained document "+document);
         }
     }
 
@@ -93,7 +93,7 @@ public class SearchResult {
                 }
             }
             else{
-                log.debug("Could not validate access to "+doc.toString());
+                log.debug("Could not validate access to "+doc);
             }
         }
         for (Document doc : filteredDocs) {

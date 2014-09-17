@@ -9,6 +9,6 @@ import org.dom4j.Element;
  */
 public interface IXmlDumper {
 
-    public void toXmlElement(Element root);
+    void toXmlElement(Element root);
 
 }

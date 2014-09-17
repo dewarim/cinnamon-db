@@ -7,7 +7,7 @@ import cinnamon.interfaces.Response;
  */
 public class TriggerResult {
     
-    Response response = null;
+    Response response;
     Boolean endProcessing = false;
 
     public TriggerResult() {
