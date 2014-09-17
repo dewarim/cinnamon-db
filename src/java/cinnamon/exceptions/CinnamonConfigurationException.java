@@ -26,7 +26,6 @@ public class CinnamonConfigurationException extends RuntimeException {
 	private static final long	serialVersionUID	= 1L;
 
 	public CinnamonConfigurationException() {
-		super();
 	}
 
 	public CinnamonConfigurationException(String arg0, Throwable arg1) {

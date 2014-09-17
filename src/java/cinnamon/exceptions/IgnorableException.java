@@ -54,6 +54,5 @@ public class IgnorableException extends RuntimeException{
     }
 
     public IgnorableException() {
-        super();
     }
 }

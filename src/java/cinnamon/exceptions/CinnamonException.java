@@ -23,65 +23,64 @@ import org.dom4j.Element;
 
 public class CinnamonException extends RuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long	serialVersionUID	= 1L;
-	
-	String[] params = {};
-	
-	public CinnamonException() {
-		super();
-	}
-	
-	public CinnamonException(String message, String... params){
-		super(message);
-		if(params != null && params.length > 0){
-			this.params = params;
-		}
-	}
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public CinnamonException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
-	}
+    String[] params = {};
+
+    public CinnamonException() {
+    }
+
+    public CinnamonException(String message, String... params) {
+        super(message);
+        if (params != null && params.length > 0) {
+            this.params = params;
+        }
+    }
+
+    public CinnamonException(String arg0, Throwable arg1) {
+        super(arg0, arg1);
+    }
 
     public CinnamonException(String message, Throwable exception, String... params) {
-		super(message, exception);
-        if(params != null && params.length > 0){
-			this.params = params;
-		}
-	}
+        super(message, exception);
+        if (params != null && params.length > 0) {
+            this.params = params;
+        }
+    }
 
-	public CinnamonException(String arg0) {
-		super(arg0);
-	}
+    public CinnamonException(String arg0) {
+        super(arg0);
+    }
 
-	public CinnamonException(Throwable arg0) {
-		super(arg0);
-	}
-	
-	public String[] getParams(){
-		return params;
-	}
-	
-	public void addToElement(Element root, ILocalizer localizer){
+    public CinnamonException(Throwable arg0) {
+        super(arg0);
+    }
+
+    public String[] getParams() {
+        return params;
+    }
+
+    public void addToElement(Element root, ILocalizer localizer) {
         String localizedMessage = getMessage();
-        if(localizer != null && localizer.getInitialized()){
+        if (localizer != null && localizer.getInitialized()) {
             localizedMessage = localizer.localize(getMessage());
-            if(localizedMessage == null){
-                localizedMessage = "null ("+getStackTrace()[0]+")";
+            if (localizedMessage == null) {
+                localizedMessage = "null (" + getStackTrace()[0] + ")";
             }
         }
-		root.addElement("message").addText(localizedMessage);
-		root.addElement("code").addText(getMessage() == null ? "null" : getMessage());
-		Element paramList = root.addElement("parameters");
-		if(params.length > 0){
-			for(String p : params){
-                if(p == null){
+        root.addElement("message").addText(localizedMessage);
+        root.addElement("code").addText(getMessage() == null ? "null" : getMessage());
+        Element paramList = root.addElement("parameters");
+        if (params.length > 0) {
+            for (String p : params) {
+                if (p == null) {
                     p = "null";
                 }
-				paramList.addElement("param").addText(p);
-			}
-		}
-	}
+                paramList.addElement("param").addText(p);
+            }
+        }
+    }
 }

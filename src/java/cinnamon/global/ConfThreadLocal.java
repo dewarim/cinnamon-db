@@ -49,7 +49,7 @@ public class ConfThreadLocal extends Conf {
 	};
 	
 	private ConfThreadLocal(){
-		super();
+		
 	}
 
 	public static ThreadLocal<ConfThreadLocal> getConfig() {
