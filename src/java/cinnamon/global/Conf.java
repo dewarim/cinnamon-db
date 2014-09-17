@@ -378,7 +378,7 @@ public class Conf{
 		String field = null;
 		
 		try {
-			field = getXml().selectSingleNode("//"+fieldName).getText();
+            field = xml.selectSingleNode("//" + fieldName).getText();
 		} catch (Exception e) {
 			log.debug("Did not find //" + fieldName + " in config - using default: "+defaultString);
 		}

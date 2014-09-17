@@ -73,7 +73,7 @@ public class ConfThreadLocal extends Conf {
 	 * @param name The Name of the repository
 	 * @return the time it takes for a session to expire (in milliseconds)
 	 */
-	public Long getSessionExpirationTime(String name){
+	public long getSessionExpirationTime(String name){
         if(sessionExpirationTime == 0){
 		    String xpath = String.format("repository[name='%s']/sessionExpirationTime", name);
 		    String time = getField(xpath, "3600000");
