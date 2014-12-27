@@ -336,6 +336,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      *  def copy = osd.createClone()
      *  copy.save()
      * metasetService.copyMetasets(osd,copy,metasets) 
+     * }
      */
     // TODO: this method will currently not work as intended (because setMeta only works safely after osd.save())
     // (but atm this is not used in Cinnamon3, only in Cinnamon2. Still, needs refactoring if more C2-methods
