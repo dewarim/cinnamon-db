@@ -60,12 +60,9 @@
           <root url="jar://$MAVEN_REPOSITORY$/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/hibernate/hibernate-core/3.6.10.Final/hibernate-core-3.6.10.Final.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-gorm-plugin-support/3.0.4.RELEASE/grails-datastore-gorm-plugin-support-3.0.4.RELEASE.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-orm/4.0.6.RELEASE/spring-orm-4.0.6.RELEASE.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/antlr/antlr/2.7.7/antlr-2.7.7.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-gorm-hibernate-core/3.0.4.RELEASE/grails-datastore-gorm-hibernate-core-3.0.4.RELEASE.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-gorm-hibernate/3.0.4.RELEASE/grails-datastore-gorm-hibernate-3.0.4.RELEASE.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/asm/asm/3.3.1/asm-3.3.1.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/cglib/cglib/2.2.2/cglib-2.2.2.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/net/sf/ehcache/ehcache-core/2.4.8/ehcache-core-2.4.8.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/hibernate/hibernate-ehcache/3.6.10.Final/hibernate-ehcache-3.6.10.Final.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/jaxen/jaxen/1.1.4/jaxen-1.1.4.jar!/" />
@@ -109,6 +106,10 @@
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/tomcat/embed/tomcat-embed-logging-log4j/7.0.42/tomcat-embed-logging-log4j-7.0.42.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/tomcat/embed/tomcat-embed-jasper/7.0.42/tomcat-embed-jasper-7.0.42.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/tomcat/tomcat-catalina-ant/7.0.42/tomcat-catalina-ant-7.0.42.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-orm/4.0.7.RELEASE/spring-orm-4.0.7.RELEASE.jar!/" />
+          <root url="jar://$USER_HOME$/grails-2.4.4/lib/asm/asm/jars/asm-3.3.1.jar!/" />
+          <root url="jar://$USER_HOME$/grails-2.4.4/lib/cglib/cglib/jars/cglib-2.2.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/cglib/cglib-nodep/2.2.2/cglib-nodep-2.2.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
@@ -119,7 +120,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="cinnamon-db-grailsPlugins" />
-    <orderEntry type="library" name="grails-2.4.3" level="application" />
+    <orderEntry type="library" name="grails-2.4.4" level="application" />
   </component>
 </module>
-
