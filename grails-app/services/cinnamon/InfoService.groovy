@@ -1,6 +1,6 @@
 package cinnamon
 
-import humulus.EnvironmentHolder
+import org.codehaus.groovy.grails.commons.cfg.GrailsConfig
 
 public class InfoService {
 
@@ -9,7 +9,7 @@ public class InfoService {
     static def transactional = false
 
     String getRepositoryName() {
-        EnvironmentHolder.environment.dbName
+        grailsApplication.config.dbName
     }
 
     ConfigObject getConfig() {

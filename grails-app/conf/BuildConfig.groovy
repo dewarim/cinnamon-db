@@ -17,8 +17,6 @@ grails.project.dependency.resolution = {
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
 
     repositories {
-//        mavenRepo name:'myRepo'
-        
         mavenCentral()
         grailsCentral()
     }
@@ -35,7 +33,7 @@ grails.project.dependency.resolution = {
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
         runtime 'dom4j:dom4j:1.6.1'
         runtime 'jaxen:jaxen:1.1.4'
-        compile 'org.grails.plugins:cinnamon-humulus:0.2.7.2'
+        compile 'org.grails.plugins:cinnamon-humulus:0.3'
     }
 
     plugins {

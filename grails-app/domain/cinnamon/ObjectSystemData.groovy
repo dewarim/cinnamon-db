@@ -12,7 +12,6 @@ import cinnamon.global.Constants
 import cinnamon.exceptions.CinnamonException
 import cinnamon.relation.Relation
 import cinnamon.utils.ParamParser
-import humulus.EnvironmentHolder
 import org.dom4j.Document
 import org.dom4j.DocumentHelper
 
@@ -533,7 +532,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     String getContent(){
-        String repository = EnvironmentHolder.getEnvironment().dbName
+        String repository = infoService.repositoryName
         return getContent(repository, null)
     }
     

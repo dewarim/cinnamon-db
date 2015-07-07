@@ -3,7 +3,6 @@ package cinnamon
 import cinnamon.i18n.UiLanguage
 import cinnamon.exceptions.CinnamonException
 import cinnamon.global.Constants
-import humulus.EnvironmentHolder
 
 /*
  * Design Note: it may be easier in the long run to use session cookies or ids,
@@ -90,9 +89,6 @@ class Session implements Serializable {
     }
 
     Long sessionExpirationTime(String repositoryName){
-        if(! repositoryName){
-            repositoryName = EnvironmentHolder.environment.dbName
-        }
         def repo = infoService?.config?.repositories?.values()?.find{it.get('name') == repositoryName}
         Long expTime = repo?.sessionExpirationTime?.value ?: 3600000
         log.debug("sessionExpirationTime for ${repositoryName}: ${expTime}")
