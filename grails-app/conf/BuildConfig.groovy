@@ -37,14 +37,14 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        compile ":rest-client-builder:2.0.3"
+        compile ":rest-client-builder:2.1.1"
         build(":tomcat:7.0.42"){
             export=false
         }
-        build(":release:3.0.0"){
+        build(":release:3.1.1"){
             export=false
         }
-        runtime(":hibernate:3.6.10.12")
+        runtime(":hibernate:3.6.10.19")
         compile(':webxml:1.4.1')
 //        compile(':resources:1.2.RC2')
         test (':spock:0.7'){
