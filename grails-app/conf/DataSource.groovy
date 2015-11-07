@@ -15,7 +15,6 @@ environments {
     initializeDb {     
         dataSource {
             dbCreate = 'create'
-            configClass = cinnamon.hibernate.FieldAccessHibernateConfiguration
             dialect = org.hibernate.dialect.PostgreSQLDialect
             driverClassName = 'org.postgresql.Driver'
             username = 'cinnamon'
