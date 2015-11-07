@@ -122,6 +122,6 @@ class ZippedFolder {
         for(ObjectSystemData contentOsd : osds){
             contentOsd.toXmlElement(zipMetaset);
         }
-        osd.setMetadata(meta.asXML());
+        osd.storeMetadata(meta.asXML());
     }
 }

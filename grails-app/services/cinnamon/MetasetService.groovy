@@ -1,5 +1,6 @@
 package cinnamon
 
+import grails.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import cinnamon.interfaces.IMetasetOwner
@@ -11,6 +12,7 @@ import cinnamon.exceptions.CinnamonException
 /**
  * Collected methods for metaset treatment
  */
+@Transactional
 public class MetasetService {
 
     Logger log = LoggerFactory.getLogger(this.getClass());

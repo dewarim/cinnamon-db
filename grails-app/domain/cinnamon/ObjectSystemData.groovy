@@ -1,5 +1,6 @@
 package cinnamon
 
+import cinnamon.global.ConfThreadLocal
 import cinnamon.index.IndexAction
 import cinnamon.index.IndexJob
 import cinnamon.index.Indexable
@@ -29,8 +30,8 @@ import cinnamon.interfaces.IMetasetOwner
 class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertable, IMetasetOwner, Accessible {
 
     public static final String defaultXmlFormatList = "xml|xhtml|dita|ditamap";
-    
-    static def infoService    
+
+    static def infoService
     static def metasetService
     static def folderService
 
@@ -42,8 +43,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         root(nullable: true) // TODO: can we switch to OSD.root:non-nullable?
         locker(nullable: true)
         format(nullable: true)
-        appName(size: 0..255, blank: true)        
-        metadata(size: 1..Constants.METADATA_SIZE)
+        appName(size: 0..255, blank: true)
         procstate(size: 0..128, blank: true)
         cmnVersion(size: 1..128)
         state(nullable: true)
@@ -74,12 +74,12 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     Format format
     ObjectType type
     String appName = ''
-    
-    @Deprecated
-    String metadata = '<meta />'
+
     String procstate = ''
     Boolean latestHead
     Boolean latestBranch = true
+    Boolean contentChanged = false
+    Boolean metadataChanged = false
     String cmnVersion = '1'
     LifeCycleState state
     Set<OsdMetaset> metasets = []
@@ -319,7 +319,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             state = that.getState().getLifeCycleStateForCopy();
         }
     }
-   
+
     /**
      * createClone: create a copy with created and modified set to current date, <br>
      * and without an Id (which should be set by the persistence layer when inserting into  the db).
@@ -331,11 +331,11 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      * If you are rebuilding a version tree etc, the current behavior is correct).
      * Note 3: this does not copy the metadata, because Metasets require a valid id which is
      * only available after persisting the object. You should use
-     * {@code 
-     *  def copy = osd.createClone()
+     * {@code
+     * def copy = osd.createClone()
      *  copy.save()
      * metasetService.copyMetasets(osd,copy,metasets) 
-     * }
+     *}
      */
     // TODO: this method will currently not work as intended (because setMeta only works safely after osd.save())
     // (but atm this is not used in Cinnamon3, only in Cinnamon2. Still, needs refactoring if more C2-methods
@@ -403,14 +403,13 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         setFormat(newFormat);
     }
 
-
     /**
      * Set the contentPath <em>and the contentSize</em>, if the former is a valid String which can
      * be mapped to a valid File.
      *
      * @param contentPath relative path to this object's content. The full path is computed from $cinnamon_data
      *                    as set in cinnamon_config.xml) and $repository_name.
-     * @param repository  name of the this OSDs repository..
+     * @param repository name of the this OSDs repository..
      */
     public void setContentPath(String contentPath, String repository) {
         this.contentPath = contentPath;
@@ -431,36 +430,36 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     public Element toXmlElement(Element root) {
         return toXmlElement(root, [])
     }
-    
+
     @Override
-    public Element toXmlElement(Element root, List metasets) {        
+    public Element toXmlElement(Element root, List metasets) {
         def obj = convert2domElement()
 
         def metaElement = obj.addElement('meta')
-        if(metasets.size() > 0){
-            metasets.each{type ->
+        if (metasets.size() > 0) {
+            metasets.each { type ->
                 def metaset = fetchMetaset(type)
-                if(metaset){
+                if (metaset) {
                     metaElement.add(Metaset.asElement('metaset', metaset))
                 }
             }
         }
-        else{
+        else {
             // adding a '-' because jQuery or Firefox seems to have problems with parsing empty <meta/>-tag.
             metaElement.text = '-'
         }
         root.add(obj)
         return obj
     }
-    
-    public Element addRelationsToElement(Element root){
+
+    public Element addRelationsToElement(Element root) {
         def data = root.addElement("relations")
-        Relation.findAllByLeftOSDOrRightOSD(this,this).each{ relation ->
+        Relation.findAllByLeftOSDOrRightOSD(this, this).each { relation ->
             relation.toXmlElement(data, true)
         }
         return root
     }
-    
+
     public Element convert2domElement() {
         Element data = DocumentHelper.createElement("object");
         data.addElement("id").addText(String.valueOf(getId()));
@@ -474,6 +473,8 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         data.addElement("appName").addText(getAppName());
         data.addElement("latestHead").addText(getLatestHead().toString());
         data.addElement("latestBranch").addText(getLatestBranch().toString());
+        data.addElement("contentChanged").addText(contentChanged.toString());
+        data.addElement("metadataChanged").addText(metadataChanged.toString());
 
         log.debug("UserAsElementSection");
         data.add(UserAccount.asElement("lockedBy", locker));
@@ -531,11 +532,11 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         return data;
     }
 
-    String getContent(){
+    String getContent() {
         String repository = infoService.repositoryName
         return getContent(repository, null)
     }
-    
+
     /**
      * Read the content of the OSD and return it as XML for indexing.
      * @see cinnamon.index.Indexable
@@ -594,7 +595,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         root.addAttribute("id", className + "@" + getId()); // for a given repository, it's unique.
         log.debug("convert2domElement");
         Element sysMeta = convert2domElement()
-        if (withRelations){
+        if (withRelations) {
             addRelationsToElement(sysMeta)
         }
         root.add(sysMeta);
@@ -743,8 +744,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         if (language != that.language) return false
         if (latestBranch != that.latestBranch) return false
         if (latestHead != that.latestHead) return false
+        if (contentChanged != that.contentChanged) return false
+        if (metadataChanged != that.metadataChanged) return false
         if (locker != that.locker) return false
-//        if (metadata != that.metadata) return false
         if (modified != that.modified) return false
         if (modifier != that.modifier) return false
         if (name != that.name) return false
@@ -759,7 +761,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 
         return true
     }
-    
+
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
@@ -777,7 +779,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         return ObjectSystemData.findAll("from ObjectSystemData o WHERE o.latestBranch = true and o.root=:root order by o.id asc",
                 [root: this.root])
     }
-    
+
     ObjectSystemData findLatestHead() {
         return ObjectSystemData.find("from ObjectSystemData o WHERE o.latestHead = true and o.root=:root",
                 [root: this.root])
@@ -789,7 +791,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     public String getMetadata() {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("meta");
-        for (Metaset m : metasets.collect{it.metaset}) {
+        for (Metaset m : metasets.collect { it.metaset }) {
             root.add(Metaset.asElement("metaset", m));
         }
         return doc.asXML();
@@ -801,28 +803,28 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     public String getMetadata(List<String> metasetNames) {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("meta");
-        if (metasetNames?.size() > 0){
-            metasetNames.each{name ->
+        if (metasetNames?.size() > 0) {
+            metasetNames.each { name ->
                 root.add(Metaset.asElement("metaset", this.fetchMetaset(name)))
             }
         }
-        else{
+        else {
             for (Metaset m : fetchMetasets()) {
                 root.add(Metaset.asElement("metaset", m));
             }
         }
         return root.asXML();
     }
-    
+
     /**
      * Set the Metadata on this object. Tries to parse the submitted string
      * and throws an exception if it is not valid XML.<br/>
      * Note: this parses the meta-xml into metasets and stores them as such.
      * @param metadata the custom metadata
      */
-    public void setMetadata(String metadata) {
-        log.debug("setMetadata")
-        setMetadata(metadata, WritePolicy.BRANCH);
+    public void storeMetadata(String metadata) {
+        log.debug("storeMetadata")
+        storeMetadata(metadata, WritePolicy.BRANCH);
     }
 
     /**
@@ -834,14 +836,11 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      * @param metadata the custom metadata
      * @param writePolicy the write policy - what to do if other items already reference a metaset.
      */
-    public void setMetadata(String metadata, WritePolicy writePolicy) {
+    public void storeMetadata(String metadata, WritePolicy writePolicy) {
         try {
-//            if(this.isDirty() ){
-//                this.save(flush:true)
-//            }
             if (metadata == null || metadata.trim().length() < 9) {
                 log.debug("delete obsolete metasets")
-                metasets.collect{it.metaset}.each {Metaset metaset ->
+                metasets.collect { it.metaset }.each { Metaset metaset ->
                     metasetService.unlinkMetaset(this, metaset)
                 }
             }
@@ -849,7 +848,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 Document doc = ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
                 List<Node> sets = doc.selectNodes("//metaset");
                 if (sets.size() == 0) {
-                    this.metadata = metadata;
                     if (metasets.size() > 0) {
                         for (Metaset m : fetchMetasets()) {
                             metasetService.unlinkMetaset(this, m);
@@ -859,17 +857,17 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 }
 
                 Set<MetasetType> currentMetasetMap = new HashSet<MetasetType>();
-                fetchMetasets().each{
+                fetchMetasets().each {
                     // create a set of the currently existing metasets.
                     currentMetasetMap.add(it.type);
                 }
-                
+
                 log.debug("found: ${sets?.size()} metasets.")
                 for (Node metasetNode : sets) {
                     String content = metasetNode.detach().asXML();
                     String metasetTypeName = metasetNode.selectSingleNode("@type").getText();
                     log.debug("metasetType: " + metasetTypeName);
-                    MetasetType metasetType = MetasetType.findByName(metasetTypeName);                    
+                    MetasetType metasetType = MetasetType.findByName(metasetTypeName);
                     if (metasetType == null) {
                         throw new CinnamonException("error.unknown.metasetType", metasetTypeName);
                     }
@@ -877,8 +875,8 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                     metasetService.createOrUpdateMetaset(this, metasetType, content, writePolicy);
                     currentMetasetMap.remove(metasetType);
                 }
-                
-                currentMetasetMap.each{
+
+                currentMetasetMap.each {
                     // any metaset that was not found in the metadata parameter has to be deleted.                    
                     metasetService.unlinkMetaset(this, this.fetchMetaset(it.name)); // somewhat convoluted.
                 }
@@ -902,9 +900,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         }
         else {
             def msj = metasetList[0]
-            if(msj.isDirty()){
+            if (msj.isDirty()) {
                 // removing a metaset with unpersisted changes is problematic.
-                msj.save(flush:true) 
+                msj.save()
             }
             return msj
         }
@@ -926,13 +924,13 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     public Set<Metaset> fetchMetasets() {
-        OsdMetaset.findAll("from OsdMetaset om where om.osd=:osd",[osd: this]).collect{it.metaset}
+        OsdMetaset.findAll("from OsdMetaset om where om.osd=:osd", [osd: this]).collect { it.metaset }
     }
 
     public Metaset fetchMetaset(String name) {
-       return fetchMetaset(name, false)
+        return fetchMetaset(name, false)
     }
-    
+
     public Metaset fetchMetaset(String name, Boolean autocreate) {
         Metaset metaset = null;
         MetasetType type = MetasetType.findByName(name)
@@ -942,7 +940,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 break;
             }
         }
-        if(metaset == null && autocreate){
+        if (metaset == null && autocreate) {
             metaset = metasetService.createMetaset(this, type, null)
         }
         return metaset;
@@ -993,13 +991,12 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
      * @return the extension as defined by the format. Empty string if no format is set or
      * format.extension is 'unknown'
      */
-    String determineExtension(){
-        if (format){
-            return format?.name == 'format.unknown' ? '' : '.'+format.extension
+    String determineExtension() {
+        if (format) {
+            return format?.name == 'format.unknown' ? '' : '.' + format.extension
         }
         return ''
     }
-
 
     /**
      * Set the latestHead and latestBranch flags on this object and fix the direct predecessor as well,
@@ -1046,24 +1043,54 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             predecessor.latestBranch = false
         }
     }
-    
-    public void updateIndex(){
+
+    public void updateIndex() {
         IndexJob indexJob = new IndexJob(this)
         indexJob.save()
     }
-    
-    def afterInsert(){
+
+    def afterInsert() {
         LocalRepository.addIndexable(this, IndexAction.ADD)
+        def user = ConfThreadLocal.conf.currentUser
+        if (user && user.changeTracking) {
+            if (contentPath != null && !contentPath.isEmpty()) {
+                contentChanged = true
+            }
+            metadataChanged = true
+        }
+        else {
+            log.debug("no user found for changeTracking updates or user does not track changed")
+        }
     }
-    
-    def afterUpdate(){
+
+    def afterUpdate() {
         LocalRepository.addIndexable(this, IndexAction.UPDATE)
     }
-    
-    def afterDelete(){
+
+    def beforeUpdate() {
+        def user = ConfThreadLocal.conf.currentUser
+        if (user && user.changeTracking) {
+            def dirtyProperties = this.dirtyPropertyNames
+            if (dirtyProperties.contains('contentPath')) {
+                contentChanged = true
+                if (dirtyProperties.size > 1) {
+                    metadataChanged = true
+                }
+            }
+            else {
+                metadataChanged = true
+            }
+        }
+        else {
+            log.debug("no user found for changeTracking updates or user does not track changes")
+        }
+        return true
+    }
+
+    def afterDelete() {
         LocalRepository.addIndexable(this, IndexAction.REMOVE)
     }
-    
+
     @Override
     public String uniqueId() {
         String className = Hibernate.getClass(this).getName();
@@ -1071,9 +1098,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     @Override
-    public Indexable reload(){
+    public Indexable reload() {
         def osd = ObjectSystemData.get(this.getId());
-        log.debug("OSD.get for "+id+" returned: "+osd);
+        log.debug("OSD.get for " + id + " returned: " + osd);
         return osd;
     }
 

@@ -18,6 +18,7 @@
 
 package cinnamon.global;
 
+import cinnamon.UserAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cinnamon.exceptions.CinnamonConfigurationException;
@@ -30,6 +31,8 @@ import cinnamon.exceptions.CinnamonConfigurationException;
 public class ConfThreadLocal extends Conf {
 
     static long sessionExpirationTime = 0;
+    
+    UserAccount currentUser = null;    
 
 	@SuppressWarnings("unused")
 	private transient Logger log = LoggerFactory.getLogger("cinnamon.global.ConfThreadLocal");
@@ -81,5 +84,12 @@ public class ConfThreadLocal extends Conf {
         }
         return sessionExpirationTime;
     }
-	
+
+    public UserAccount getCurrentUser() {
+        return this.currentUser;
+    }
+
+    public void setCurrentUser(UserAccount currentUser) {
+        this.currentUser = currentUser;
+    }
 }
