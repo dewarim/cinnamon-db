@@ -45,7 +45,8 @@ grails.project.dependency.resolution = {
         build(":release:3.1.1"){
             export=false
         }
-        runtime(":hibernate:3.6.10.19")
+//        runtime(":hibernate:3.6.10.19")
+        runtime(":hibernate4:4.3.8.1")
         compile(':webxml:1.4.1')
 //        compile(':resources:1.2.RC2')
         test (':spock:0.7'){
