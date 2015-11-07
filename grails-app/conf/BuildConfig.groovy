@@ -33,10 +33,11 @@ grails.project.dependency.resolution = {
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
         runtime 'dom4j:dom4j:1.6.1'
         runtime 'jaxen:jaxen:1.1.4'
-        compile 'org.grails.plugins:cinnamon-humulus:0.3'
+//        compile 'org.grails.plugins:cinnamon-humulus:0.3'
     }
 
     plugins {
+        compile(':spring-security-core:2.0-RC5') // needed for CinnamonPasswordEncoder
         compile ":rest-client-builder:2.1.1"
         build(":tomcat:7.0.42"){
             export=false
