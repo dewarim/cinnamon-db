@@ -35,6 +35,7 @@ class UserAccount  implements Serializable {
     Boolean activated = true
     Boolean sudoer = false
     Boolean sudoable = false
+    Boolean changeTracking = false
     
     Boolean accountExpired = false
     Boolean accountLocked = false
@@ -153,6 +154,7 @@ class UserAccount  implements Serializable {
         if (pwd != user.pwd) return false
         if (sudoable != user.sudoable) return false
         if (sudoer != user.sudoer) return false
+        if (changeTracking != user.changeTracking) return false
         if (token != user.token) return false
         if (tokenAge != user.tokenAge) return false
         if (tokensToday != user.tokensToday) return false
@@ -186,6 +188,7 @@ class UserAccount  implements Serializable {
             e.addElement("isSuperuser").addText(user.verifySuperuserStatus().toString());
             e.addElement("sudoer").addText(user.sudoer.toString());
             e.addElement("sudoable").addText(user.sudoable.toString());
+            e.addElement("changeTracking").addText(user.changeTracking.toString());
             Element userEmail = e.addElement("email");
             if (user.getEmail() != null) {
                 userEmail.addText(user.getEmail());
