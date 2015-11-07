@@ -53,17 +53,9 @@
           <root url="file://$MODULE_DIR$/lib" />
           <root url="jar://$USER_HOME$/grails-2.4.4/lib/asm/asm/jars/asm-3.3.1.jar!/" />
           <root url="jar://$USER_HOME$/grails-2.4.4/lib/cglib/cglib/jars/cglib-2.2.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-simple/3.0.4.RELEASE/grails-datastore-simple-3.0.4.RELEASE.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-gorm/3.0.4.RELEASE/grails-datastore-gorm-3.0.4.RELEASE.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/javassist/javassist/3.17.1-GA/javassist-3.17.1-GA.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-core/3.0.4.RELEASE/grails-datastore-core-3.0.4.RELEASE.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-rest-client/1.0.1.RELEASE/grails-datastore-rest-client-1.0.1.RELEASE.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-gorm-plugin-support/3.0.4.RELEASE/grails-datastore-gorm-plugin-support-3.0.4.RELEASE.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-orm/4.0.7.RELEASE/spring-orm-4.0.7.RELEASE.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/antlr/antlr/2.7.7/antlr-2.7.7.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-gorm-hibernate-core/3.0.4.RELEASE/grails-datastore-gorm-hibernate-core-3.0.4.RELEASE.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-gorm-hibernate/3.0.4.RELEASE/grails-datastore-gorm-hibernate-3.0.4.RELEASE.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/net/sf/ehcache/ehcache-core/2.4.8/ehcache-core-2.4.8.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/hibernate/hibernate-ehcache/3.6.10.Final/hibernate-ehcache-3.6.10.Final.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/jaxen/jaxen/1.1.4/jaxen-1.1.4.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar!/" />
@@ -113,6 +105,13 @@
           <root url="jar://$MAVEN_REPOSITORY$/org/springframework/security/spring-security-web/3.2.7.RELEASE/spring-security-web-3.2.7.RELEASE.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/springframework/security/spring-security-core/3.2.7.RELEASE/spring-security-core-3.2.7.RELEASE.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/grails/plugins/cinnamon-humulus/0.3/cinnamon-humulus-0.3.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-simple/3.1.4.RELEASE/grails-datastore-simple-3.1.4.RELEASE.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-gorm/3.1.4.RELEASE/grails-datastore-gorm-3.1.4.RELEASE.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-core/3.1.4.RELEASE/grails-datastore-core-3.1.4.RELEASE.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-rest-client/3.1.4.RELEASE/grails-datastore-rest-client-3.1.4.RELEASE.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-gorm-plugin-support/3.1.4.RELEASE/grails-datastore-gorm-plugin-support-3.1.4.RELEASE.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-gorm-hibernate-core/3.1.4.RELEASE/grails-datastore-gorm-hibernate-core-3.1.4.RELEASE.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-gorm-hibernate/3.1.4.RELEASE/grails-datastore-gorm-hibernate-3.1.4.RELEASE.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
@@ -122,7 +121,7 @@
         <jarDirectory url="file://$MODULE_DIR$/../cinnamonBase/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="cinnamon-db-grailsPlugins" />
     <orderEntry type="library" name="grails-2.4.4" level="application" />
+    <orderEntry type="module" module-name="cinnamon-db-grailsPlugins" />
   </component>
 </module>
