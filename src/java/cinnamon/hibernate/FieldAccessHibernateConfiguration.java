@@ -16,7 +16,9 @@ import java.util.Iterator;
  * see: http://stackoverflow.com/questions/4850768/grails-field-access-with-gorm
  * see: http://grails.1312388.n4.nabble.com/GORM-setting-access-quot-field-quot-td1592837.html#a1594428
  * 
+ * @Deprecated: No longer works with Hibernate4
  */
+@Deprecated
 public class FieldAccessHibernateConfiguration extends DefaultGrailsDomainConfiguration {
 
     private static final long serialVersionUID = 1;
