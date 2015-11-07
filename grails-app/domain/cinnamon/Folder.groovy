@@ -80,7 +80,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         parent = that.parent;
         type = that.type;
         acl = that.acl;
-//        setMetadata(that.getMetadata())
     }
 
     // TODO: determine which constructors are really needed.
@@ -498,7 +497,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         for (Metaset m : metasets.collect { it.metaset }) {
             root.add(Metaset.asElement("metaset", m));
         }
-        log.debug("metadata: ${doc.asXML()}")
         return doc.asXML();
     }
 
