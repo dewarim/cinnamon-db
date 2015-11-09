@@ -1,6 +1,7 @@
 package cinnamon
 
 import cinnamon.exceptions.CinnamonConfigurationException
+import cinnamon.global.ConfThreadLocal
 import cinnamon.index.IndexAction
 import cinnamon.index.IndexJob
 import cinnamon.interfaces.Accessible
@@ -31,7 +32,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
     static constraints = {
         name unique: ['parent'], size: 1..Constants.NAME_LENGTH
-        metadata(size: 1..Constants.METADATA_SIZE)
         parent nullable: true
     }
 
@@ -47,6 +47,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     Folder parent
     FolderType type
     Acl acl
+    Boolean metadataChanged = false
 
     Set<FolderMetaset> metasets = []
 
@@ -310,6 +311,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         if (owner != folder.owner) return false
         if (parent != folder.parent) return false
         if (type != folder.type) return false
+        if (metadataChanged != folder.metadataChanged) return false
 
         return true
     }
@@ -726,6 +728,13 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
     def afterInsert(){
         LocalRepository.addIndexable(this, IndexAction.ADD)
+        def user = ConfThreadLocal.conf.currentUser
+        if (user && user.changeTracking) {
+            metadataChanged = true
+        }
+        else {
+            log.debug("no user found for changeTracking updates or user does not track changes")
+        }
     }
 
     def afterUpdate(){
@@ -734,6 +743,16 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
     def afterDelete(){
         LocalRepository.addIndexable(this, IndexAction.REMOVE)
+    }
+    
+    def beforeUpdate(){
+        def user = ConfThreadLocal.conf.currentUser
+        if (user && user.changeTracking) {
+            metadataChanged = true
+        }
+        else {
+            log.debug("no user found for changeTracking updates or user does not track changes")
+        }
     }
 
     @Override
