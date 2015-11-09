@@ -1059,7 +1059,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             metadataChanged = true
         }
         else {
-            log.debug("no user found for changeTracking updates or user does not track changed")
+            log.debug("no user found for changeTracking updates or user does not track changes")
         }
     }
 
