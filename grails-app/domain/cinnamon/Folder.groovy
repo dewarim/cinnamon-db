@@ -44,7 +44,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     static hasMany = [metasets: FolderMetaset]
     
     String name
-    String metadata = "<meta />"
     UserAccount owner
     Folder parent
     FolderType type
@@ -85,7 +84,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     // TODO: determine which constructors are really needed.
     public Folder(String name, String metadata, Acl acl, Folder parent, UserAccount owner, FolderType type) {
         this.name = name;
-        setMetadata(metadata);
+        storeMetadata(metadata);
         this.acl = acl;
         this.parent = parent;
         this.owner = owner;
@@ -96,7 +95,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         log.debug("Entering Folder-Constructor");
 
         this.name = cmd.get("name");
-        this.setMetadata(cmd.get("metadata"));
+        this.storeMetadata(cmd.get("metadata"));
         Long parentId = ParamParser.parseLong(cmd.get("parentid"), "error.param.parent_id");
 
         log.debug("trying to find parent folder with id " + parentId);
@@ -308,7 +307,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         Folder folder = (Folder) o
 
         if (acl != folder.acl) return false
-        if (metadata != folder.metadata) return false
         if (name != folder.name) return false
         if (owner != folder.owner) return false
         if (parent != folder.parent) return false
@@ -320,7 +318,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (metadata != null ? metadata.hashCode() : 0)
         result = 31 * result + (owner != null ? owner.hashCode() : 0)
         result = 31 * result + (type != null ? type.hashCode() : 0)
         result = 31 * result + (acl != null ? acl.hashCode() : 0)
@@ -364,7 +361,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
             resetIndexOnFolderContent();
         }
         if (fields.metadata) {
-            setMetadata(fields.metadata);
+            storeMetadata(fields.metadata);
         }
         if (fields.aclid) {
             Acl acl = Acl.get(fields.aclid);
@@ -506,8 +503,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * Note: this parses the meta-xml into metasets and stores them as such.
      * @param metadata the custom metadata
      */
-    public void setMetadata(String metadata) {
-        setMetadata(metadata, WritePolicy.BRANCH);
+    public void storeMetadata(String metadata) {
+        storeMetadata(metadata, WritePolicy.BRANCH);
     }
 
     /**
@@ -519,7 +516,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * @param metadata the custom metadata
      * @param writePolicy the WritePolicy - how to treat existing metasets.
      */
-    public void setMetadata(String metadata, WritePolicy writePolicy) {
+    public void storeMetadata(String metadata, WritePolicy writePolicy) {
         if (metadata == null || metadata.trim().length() < 9) {
             log.debug("delete obsolete metasets")
             metasets.collect { it.metaset }.each { Metaset metaset ->
@@ -530,7 +527,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
             Document doc = ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
             List<Node> sets = doc.selectNodes("//metaset");
             if (sets.size() == 0) {
-                this.metadata = metadata;
                 if (metasets.size() > 0) {
                     // delete obsolete metasets:
                     for (Metaset m : fetchMetasets()) {
