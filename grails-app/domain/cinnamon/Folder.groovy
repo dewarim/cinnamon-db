@@ -27,7 +27,6 @@ import cinnamon.utils.ZippedFolder
 class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetasetOwner, Accessible {
 
     static def folderService
-    static def userService
     static def metasetService
 
     static constraints = {
