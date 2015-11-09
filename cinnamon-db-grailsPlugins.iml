@@ -31,8 +31,6 @@
       <sourceFolder url="file://$USER_HOME$/.grails/2.4.4/projects/cinnamonDb/plugins/release-3.1.1/src/java" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.4.4/projects/cinnamonDb/plugins/release-3.1.1/src/groovy" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.4.4/projects/cinnamonDb/plugins/rest-client-builder-2.1.1" />
-    <content url="file://$USER_HOME$/.grails/2.4.4/projects/cinnamonDb/plugins/spock-0.7" />
     <content url="file://$USER_HOME$/.grails/2.4.4/projects/cinnamonDb/plugins/spring-security-core-2.0-RC5">
       <sourceFolder url="file://$USER_HOME$/.grails/2.4.4/projects/cinnamonDb/plugins/spring-security-core-2.0-RC5/src/java" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.4.4/projects/cinnamonDb/plugins/spring-security-core-2.0-RC5/src/groovy" isTestSource="false" />
