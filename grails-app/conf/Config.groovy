@@ -38,24 +38,24 @@ log4j = {
 
 
 // Added by the Spring Security Core plugin:
-grails.plugins.springsecurity.userLookup.userDomainClassName = 'cinnamon.UserAccount'
-grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'cinnamon.CmnGroupUser'
-grails.plugins.springsecurity.authority.className = 'cinnamon.CmnGroup'
-grails.plugins.springsecurity.authority.nameField = 'name'
-grails.plugins.springsecurity.userLookup.usernamePropertyName='name'
-grails.plugins.springsecurity.userLookup.passwordPropertyName='pwd'
-grails.plugins.springsecurity.userLookup.enabledPropertyName='activated'
-grails.plugins.springsecurity.userLookup.authoritiesPropertyName='groupUsers'
-grails.plugins.springsecurity.successHandler.defaultTargetUrl='/login/dummyPage'
-grails.plugins.springsecurity.accessDeniedHandler
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'cinnamon.UserAccount'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'cinnamon.CmnGroupUser'
+grails.plugin.springsecurity.authority.className = 'cinnamon.CmnGroup'
+grails.plugin.springsecurity.authority.nameField = 'name'
+grails.plugin.springsecurity.userLookup.usernamePropertyName='name'
+grails.plugin.springsecurity.userLookup.passwordPropertyName='pwd'
+grails.plugin.springsecurity.userLookup.enabledPropertyName='activated'
+grails.plugin.springsecurity.userLookup.authoritiesPropertyName='groupUsers'
+grails.plugin.springsecurity.successHandler.defaultTargetUrl='/login/dummyPage'
+grails.plugin.springsecurity.accessDeniedHandler
 
 grails.logging.jul.usebridge = false
 /*
  The default page is responsible for connecting to the right database,
  so we always redirect the user there:
   */
-grails.plugins.springsecurity.successHandler.alwaysUseDefault=true
-grails.plugins.springsecurity.http.useExpressions=false
+grails.plugin.springsecurity.successHandler.alwaysUseDefault=true
+grails.plugin.springsecurity.http.useExpressions=false
 
 grails.views.javascript.library="jquery"
 grails.json.legacy.builder=falsegrails.views.default.codec="none" // none, html, base64
