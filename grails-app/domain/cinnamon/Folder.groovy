@@ -192,6 +192,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         else {
             folder.addElement("hasChildren").addText("true")
         }
+        folder.addElement("metadataChanged").addText(String.valueOf(metadataChanged))
         def metaElement = folder.addElement('meta')
         if(metasets.size() > 0){
             metasets.each{type ->
