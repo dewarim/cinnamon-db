@@ -35,7 +35,7 @@ class UserAccount  implements Serializable {
     Boolean activated = true
     Boolean sudoer = false
     Boolean sudoable = false
-    Boolean changeTracking = false
+    Boolean changeTracking = true
     
     Boolean accountExpired = false
     Boolean accountLocked = false
