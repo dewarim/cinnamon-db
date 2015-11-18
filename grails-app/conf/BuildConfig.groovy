@@ -33,6 +33,7 @@ grails.project.dependency.resolution = {
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
         runtime 'dom4j:dom4j:1.6.1'
         runtime 'jaxen:jaxen:1.1.4'
+        runtime 'org.apache.httpcomponents:httpclient:4.5.1'
 //        compile 'org.grails.plugins:cinnamon-humulus:0.3'
     }
 
