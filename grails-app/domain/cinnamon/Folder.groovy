@@ -41,18 +41,19 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     static hasMany = [metasets: FolderMetaset]
-    
+
     String name
     UserAccount owner
     Folder parent
     FolderType type
     Acl acl
     Boolean metadataChanged = false
+    String summary = '<summary />'
 
     Set<FolderMetaset> metasets = []
 
     def grailsApplication
-    
+
     public Folder() {
 
     }
@@ -163,8 +164,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * @param root
      */
     @Override
-    public Element toXmlElement(Element root) {
-        return toXmlElement(root, [])   
+    public Element toXmlElement(Element root, Boolean includeSummary) {
+        return toXmlElement(root, [], includeSummary)
     }
     
     /**
@@ -173,7 +174,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
      * @param root
      */
     @Override
-    public Element toXmlElement(Element root, List metasets) {
+    public Element toXmlElement(Element root, List metasets, Boolean includeSummary) {
         Element folder = root.addElement("folder")
         folder.addElement("id").addText(String.valueOf(id))
         folder.addElement("name").addText(name)
@@ -195,12 +196,15 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         folder.addElement("metadataChanged").addText(String.valueOf(metadataChanged))
         def metaElement = folder.addElement('meta')
         if(metasets.size() > 0){
-            metasets.each{type ->
+            metasets.each{ type ->
                 def metaset = fetchMetaset(type)
                 if(metaset){
                     metaElement.add(Metaset.asElement('metaset', metaset))
                 }
             }
+        }
+        if(includeSummary){
+            folder.addElement('summary').addText(summary)
         }
         return folder
     }
@@ -253,14 +257,14 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     @Override
-    public String getSystemMetadata(Boolean withRelations) {
+    public String getSystemMetadata(Boolean withRelations, Boolean withSummary) {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("sysMeta");
         String className = getClass().getName();
         root.addAttribute("javaClass", className);
         root.addAttribute("hibernateId", String.valueOf(getId()));
         root.addAttribute("id", className + "@" + getId());
-        toXmlElement(root);
+        toXmlElement(root, withSummary);
         // note: Folders currently do not have relations, so the parameter is set to an empty node if required.
         if (withRelations) {
             ((Element) root.selectSingleNode('folder')).addElement('relations')
@@ -312,6 +316,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         if (owner != folder.owner) return false
         if (parent != folder.parent) return false
         if (type != folder.type) return false
+        if (summary != folder.summary) return false
         if (metadataChanged != folder.metadataChanged) return false
 
         return true
@@ -599,7 +604,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         }
         else {
             def msj = metasetList[0]
-            if(msj.isDirty()){
+            if(msj.isDirty()) {
                 // removing a metaset with unpersisted changes is problematic.
                 msj.save(flush:true)
             }
@@ -680,7 +685,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
             for (Folder folder : folders) {
 
-                String path = folder.fetchPath().replace(fetchPath(), name); // do not include the parent folders up to root.
+                String path = folder.fetchPath().replace(fetchPath(), name);
+                // do not include the parent folders up to root.
                 log.debug("zipFolderPath: " + path);
                 File currentFolder = new File(tempFolder, path);
                 if (!currentFolder.mkdirs()) {
@@ -747,8 +753,15 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
     
     def beforeUpdate(){
-        def user = ConfThreadLocal.conf.currentUser
+        def
+
+                user = ConfThreadLocal.conf.currentUser
         if (user && user.changeTracking) {
+            def dirtyProperties = this.dirtyPropertyNames
+            if( dirtyProperties.size == 1 && dirtyProperties.contains('summary')){
+                // just setting the summary does not set metadataChanged.
+                return true
+            }
             metadataChanged = true
         }
         else {
@@ -768,4 +781,5 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         log.debug("Folder.get for "+id+" returned: "+folder);
         return folder;
     }
-}
+
+}  

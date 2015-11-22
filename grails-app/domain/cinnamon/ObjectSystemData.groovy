@@ -82,6 +82,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     Boolean metadataChanged = false
     String cmnVersion = '1'
     LifeCycleState state
+    String summary = '<summary />'
     Set<OsdMetaset> metasets = []
 
     public ObjectSystemData() {
@@ -177,7 +178,10 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         if (cmd.containsKey("appname")) {
             setAppName((String) cmd.get("appname"));
         }
-
+        if (cmd.containsKey('summary')) {
+            summary = cmd.get('summary')
+        }
+        
         /*
            * Set ObjectType:
            * 1. by objtype_id
@@ -427,12 +431,12 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     @Override
-    public Element toXmlElement(Element root) {
-        return toXmlElement(root, [])
+    public Element toXmlElement(Element root, Boolean includeSummary) {
+        return toXmlElement(root, [], includeSummary)
     }
 
     @Override
-    public Element toXmlElement(Element root, List metasets) {
+    public Element toXmlElement(Element root, List metasets, Boolean includeSummary) {
         def obj = convert2domElement()
 
         def metaElement = obj.addElement('meta')
@@ -447,6 +451,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         else {
             // adding a '-' because jQuery or Firefox seems to have problems with parsing empty <meta/>-tag.
             metaElement.text = '-'
+        }
+        if (includeSummary) {
+            obj.addElement('summary').addText(summary)
         }
         root.add(obj)
         return obj
@@ -585,7 +592,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     @Override
-    public String getSystemMetadata(Boolean withRelations) {
+    public String getSystemMetadata(Boolean withRelations, Boolean withSummary) {
         log.debug("getsystemMeta");
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("sysMeta");
@@ -597,6 +604,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         Element sysMeta = convert2domElement()
         if (withRelations) {
             addRelationsToElement(sysMeta)
+        }
+        if (withSummary) {
+            sysMeta.addElement('summary').addText(summary)
         }
         root.add(sysMeta);
         return doc.asXML();
@@ -758,6 +768,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         if (state != that.state) return false
         if (type != that.type) return false
         if (cmnVersion != that.cmnVersion) return false
+        if (summary != folder.summary) return false
 
         return true
     }
@@ -1071,6 +1082,10 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         def user = ConfThreadLocal.conf.currentUser
         if (user && user.changeTracking) {
             def dirtyProperties = this.dirtyPropertyNames
+            if (dirtyProperties.size == 1 && dirtyProperties.contains('summary')) {
+                // just setting the summary does not set metadataChanged.
+                return true
+            }
             if (dirtyProperties.contains('contentPath')) {
                 contentChanged = true
                 if (dirtyProperties.size > 1) {

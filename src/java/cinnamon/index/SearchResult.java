@@ -102,7 +102,7 @@ public class SearchResult {
         return this;
     }
 
-    public org.dom4j.Document getSearchResultsAsXML() {
+    public org.dom4j.Document getSearchResultsAsXML(Boolean includeSummary) {
         org.dom4j.Document resultDoc = DocumentHelper.createDocument();
         Element root = resultDoc.addElement("searchResults");
         root.addAttribute("total-results", String.valueOf(totalResults));
@@ -113,7 +113,7 @@ public class SearchResult {
             Float score = entry.getValue();
             Element item = root.addElement("item");
             item.addElement("score").setText(String.valueOf(score));// TODO: turn score into score/maxScore %
-            xml.toXmlElement(item);
+            xml.toXmlElement(item, includeSummary);
         }
         return resultDoc;
     }

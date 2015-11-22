@@ -37,10 +37,12 @@ public interface Indexable {
 	 * <p>The LuceneBridge will generate a unique Id from this ($className+$hibernateId).</p>
      * @param withRelations if applicable, add a relations node with a serialized relation element for
      *                      each relation of this indexable.
+	 * @param withSummary if applicable, add a summary node with the encoded content of the summary field.             
+	 *                       
 	 * @return an XML representation of the object's system metadata - 
 	 * or an empty {@code <sysMeta/>} element with attributes javaClass and hibernateId.
 	 */
-	String getSystemMetadata(Boolean withRelations);
+	String getSystemMetadata(Boolean withRelations, Boolean withSummary);
 	
     Boolean hasXmlContent();
     

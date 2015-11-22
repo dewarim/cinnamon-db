@@ -472,7 +472,7 @@ class Validator implements ResultValidator {
             Permission p = fetchPermission(PermissionName.SET_ACL);
             validateFolderAgainstAcl(folder, p);
         }
-        if (containsOneOf(cmd, "name", "metadata", "ownerid", "typeid")) {
+        if (containsOneOf(cmd, "name", "metadata", "ownerid", "typeid", "summary")) {
             Permission p = fetchPermission(PermissionName.EDIT_FOLDER);
             validateFolderAgainstAcl(folder, p);
         }
