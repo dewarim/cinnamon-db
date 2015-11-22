@@ -1,6 +1,7 @@
 package cinnamon.trigger.impl
 
 import cinnamon.PoBox
+import cinnamon.trigger.ChangeTrigger
 import cinnamon.trigger.ITrigger
 
 /**
@@ -9,13 +10,13 @@ import cinnamon.trigger.ITrigger
 class TestTriggerImpl implements ITrigger{
     
     @Override
-    PoBox executePreCommand(PoBox poBox, String config) {
+    PoBox executePreCommand(PoBox poBox, ChangeTrigger changeTrigger) {
         return poBox
     }
 
     @Override
-    PoBox executePostCommand(PoBox poBox, String config) {
+    PoBox executePostCommand(PoBox poBox, ChangeTrigger changeTrigger) {
         return poBox 
     }
-    
+
 }

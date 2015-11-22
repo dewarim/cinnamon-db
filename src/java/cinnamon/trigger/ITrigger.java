@@ -4,8 +4,7 @@ import cinnamon.PoBox;
 
 public interface ITrigger {
 
-	PoBox executePreCommand(PoBox poBox, String config);
-	PoBox executePostCommand(PoBox poBox, String config);
-	
+	PoBox executePreCommand(PoBox poBox, ChangeTrigger changeTrigger);
+	PoBox executePostCommand(PoBox poBox, ChangeTrigger changeTrigger);
 	
 }

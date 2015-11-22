@@ -1,5 +1,6 @@
 package cinnamon.trigger.impl
 
+import cinnamon.trigger.ChangeTrigger
 import cinnamon.trigger.ITrigger
 import cinnamon.RelationService
 import org.slf4j.Logger
@@ -15,7 +16,7 @@ public class RelationChangeTrigger implements ITrigger {
     Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public PoBox executePreCommand(PoBox poBox, String config) {
+    public PoBox executePreCommand(PoBox poBox, ChangeTrigger changeTrigger) {
         log.debug("preCommand of RelationChangeTrigger");
         if (poBox.controller.equals("osd") && poBox.action.equals("delete")) {
             /*
@@ -41,7 +42,7 @@ public class RelationChangeTrigger implements ITrigger {
     }
 
     @Override
-    public PoBox executePostCommand(PoBox poBox, String config) {
+    public PoBox executePostCommand(PoBox poBox, ChangeTrigger changeTrigger) {
         log.debug("postCommand RelationChangeTrigger");
         Map<String, Object> params = poBox.params
         String controller = poBox.controller
