@@ -437,7 +437,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 
     @Override
     public Element toXmlElement(Element root, List metasets, Boolean includeSummary) {
-        def obj = convert2domElement()
+        def obj = convert2domElement(includeSummary)
 
         def metaElement = obj.addElement('meta')
         if (metasets.size() > 0) {
@@ -452,9 +452,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             // adding a '-' because jQuery or Firefox seems to have problems with parsing empty <meta/>-tag.
             metaElement.text = '-'
         }
-        if (includeSummary) {
-            obj.add(ParamParser.parseXml(summary, "Failed to parse summary"))
-        }
         root.add(obj)
         return obj
     }
@@ -468,6 +465,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     public Element convert2domElement() {
+        return convert2domElement(false)
+    }
+    public Element convert2domElement(Boolean includeSummary) {
         Element data = DocumentHelper.createElement("object");
         data.addElement("id").addText(String.valueOf(getId()));
         data.addElement("name").addText(getName());
@@ -535,7 +535,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         else {
             data.addElement("lifeCycleState").addText(String.valueOf(state.getId()));
         }
-
+        if (includeSummary) {
+            data.add(ParamParser.parseXml(summary, "Failed to parse summary"))
+        }
         return data;
     }
 
@@ -592,7 +594,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     @Override
-    public String getSystemMetadata(Boolean withRelations, Boolean withSummary) {
+    public String getSystemMetadata(Boolean withRelations, Boolean includeSummary) {
         log.debug("getsystemMeta");
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("sysMeta");
@@ -601,12 +603,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         root.addAttribute("hibernateId", String.valueOf(getId()));
         root.addAttribute("id", className + "@" + getId()); // for a given repository, it's unique.
         log.debug("convert2domElement");
-        Element sysMeta = convert2domElement()
+        Element sysMeta = convert2domElement(includeSummary)
         if (withRelations) {
             addRelationsToElement(sysMeta)
-        }
-        if (withSummary) {
-            sysMeta.add(ParamParser.parseXml(summary, "could not parse summary"))
         }
         root.add(sysMeta);
         return doc.asXML();
