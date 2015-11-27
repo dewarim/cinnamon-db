@@ -204,7 +204,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
             }
         }
         if(includeSummary){
-            folder.addElement('summary').addText(summary)
+            folder.add(ParamParser.parseXml(summary, "Failed to parse summary"))
         }
         return folder
     }

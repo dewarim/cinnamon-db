@@ -453,7 +453,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             metaElement.text = '-'
         }
         if (includeSummary) {
-            obj.addElement('summary').addText(summary)
+            obj.add(ParamParser.parseXml(summary, "Failed to parse summary"))
         }
         root.add(obj)
         return obj
@@ -768,8 +768,8 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         if (state != that.state) return false
         if (type != that.type) return false
         if (cmnVersion != that.cmnVersion) return false
-        if (summary != folder.summary) return false
-
+        if (summary != that.summary) return false
+        
         return true
     }
 
