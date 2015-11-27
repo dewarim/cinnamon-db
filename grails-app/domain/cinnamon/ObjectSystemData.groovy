@@ -606,7 +606,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             addRelationsToElement(sysMeta)
         }
         if (withSummary) {
-            sysMeta.addElement('summary').addText(summary)
+            sysMeta.add(ParamParser.parseXml(summary, "could not parse summary"))
         }
         root.add(sysMeta);
         return doc.asXML();
