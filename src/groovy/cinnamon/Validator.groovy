@@ -249,6 +249,11 @@ class Validator implements ResultValidator {
         checkLockStatus(osd);
     }
 
+    public void validateSetSummary(ObjectSystemData osd) {
+        Permission writeObject = fetchPermission(PermissionName.WRITE_OBJECT_SYS_METADATA);
+        validateAgainstAcl(osd, writeObject);
+    }
+    
     /**
      * Note: this is the one Permission that does currently not depend on an ACL.
      * The logic is thus:
