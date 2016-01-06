@@ -5,8 +5,10 @@ import cinnamon.global.ConfThreadLocal
 import cinnamon.trigger.ChangeTrigger
 import cinnamon.trigger.ITrigger
 import cinnamon.utils.ParamParser
+import org.apache.commons.io.IOUtils
 import org.apache.http.Header
 import org.apache.http.HttpResponse
+import org.apache.http.HttpStatus
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.RequestBuilder
 import org.apache.http.impl.client.HttpClientBuilder
@@ -54,9 +56,10 @@ public class MicroserviceChangeTrigger implements ITrigger {
                 }
             }
             HttpResponse httpResponse = httpClient.execute(requestCopy.build())
-//            if(httpResponse.statusCode == HttpStatus.SC_OK){
-                log.debug("Microservice post returned :"+ httpResponse.statusLine)
-//            }
+            if(httpResponse.statusLine.statusCode != HttpStatus.SC_OK){
+                poBox.endProcessing = true
+            }
+            addResponseHeader(httpResponse, poBox.response, url)
         }
         catch (Exception e) {
             log.debug("Failed to execute microserviceChangeTrigger.", e);
@@ -75,8 +78,25 @@ public class MicroserviceChangeTrigger implements ITrigger {
                         changeTrigger.config)
                 return poBox;
             }
-            poBox.response.addHeader("microservice", url)
-            // request will be executed later on by the ResponseFilter.
+            def request = poBox.request
+            HttpClient httpClient = HttpClientBuilder.create().build()
+            def requestCopy = RequestBuilder.create("POST")
+            requestCopy.setUri(url)
+            def headerNames = request.headerNames
+            while(headerNames.hasMoreElements()){
+                def headerName = headerNames.nextElement()
+                if(headerName.equals("microservice")){
+                    continue;
+                }
+                requestCopy.setHeader(headerName, request.getHeader(headerName))
+            }
+            for(Map.Entry entry : poBox.params){
+                if(entry.key instanceof String && entry.value instanceof String) {
+                    requestCopy.addParameter(entry.key, entry.value)
+                }
+            }
+            HttpResponse httpResponse = httpClient.execute(requestCopy.build())
+            addResponseHeader(httpResponse, poBox.response, url)
 
         }
         catch (Exception e) {
@@ -91,6 +111,16 @@ public class MicroserviceChangeTrigger implements ITrigger {
         return configDoc.selectNodes("//remoteServer")?.get(0)?.text
     }
     
-    
+    void addResponseHeader(HttpResponse remoteResponse, myResponse, url){
+        myResponse.addHeader("microservice-url", url)
+        if(remoteResponse.entity.contentLength > 0){
+            def entity = remoteResponse.entity
+            String responseContent = IOUtils.toString(entity.content)
+            myResponse.addHeader("microservice-response", responseContent)
+        }
+        else{
+            myResponse.addHeader("microservice-response", "<no-content/>")
+        }
+    }
 }
 
