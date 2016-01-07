@@ -107,8 +107,11 @@ public class MicroserviceChangeTrigger implements ITrigger {
     }
 
     String findRemoteUrl(String config) {
-        def configDoc = ParamParser.parseXmlToDocument(config, "error.param.config");
-        return configDoc.selectNodes("//remoteServer")?.get(0)?.text
+        def configDoc = ParamParser.parseXmlToDocument(config, "error.param.config")
+        def remoteServerNode = configDoc.selectNodes("//remoteServer")
+        if(remoteServerNode?.size() > 0){
+            return remoteServerNode[0]?.text    
+        }
     }
     
     void addResponseHeader(HttpResponse remoteResponse, myResponse, url){
