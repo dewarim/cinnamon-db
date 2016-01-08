@@ -374,6 +374,10 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     public void updateAccess(UserAccount user) {
+        def currentUser = ConfThreadLocal.conf.currentUser
+        if (currentUser && !currentUser.changeTracking) {
+            return
+        }
         setModifier(user);
         setModified(Calendar.getInstance().getTime());
     }
