@@ -12,6 +12,7 @@ import org.apache.http.HttpStatus
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.RequestBuilder
 import org.apache.http.impl.client.HttpClientBuilder
+import org.apache.http.protocol.HTTP
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -30,33 +31,33 @@ public class MicroserviceChangeTrigger implements ITrigger {
         try {
             def url = findRemoteUrl(changeTrigger.config)
             if (!url) {
-                log.warn("Found microserviceChangeTrigger without valid remoteServer url. Config is: " + 
+                log.warn("Found microserviceChangeTrigger without valid remoteServer url. Config is: " +
                         changeTrigger.config)
                 return poBox;
             }
-            
+
             def request = poBox.request
             HttpClient httpClient = HttpClientBuilder.create().build()
             def requestCopy = RequestBuilder.create("POST")
             requestCopy.setUri(url)
             def headerNames = request.headerNames
-            while(headerNames.hasMoreElements()){
+            while (headerNames.hasMoreElements()) {
                 def headerName = headerNames.nextElement()
-                if(headerName.equals("microservice")){
+                if (headerName.equals("microservice")) {
                     continue;
                 }
-                requestCopy.setHeader(headerName, request.getHeader(headerName))   
+                requestCopy.setHeader(headerName, request.getHeader(headerName))
             }
-            for(Map.Entry entry : poBox.params){
-                if(entry.key instanceof String && entry.value instanceof String) {
+            for (Map.Entry entry : poBox.params) {
+                if (entry.key instanceof String && entry.value instanceof String) {
                     requestCopy.addParameter(entry.key, entry.value)
                 }
-                else{
-                    log.debug("Entry "+entry+" is not <String,String>")
+                else {
+                    log.debug("Entry " + entry + " is not <String,String>")
                 }
             }
             HttpResponse httpResponse = httpClient.execute(requestCopy.build())
-            if(httpResponse.statusLine.statusCode != HttpStatus.SC_OK){
+            if (httpResponse.statusLine.statusCode != HttpStatus.SC_OK) {
                 poBox.endProcessing = true
             }
             addResponseHeader(httpResponse, poBox.response, url)
@@ -70,11 +71,11 @@ public class MicroserviceChangeTrigger implements ITrigger {
     @Override
     public PoBox executePostCommand(PoBox poBox, ChangeTrigger changeTrigger) {
         log.debug("postCommand MicroserviceChangeTrigger");
-        
+
         try {
             def url = findRemoteUrl(changeTrigger.config)
             if (!url) {
-                log.warn("Found microserviceChangeTrigger without valid remoteServer url. Config is: " + 
+                log.warn("Found microserviceChangeTrigger without valid remoteServer url. Config is: " +
                         changeTrigger.config)
                 return poBox;
             }
@@ -83,15 +84,19 @@ public class MicroserviceChangeTrigger implements ITrigger {
             def requestCopy = RequestBuilder.create("POST")
             requestCopy.setUri(url)
             def headerNames = request.headerNames
-            while(headerNames.hasMoreElements()){
+            while (headerNames.hasMoreElements()) {
                 def headerName = headerNames.nextElement()
-                if(headerName.equals("microservice")){
+                if (headerName.equals("microservice")) {
                     continue;
                 }
                 requestCopy.setHeader(headerName, request.getHeader(headerName))
             }
-            for(Map.Entry entry : poBox.params){
-                if(entry.key instanceof String && entry.value instanceof String) {
+            
+            // content_len must not be set according to RequestContent.process 
+            requestCopy.removeHeaders(HTTP.CONTENT_LEN)
+            
+            for (Map.Entry entry : poBox.params) {
+                if (entry.key instanceof String && entry.value instanceof String) {
                     requestCopy.addParameter(entry.key, entry.value)
                 }
             }
@@ -103,25 +108,25 @@ public class MicroserviceChangeTrigger implements ITrigger {
             log.debug("Failed to execute microserviceChangeTrigger.", e);
         }
         return poBox;
-        
+
     }
 
     String findRemoteUrl(String config) {
         def configDoc = ParamParser.parseXmlToDocument(config, "error.param.config")
         def remoteServerNode = configDoc.selectNodes("//remoteServer")
-        if(remoteServerNode?.size() > 0){
-            return remoteServerNode[0]?.text    
+        if (remoteServerNode?.size() > 0) {
+            return remoteServerNode[0]?.text
         }
     }
-    
-    void addResponseHeader(HttpResponse remoteResponse, myResponse, url){
+
+    void addResponseHeader(HttpResponse remoteResponse, myResponse, url) {
         myResponse.addHeader("microservice-url", url)
-        if(remoteResponse.entity.contentLength > 0){
+        if (remoteResponse.entity.contentLength > 0) {
             def entity = remoteResponse.entity
             String responseContent = IOUtils.toString(entity.content)
             myResponse.addHeader("microservice-response", responseContent)
         }
-        else{
+        else {
             myResponse.addHeader("microservice-response", "<no-content/>")
         }
     }
