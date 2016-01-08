@@ -24,7 +24,7 @@ grails.project.dependency.resolution = {
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
-        runtime('org.apache.commons:commons-compress:1.4')
+        runtime('org.apache.commons:commons-compress:1.10')
         runtime('org.apache.lucene:lucene-core:3.6.2')
         runtime('org.apache.lucene:lucene-xml-query-parser:3.6.2')
         runtime('org.apache.lucene:lucene-queries:3.6.2')
