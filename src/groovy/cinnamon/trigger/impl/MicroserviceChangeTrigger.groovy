@@ -70,7 +70,7 @@ public class MicroserviceChangeTrigger implements ITrigger {
 
     @Override
     public PoBox executePostCommand(PoBox poBox, ChangeTrigger changeTrigger) {
-        log.debug("postCommand MicroserviceChangeTrigger");
+        log.debug("postCommand MicroserviceChangeTrigger: "+changeTrigger.dump());
 
         try {
             def url = findRemoteUrl(changeTrigger.config)
