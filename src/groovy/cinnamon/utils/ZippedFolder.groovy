@@ -8,6 +8,7 @@ import cinnamon.ObjectSystemData
 
 /**
  * Store information about the files contained in a zipped folder.
+ * TODO: is this used anywhere?
  */
 class ZippedFolder {
     
@@ -90,7 +91,7 @@ class ZippedFolder {
         Document doc = ParamParser.parseXmlToDocument("<zipContent/>");
         Element root = doc.getRootElement();
         for(ObjectSystemData osd : osds){
-            osd.toXmlElement(root);
+            osd.toXmlElement(root, false);
         }
         return doc;
     }
