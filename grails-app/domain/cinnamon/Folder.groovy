@@ -40,8 +40,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         version 'obj_version'
     }
 
-    static hasMany = [metasets: FolderMetaset]
-
     String name
     UserAccount owner
     Folder parent
@@ -49,8 +47,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     Acl acl
     Boolean metadataChanged = false
     String summary = '<summary />'
-
-    Set<FolderMetaset> metasets = []
 
     def grailsApplication
 
@@ -586,7 +582,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
             }
         }
         if (metaset == null && autocreate) {
-            metaset = metasetService.createMetaset(this, type, null)
+            metaset = metasetService.createMetaset(type, null)
         }
         return metaset;
     }
@@ -782,4 +778,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         return folder;
     }
 
+    def Set<FolderMetaset> getMetasets(){
+        FolderMetaset.findAllByFolder(this)
+    }
 }  

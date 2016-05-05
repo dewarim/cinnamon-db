@@ -155,6 +155,7 @@ public class MetasetService {
         return metaset;
     }
 
+    // TODO: remove?
     public void copyMetasets(IMetasetOwner source, IMetasetOwner target, String metasets) {
         if (metasets == null) {
             for (Metaset m : source.fetchMetasets()) {
@@ -169,6 +170,7 @@ public class MetasetService {
         }
     }
 
+    // TODO: remove? may be leftover from metaset field to class conversion
     public void initializeMetasets(IMetasetOwner owner, String metasets) {
         if(metasets == null){
             // nothing to do.

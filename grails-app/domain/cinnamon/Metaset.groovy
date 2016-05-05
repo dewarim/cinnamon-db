@@ -16,13 +16,8 @@ class Metaset {
         version 'obj_version'
     }
     
-    static hasMany = [osdMetasets:OsdMetaset, folderMetasets:FolderMetaset]
-
     String content
     MetasetType type
-    
-    Set<OsdMetaset> osdMetasets = []
-    Set<FolderMetaset> folderMetasets = []
     
     public Metaset() {
 
@@ -57,11 +52,12 @@ class Metaset {
     }
 
     public void setContent(String content) {
+        def newContent = content 
         if(content == null){
-            content = '<metaset />'
+            newContent = '<metaset />'
         }
         // fix id and type, in case the content is simply copied from some other metaset.
-        Element c = (Element) ParamParser.parseXml(content, null);
+        Element c = (Element) ParamParser.parseXml(newContent, null);
         if( !c.hasContent() ){
             c.addAttribute("status","empty");
         }
@@ -91,6 +87,14 @@ class Metaset {
         return content;
     }
 
+    def Set<OsdMetaset> getOsdMetasets(){
+        OsdMetaset.findAllByMetaset(this)
+    }
+    
+    def Set<FolderMetaset> getFolderMetasets(){
+        FolderMetaset.findAllByMetaset(this)
+    }
+    
     boolean equals(o) {
         if (this.is(o)) return true
         if (!(o instanceof Metaset)) return false

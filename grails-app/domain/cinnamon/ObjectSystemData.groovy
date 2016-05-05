@@ -55,8 +55,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         appName column: 'appname'
     }
 
-    static hasMany = [metasets: OsdMetaset]
-
     String name
     String contentPath
     Long contentSize
@@ -83,7 +81,6 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     String cmnVersion = '1'
     LifeCycleState state
     String summary = '<summary />'
-    Set<OsdMetaset> metasets = []
 
     public ObjectSystemData() {
 
@@ -799,13 +796,17 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 [root: this.root])
     }
 
+    def Set<OsdMetaset> getMetasets(){
+        OsdMetaset.findAllByOsd(this)
+    }
+    
     /**
      * @return the compiled metadata of this element (all metasets collected under one meta root element).
      */
     public String getMetadata() {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("meta");
-        for (Metaset m : metasets.collect { it.metaset }) {
+        for (Metaset m : getMetasets().collect { it.metaset }) {
             root.add(Metaset.asElement("metaset", m));
         }
         return doc.asXML();
@@ -854,7 +855,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         try {
             if (metadata == null || metadata.trim().length() < 9) {
                 log.debug("delete obsolete metasets")
-                metasets.collect { it.metaset }.each { Metaset metaset ->
+                getMetasets().collect { it.metaset }.each { Metaset metaset ->
                     metasetService.unlinkMetaset(this, metaset)
                 }
             }
@@ -862,7 +863,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 Document doc = ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
                 List<Node> sets = doc.selectNodes("//metaset");
                 if (sets.size() == 0) {
-                    if (metasets.size() > 0) {
+                    if (getMetasets().size() > 0) {
                         for (Metaset m : fetchMetasets()) {
                             metasetService.unlinkMetaset(this, m);
                         }
