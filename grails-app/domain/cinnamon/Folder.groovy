@@ -78,10 +78,8 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         acl = that.acl;
     }
 
-    // TODO: determine which constructors are really needed.
-    public Folder(String name, String metadata, Acl acl, Folder parent, UserAccount owner, FolderType type) {
+    public Folder(String name, Acl acl, Folder parent, UserAccount owner, FolderType type) {
         this.name = name;
-        storeMetadata(metadata);
         this.acl = acl;
         this.parent = parent;
         this.owner = owner;

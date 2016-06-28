@@ -178,7 +178,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         if (cmd.containsKey('summary')) {
             summary = cmd.get('summary')
         }
-        
+
         /*
            * Set ObjectType:
            * 1. by objtype_id
@@ -299,10 +299,10 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     public ObjectSystemData(ObjectSystemData that, UserAccount user) {
         acl = that.getAcl();
         appName = that.getAppName();
-        created = Calendar.getInstance().getTime();
+        created = Calendar.instance.time
         creator = user;
         owner = user;
-        modified = Calendar.getInstance().getTime();
+        modified = Calendar.instance.time
         modifier = user;
 //        format = that.getFormat();
         language = that.getLanguage();
@@ -317,7 +317,8 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         cmnVersion = "0";
 
         if (that.getState() != null) {
-            state = that.getState().getLifeCycleStateForCopy();
+            state = that.state.lifeCycleStateForCopy
+            state.enterState(this, state)
         }
     }
 
@@ -468,6 +469,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     public Element convert2domElement() {
         return convert2domElement(false)
     }
+
     public Element convert2domElement(Boolean includeSummary) {
         Element data = DocumentHelper.createElement("object");
         data.addElement("id").addText(String.valueOf(getId()));
@@ -769,7 +771,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         if (type != that.type) return false
         if (cmnVersion != that.cmnVersion) return false
         if (summary != that.summary) return false
-        
+
         return true
     }
 
@@ -796,10 +798,10 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 [root: this.root])
     }
 
-    def Set<OsdMetaset> getMetasets(){
+    def Set<OsdMetaset> getMetasets() {
         OsdMetaset.findAllByOsd(this)
     }
-    
+
     /**
      * @return the compiled metadata of this element (all metasets collected under one meta root element).
      */
