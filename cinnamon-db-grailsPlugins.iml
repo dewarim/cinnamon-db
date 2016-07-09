@@ -226,6 +226,7 @@
           <root url="jar://$USER_HOME$/.ideaLibSources/tomcat-embed-core-7.0.42-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ideaLibSources/httpclient-4.5.1-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ideaLibSources/httpcore-4.4.3-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ideaLibSources/spring-context-4.1.6.RELEASE-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
