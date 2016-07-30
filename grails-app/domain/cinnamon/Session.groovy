@@ -19,7 +19,7 @@ class Session implements Serializable {
 
     static mapping = {
         table 'sessions'
-        version false
+        version false // TODO: remove obj_version column in existing databases.
         language column: 'ui_language_id'
     }
     
