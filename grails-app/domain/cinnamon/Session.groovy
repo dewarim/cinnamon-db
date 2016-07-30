@@ -19,7 +19,7 @@ class Session implements Serializable {
 
     static mapping = {
         table 'sessions'
-        version 'obj_version'
+        version false
         language column: 'ui_language_id'
     }
     
