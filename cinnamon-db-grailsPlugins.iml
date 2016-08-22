@@ -227,6 +227,9 @@
           <root url="jar://$USER_HOME$/.ideaLibSources/httpclient-4.5.1-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ideaLibSources/httpcore-4.4.3-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ideaLibSources/spring-context-4.1.6.RELEASE-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ideaLibSources/lucene-core-3.6.2-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ideaLibSources/grails-datastore-gorm-3.1.4.RELEASE-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ideaLibSources/grails-datastore-core-3.1.4.RELEASE-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
