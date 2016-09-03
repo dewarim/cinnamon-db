@@ -20,72 +20,73 @@ import java.util.List;
  * and store the <i>analyzed</i> results of node.getText()</p>
  */
 public class DefaultIndexer implements Indexer {
-	
-	protected Index index;
-	protected Store store;
-	
-	public DefaultIndexer(){
-		index = Index.ANALYZED;
-		store = Store.NO;
-	}
 
-	transient Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void indexObject(ContentContainer data, Document doc, String fieldname,
-			String searchString, Boolean multipleResults) {
+    protected Index index;
+    protected Store store;
+
+    public DefaultIndexer() {
+        index = Index.ANALYZED;
+        store = Store.NO;
+    }
+
+    transient Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void indexObject(ContentContainer data, Document doc, String fieldname,
+                            String searchString, Boolean multipleResults) {
 
 //		log.debug("trying to index the following data:\n"+data+"\n//end of data.");
-		org.dom4j.Document indexObject = data.asDocument();
-		List<Node> hits = new ArrayList<>();
-		
-		if(multipleResults){
-			hits = indexObject.selectNodes(searchString);
-		}
-		else{
-			Node node = indexObject.selectSingleNode(searchString);
-			if(node != null){
-				hits.add(node);
-			}
-		}
+        org.dom4j.Document indexObject = data.asDocument();
+        List<Node> hits = new ArrayList<>();
 
-		for(Node node : hits){
-			String nodeValue = convertNodeToString(node);
-			if(nodeValue != null){
-				log.debug("fieldname: "+fieldname+" value: "+ nodeValue);
-				doc.add(new Field(fieldname, nodeValue, store, index));
-			}
-		}
-	}
+        if (multipleResults) {
+            hits = indexObject.selectNodes(searchString);
+        }
+        else {
+            Node node = indexObject.selectSingleNode(searchString);
+            if (node != null) {
+                hits.add(node);
+            }
+        }
 
-	public String convertNodeToString(Node node){
-		return node.getText();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public StringBuilder descendIntoNodes(Node node){
-		List<Node> children = node.selectNodes("descendant::*");
-		StringBuilder result = new StringBuilder();
-		appendNonEmptyText(node, result);
-		for(Node n : children){
-			appendNonEmptyText(n, result);
-		}
-		return result;
-	}
-	
-	/**
-	 * If a node contains non-whitespace text, add it to the builder, followed by one whitespace.
-	 * @param node the node from which the text content is read
-	 * @param builder the StringBuilder to which the text is appended (that is, this parameter object will be modified)
-	 */
-	public void appendNonEmptyText(Node node, StringBuilder builder){
-		String text = node.getText();
-		if(text != null && text.trim().length() > 0){
-			builder.append(node.getText());
-			builder.append(' ');
-		}
-	}
+        for (Node node : hits) {
+            String nodeValue = convertNodeToString(node);
+            if (nodeValue != null) {
+                log.debug("fieldname: " + fieldname + " value: " + nodeValue);
+                doc.add(new Field(fieldname, nodeValue, store, index));
+            }
+        }
+    }
+
+    public String convertNodeToString(Node node) {
+        return node.getText();
+    }
+
+    @SuppressWarnings("unchecked")
+    public StringBuilder descendIntoNodes(Node node) {
+        List<Node> children = node.selectNodes("descendant::*");
+        StringBuilder result = new StringBuilder();
+        appendNonEmptyText(node, result);
+        for (Node n : children) {
+            appendNonEmptyText(n, result);
+        }
+        return result;
+    }
+
+    /**
+     * If a node contains non-whitespace text, add it to the builder, followed by one whitespace.
+     *
+     * @param node    the node from which the text content is read
+     * @param builder the StringBuilder to which the text is appended (that is, this parameter object will be modified)
+     */
+    public void appendNonEmptyText(Node node, StringBuilder builder) {
+        String text = node.getText();
+        if (text != null && text.trim().length() > 0) {
+            builder.append(node.getText());
+            builder.append(' ');
+        }
+    }
 
     public Store getStore() {
         return store;
