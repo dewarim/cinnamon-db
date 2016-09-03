@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>The BooleanXPathIndexer expects an XPath parameter as searchString and will store
+ * <p>The BooleanXPathIndexer expects an XPath parameter as searchString and will stored
  * the results of this search in the Lucene document. Currently, Boolean fields need to consist
  * of a string "true" or "false".</p>
  */

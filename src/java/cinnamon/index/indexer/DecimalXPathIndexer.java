@@ -1,9 +1,6 @@
 package cinnamon.index.indexer;
 
-import org.apache.lucene.document.Field.Index;
 import org.dom4j.Node;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -34,7 +31,7 @@ public class DecimalXPathIndexer extends DefaultIndexer{
 	}
 
 	public DecimalXPathIndexer(){
-		  index = Index.NOT_ANALYZED;
+		fieldType.setTokenized(false);
 	}
 	
 	

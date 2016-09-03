@@ -1,11 +1,9 @@
 package cinnamon.index.indexer;
 
 import org.dom4j.Node;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * <p>The TimeXpathIndexer expects an XPath parameter as searchString and will store
+ * <p>The TimeXpathIndexer expects an XPath parameter as searchString and will stored
  * the results of this search in the Lucene document.</p>
  * <p>Timestamps must be formatted as YYYY-MM-DDThh:mm:ss.</p> 
  */

@@ -4,8 +4,8 @@ import cinnamon.index.ContentContainer;
 import cinnamon.index.Indexer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.index.IndexOptions;
 import org.dom4j.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,18 +16,20 @@ import java.util.List;
 
 /**
  * <p>The CountIndexer expects an XPath parameter as searchString that returns n nodes.
- * It will store the number of nodes found by this search in the Lucene document.</p>
+ * It will stored the number of nodes found by this search in the Lucene document.</p>
  * <p>Example: name="index.count", searchString="//name" will find all name-elements.
- * and store the number.</p>
+ * and stored the number.</p>
  */
 public class CountIndexer implements Indexer {
 
-	protected Index index;
-	protected Store store;
+	protected FieldType fieldType;
+	boolean stored = false;
 
-	public CountIndexer(){
-		index = Index.ANALYZED;
-		store = Store.NO;
+	public CountIndexer() {
+		fieldType = new FieldType();
+		fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+		fieldType.setStored(false);
+		fieldType.setTokenized(true);
 	}
 
 	transient Logger log = LoggerFactory.getLogger(this.getClass());
@@ -50,7 +52,7 @@ public class CountIndexer implements Indexer {
 			}
 		}
 		log.debug("fieldname: "+fieldname+" count:"+ pad(hits.size()));
-		doc.add(new Field(fieldname, pad(hits.size()), store, index));
+		doc.add(new Field(fieldname, pad(hits.size()), fieldType));
 
 	}
 
@@ -61,11 +63,13 @@ public class CountIndexer implements Indexer {
 	  return formatter.format(n);
 	}
 
-    public Store getStore() {
-        return store;
-    }
+	@Override
+	public boolean isStored() {
+		return this.stored;
+	}
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
+	@Override
+	public void setStored(boolean stored) {
+		this.stored = stored;
+	}
 }

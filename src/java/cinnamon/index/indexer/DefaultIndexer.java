@@ -4,8 +4,8 @@ import cinnamon.index.ContentContainer;
 import cinnamon.index.Indexer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.index.IndexOptions;
 import org.dom4j.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,19 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>The DefaultIndexer expects an XPath parameter as searchString and will store
+ * <p>The DefaultIndexer expects an XPath parameter as searchString and will stored
  * the results of this search in the Lucene document.</p>
  * <p>Example: name="index.name", searchString="//name" will find all name-elements.
- * and store the <i>analyzed</i> results of node.getText()</p>
+ * and stored the <i>analyzed</i> results of node.getText()</p>
  */
 public class DefaultIndexer implements Indexer {
 
-    protected Index index;
-    protected Store store;
+    protected FieldType fieldType;
+    boolean stored = false;
 
     public DefaultIndexer() {
-        index = Index.ANALYZED;
-        store = Store.NO;
+        fieldType = new FieldType();
+        fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+        fieldType.setStored(false);
+        fieldType.setTokenized(true);
     }
 
     transient Logger log = LoggerFactory.getLogger(this.getClass());
@@ -54,7 +56,7 @@ public class DefaultIndexer implements Indexer {
             String nodeValue = convertNodeToString(node);
             if (nodeValue != null) {
                 log.debug("fieldname: " + fieldname + " value: " + nodeValue);
-                doc.add(new Field(fieldname, nodeValue, store, index));
+                doc.add(new Field(fieldname, nodeValue, fieldType));
             }
         }
     }
@@ -88,11 +90,11 @@ public class DefaultIndexer implements Indexer {
         }
     }
 
-    public Store getStore() {
-        return store;
+    public void setStored(boolean stored) {
+        this.stored = stored;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
+    public boolean isStored() {
+        return this.stored;
     }
 }

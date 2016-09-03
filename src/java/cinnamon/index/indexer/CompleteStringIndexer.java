@@ -1,22 +1,19 @@
 package cinnamon.index.indexer;
 
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
 import org.dom4j.Node;
 
 /**
- * <p>The CompleteStringIndexer expects an XPath parameter as searchString and will store
+ * <p>The CompleteStringIndexer expects an XPath parameter as searchString and will stored
  * the results of this search in the Lucene document.</p>
  * <p>Example: name="index.name", searchString="//name" will find all name-elements.
- * and store the <i>raw</i> results of node.getText()</p>
+ * and stored the <i>raw</i> results of node.getText()</p>
  * <p>The difference between DefaultIndexer and CompleteStringIndexer is: the DefaultIndexer tokenizes
- * the indexed field while the CompleteStringIndexer stores the field as-is.</p>
+ * the indexed field while the CompleteStringIndexer indexes the field as-is.</p>
  */
 public class CompleteStringIndexer extends DefaultIndexer {
 	
 	public CompleteStringIndexer(){
-		index = Index.NOT_ANALYZED;
-		store = Store.NO;
+		fieldType.setTokenized(false);
 	}
 	
 	public String convertNodeToString(Node node){
