@@ -9,5 +9,4 @@ Project Homepage: http://cinnamon-cms.com
 Sourceforge Project: http://sourceforge.net/projects/cinnamon  
 
 # Version
-
 This branch is 3.6-stable
