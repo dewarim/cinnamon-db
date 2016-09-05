@@ -7,3 +7,7 @@ License is LGPL 2.1 or later - if you require other license conditions, please c
 Contact: ingo_wiarda@dewarim.de  
 Project Homepage: http://cinnamon-cms.com
 Sourceforge Project: http://sourceforge.net/projects/cinnamon  
+
+# Version
+
+This branch is 3.6-stable
