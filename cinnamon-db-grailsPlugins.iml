@@ -62,10 +62,6 @@
           <root url="jar://$MAVEN_REPOSITORY$/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/mindrot/jbcrypt/0.3m/jbcrypt-0.3m.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/postgresql/postgresql/9.1-901.jdbc4/postgresql-9.1-901.jdbc4.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/jakarta-regexp/jakarta-regexp/1.4/jakarta-regexp-1.4.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-queries/3.6.2/lucene-queries-3.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-xml-query-parser/3.6.2/lucene-xml-query-parser-3.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-core/3.6.2/lucene-core-3.6.2.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/cglib/cglib-nodep/2.2.2/cglib-nodep-2.2.2.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/spockframework/spock-grails-support/0.7-groovy-2.0/spock-grails-support-0.7-groovy-2.0.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/wagon/wagon-provider-api/1.0-beta-6/wagon-provider-api-1.0-beta-6.jar!/" />
@@ -219,6 +215,8 @@
           <root url="jar://$USER_HOME$/grails-2.5.2/lib/org.apache.ivy/ivy/jars/ivy-2.3.0.jar!/" />
           <root url="jar://$USER_HOME$/grails-2.5.2/lib/net.java.dev.jna/jna/jars/jna-4.0.0.jar!/" />
           <root url="jar://$USER_HOME$/grails-2.5.2/lib/org.apache.ant/ant-trax/jars/ant-trax-1.7.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-queries/6.2.0/lucene-queries-6.2.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-core/6.2.0/lucene-core-6.2.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
@@ -230,6 +228,7 @@
           <root url="jar://$USER_HOME$/.ideaLibSources/lucene-core-3.6.2-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ideaLibSources/grails-datastore-gorm-3.1.4.RELEASE-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ideaLibSources/grails-datastore-core-3.1.4.RELEASE-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ideaLibSources/lucene-core-6.2.0-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

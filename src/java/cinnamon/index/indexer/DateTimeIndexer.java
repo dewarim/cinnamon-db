@@ -1,15 +1,13 @@
 package cinnamon.index.indexer;
 
 import org.dom4j.Node;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * <p>The DateTimeIndexer expects an XPath parameter as searchString and will store
+ * <p>The DateTimeIndexer expects an XPath parameter as searchString and will stored
  * the results of this search in the Lucene document.</p>
  * <p>Dates must be formatted as YYYY-MM-DDThh:mm:ss.</p> 
  */

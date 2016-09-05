@@ -63,7 +63,7 @@ class IndexType implements Serializable  {
             log.debug("indexerClass: $indexerClass")
             indexerClass.getConstructor()
             indexer = indexerClass.newInstance();
-            indexer.store = storeField ? Field.Store.YES : Field.Store.NO
+            indexer.stored = storeField
         }
         catch (InstantiationException e) {
             throw new CinnamonException("error.instantiating.class", e, indexerClass.getName());

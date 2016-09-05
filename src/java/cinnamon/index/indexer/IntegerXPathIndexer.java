@@ -1,8 +1,6 @@
 package cinnamon.index.indexer;
 
 import org.dom4j.Node;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 

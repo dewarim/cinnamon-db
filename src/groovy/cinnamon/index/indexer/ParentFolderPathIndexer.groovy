@@ -4,8 +4,6 @@ import cinnamon.Folder
 import cinnamon.index.ContentContainer
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
-import org.apache.lucene.document.Field.Index
-import org.apache.lucene.document.Field.Store
 import org.dom4j.Node
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,8 +16,8 @@ public class ParentFolderPathIndexer extends DefaultIndexer{
 
 	transient Logger log = LoggerFactory.getLogger(this.getClass());
 	public ParentFolderPathIndexer() {
-		index = Index.NOT_ANALYZED;
-		store = Store.NO;
+		fieldType.setTokenized(false)
+		fieldType.setStored(false)
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -48,7 +46,7 @@ public class ParentFolderPathIndexer extends DefaultIndexer{
 				Folder folder = Folder.get(nodeValue);
                 String path = folder.fetchPath();
 				log.debug("fieldname: "+fieldname+" value: "+ path);
-				doc.add(new Field(fieldname, path.toLowerCase(), store, index));
+				doc.add(new Field(fieldname, path.toLowerCase(), fieldType));
 			}
 			else{
 				log.debug("nodeValue == null");
