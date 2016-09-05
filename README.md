@@ -10,4 +10,6 @@ Sourceforge Project: http://sourceforge.net/projects/cinnamon
 
 # Version
 
-This branch is 3.6-stable
+Stable branch: 3.6-stable
+
+Current branch: master.
