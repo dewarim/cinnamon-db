@@ -20,7 +20,14 @@ class UserAccount  implements Serializable {
         name unique: true, size: 1..Constants.NAME_LENGTH, validator: {val, obj ->
             val.trim().length() != 0
         }
-        pwd size: 4..255
+        pwd validator: {val, obj, errors ->
+            if(val == null){
+                errors.rejectValue('pwd', 'userAccount.pwd.nullable.error')
+            }
+            else if(val.length() < Constants.MINIMUM_PASSWORD_LENGTH){
+                errors.rejectValue('pwd', 'error.password.too.short', [Constants.MINIMUM_PASSWORD_LENGTH] as Object[], "Password too short")
+            }
+        }
         description size: 0..Constants.DESCRIPTION_SIZE, blank: true
         email nullable: true
         language nullable: true
