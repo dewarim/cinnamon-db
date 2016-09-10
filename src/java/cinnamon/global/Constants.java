@@ -22,49 +22,49 @@ public class Constants {
 
     public static final String SERVER_VERSION = "3.7.0";
     public static final Integer MINIMUM_PASSWORD_LENGTH = 8;
-    
-	public static final String PS_LABEL_CREATED="_created";
-	public static final String ACL_DEFAULT="_default_acl";
 
-	public static final String OBJTYPE_DEFAULT = "_default_objtype";
+    public static final String PS_LABEL_CREATED = "_created";
+    public static final String ACL_DEFAULT = "_default_acl";
+
+    public static final String OBJTYPE_DEFAULT = "_default_objtype";
     public static final String OBJTYPE_TRANSLATION_TASK = "_translation_task";
-	public static final String OBJTYPE_WORKFLOW = "_workflow";
-	/**
-	 * The name of the object type for workflow template objects.
-	 */
-	public static final String OBJTYPE_WORKFLOW_TEMPLATE = "_workflow_template";
-	public static final String OBJTYPE_TASK_DEFINITION= "_task_definition";
-	public static final String OBJTYPE_TASK = "_task";
-	public static final String OBJTYPE_SEARCH = "_search";
-	public static final String OBJTYPE_SUPPORTING_DOCUMENT = "_supporting_document";
-	public static final String OBJTYPE_RENDITION = "_rendition";
-	public static final String OBJTYPE_CART = "_cart";
-	public static final String OBJTYPE_CONFIG = "_config";
-	public static final String OBJTYPE_IMAGE = "image";
-	public static final String OBJTYPE_DOCUMENT = "document";
+    public static final String OBJTYPE_WORKFLOW = "_workflow";
+    /**
+     * The name of the object type for workflow template objects.
+     */
+    public static final String OBJTYPE_WORKFLOW_TEMPLATE = "_workflow_template";
+    public static final String OBJTYPE_TASK_DEFINITION = "_task_definition";
+    public static final String OBJTYPE_TASK = "_task";
+    public static final String OBJTYPE_SEARCH = "_search";
+    public static final String OBJTYPE_SUPPORTING_DOCUMENT = "_supporting_document";
+    public static final String OBJTYPE_RENDITION = "_rendition";
+    public static final String OBJTYPE_CART = "_cart";
+    public static final String OBJTYPE_CONFIG = "_config";
+    public static final String OBJTYPE_IMAGE = "image";
+    public static final String OBJTYPE_DOCUMENT = "document";
     public static final String OBJTYPE_NOTIFICATION = "_notification";
     public static final String OBJTYPE_REFERENCE = "_object_reference";
-    
+
     public static final String FOLDER_TYPE_REFERENCE = "_folder_reference";
-	public static final String FOLDER_TYPE_DEFAULT = "_default_folder_type";
-	public static final String INDEX_GROUP_DEFAULT = "_default_index_group";
-	
-	public static final String GROUP_SUPERUSERS="_superusers";
+    public static final String FOLDER_TYPE_DEFAULT = "_default_folder_type";
+    public static final String INDEX_GROUP_DEFAULT = "_default_index_group";
+
+    public static final String GROUP_SUPERUSERS = "_superusers";
     public static final String GROUP_USERS = "_users";
-	public static final String ALIAS_EVERYONE="_everyone";
-	public static final String ALIAS_OWNER="_owner";
-	
-	public static final String ROOT_FOLDER_NAME = "root";
-	public static final String SYSTEM_FOLDER_NAME = "system";
-	public static final String WORKFLOW_FOLDER_NAME = "workflows";
-	public static final String WORKFLOW_TEMPLATE_FOLDER_NAME = "templates";
-	public static final String WORKFLOW_TASK_DEFINITION_FOLDER_NAME = "task_definitions";
-	public static final String WORKFLOW_TASK_FOLDER_NAME = "tasks";
+    public static final String ALIAS_EVERYONE = "_everyone";
+    public static final String ALIAS_OWNER = "_owner";
+
+    public static final String ROOT_FOLDER_NAME = "root";
+    public static final String SYSTEM_FOLDER_NAME = "system";
+    public static final String WORKFLOW_FOLDER_NAME = "workflows";
+    public static final String WORKFLOW_TEMPLATE_FOLDER_NAME = "templates";
+    public static final String WORKFLOW_TASK_DEFINITION_FOLDER_NAME = "task_definitions";
+    public static final String WORKFLOW_TASK_FOLDER_NAME = "tasks";
 
     public static final String RELATION_RESOLVER_FIXED = "FixedRelationResolver";
-	public static final String RELATION_TYPE_WORKFLOW_TO_START_TASK = "_workflow_start_task";
-	public static final String RELATION_TYPE_WORKFLOW_TO_TASK = "_workflow_task";
-	public static final String RELATION_TYPE_WORKFLOW_TO_DEADLINE_TASK = "_workflow_deadline_task";
+    public static final String RELATION_TYPE_WORKFLOW_TO_START_TASK = "_workflow_start_task";
+    public static final String RELATION_TYPE_WORKFLOW_TO_TASK = "_workflow_task";
+    public static final String RELATION_TYPE_WORKFLOW_TO_DEADLINE_TASK = "_workflow_deadline_task";
     public static final String RELATION_TYPE_CHILD = "child_content";
     public static final String RELATION_TYPE_RENDITION = "rendition";
     public static final String RELATION_TYPE_TRANSLATION_SOURCE = "translation_source";
@@ -75,18 +75,18 @@ public class Constants {
 
     public static final String USER_SUPERADMIN_NAME = "admin";
 
-	public static final String WORKFLOW_FOLDER_PATH = "/root/system/workflows";
-	public static final String WORKFLOW_TEMPLATE_PATH = WORKFLOW_FOLDER_PATH +"/"+ WORKFLOW_TEMPLATE_FOLDER_NAME;
-	public static final String WORKFLOW_TASK_PATH = WORKFLOW_FOLDER_PATH +"/"+ WORKFLOW_TASK_FOLDER_NAME;
-	public static final String WORKFLOW_TASK_DEFINITION_PATH = WORKFLOW_FOLDER_PATH + "/" + WORKFLOW_TASK_DEFINITION_FOLDER_NAME;
+    public static final String WORKFLOW_FOLDER_PATH = "/root/system/workflows";
+    public static final String WORKFLOW_TEMPLATE_PATH = WORKFLOW_FOLDER_PATH + "/" + WORKFLOW_TEMPLATE_FOLDER_NAME;
+    public static final String WORKFLOW_TASK_PATH = WORKFLOW_FOLDER_PATH + "/" + WORKFLOW_TASK_FOLDER_NAME;
+    public static final String WORKFLOW_TASK_DEFINITION_PATH = WORKFLOW_FOLDER_PATH + "/" + WORKFLOW_TASK_DEFINITION_FOLDER_NAME;
 
-	public static final String PROCSTATE_TASK_TODO = "todo";
-	public static final String PROCSTATE_TASK_DONE = "done";
-	public static final String PROCSTATE_TRANSITION_READY = "transition_ready";
-	public static final String PROCSTATE_TRANSITION_FAILED = "transition_failed";
-	public static final String PROCSTATE_WORKFLOW_STARTED = "running";
-	public static final String PROCSTATE_WORKFLOW_FINISHED = "finished";
-	public static final String PROCSTATE_REVIEW_OK = "review_ok";
+    public static final String PROCSTATE_TASK_TODO = "todo";
+    public static final String PROCSTATE_TASK_DONE = "done";
+    public static final String PROCSTATE_TRANSITION_READY = "transition_ready";
+    public static final String PROCSTATE_TRANSITION_FAILED = "transition_failed";
+    public static final String PROCSTATE_WORKFLOW_STARTED = "running";
+    public static final String PROCSTATE_WORKFLOW_FINISHED = "finished";
+    public static final String PROCSTATE_REVIEW_OK = "review_ok";
 
     public static final String METASET_TASK_DEFINITION = "task_definition";
     public static final String METASET_WORKFLOW_TEMPLATE = "workflow_template";
@@ -100,7 +100,7 @@ public class Constants {
     public static final String METASET_SEARCH = "search";
     public static final String METASET_CART = "cart";
     public static final String METASET_NOTIFICATION = "notification";
-    
+
     // Constants for the RenderServer extension
     public static final String RENDER_SERVER_LIFECYCLE = "_RenderServerLC";
     public static final String RENDERSERVER_RENDER_TASK_NEW = "newRenderTask";
@@ -108,12 +108,12 @@ public class Constants {
     public static final String RENDERSERVER_RENDER_TASK_FINISHED = "finishedRenderTask";
     public static final String RENDERSERVER_RENDER_TASK_FAILED = "failedRenderTask";
     public static final String OBJECT_TYPE_RENDER_TASK = "_render_task";
-    
+
     /**
-     * Metaset type for thumbnail images embedded in custom xml data. 
+     * Metaset type for thumbnail images embedded in custom xml data.
      */
     public static final String METASET_THUMBNAIL = "thumbnail";
-    
+
     /**
      * Maximum length of cinnamon.i18n.Language.isoCode
      */
@@ -126,17 +126,17 @@ public class Constants {
     public static final int METADATA_SIZE = LARGE_TEXT_FIELD;
     public static final int NAME_LENGTH = 128;
 
-	public static final int DESCRIPTION_SIZE = 255;
+    public static final int DESCRIPTION_SIZE = 255;
 
-	/**
-	 * Default length of database fields which contain XPATH statements.
-	 */
-	public static final int XPATH_LENGTH = LARGE_TEXT_FIELD;
-	
-	/**
-	 * Default length of database fields which contain XML parameters.
-	 */
-	public static final int XML_PARAMS = LARGE_TEXT_FIELD;
+    /**
+     * Default length of database fields which contain XPATH statements.
+     */
+    public static final int XPATH_LENGTH = LARGE_TEXT_FIELD;
+
+    /**
+     * Default length of database fields which contain XML parameters.
+     */
+    public static final int XML_PARAMS = LARGE_TEXT_FIELD;
 
     /*
      * We cannot make the INDEX_* and FIELD_* into an enum, because the user
@@ -208,5 +208,5 @@ public class Constants {
     public static final String FIELD_ACTIVE_WORKFLOW = "active_workflow";
     public static final String INDEX_WORKFLOW_DEADLINE = "index.workflow_deadline";
     public static final String FIELD_WORKFLOW_DEADLINE = "workflow_deadline";
-    
+
 }
