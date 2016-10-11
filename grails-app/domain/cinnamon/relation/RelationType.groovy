@@ -71,7 +71,7 @@ class RelationType implements IXmlDumper {
     }
 
     public String toString() {
-        return "RelationResolver::name:" + getName();
+        return "RelationType::name:" + getName();
     }
 
     /**
