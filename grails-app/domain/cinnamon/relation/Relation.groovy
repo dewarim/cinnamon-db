@@ -6,14 +6,13 @@ import cinnamon.utils.ParamParser
 import org.dom4j.Element
 import org.dom4j.Node
 
-class Relation implements Serializable  {
+class Relation {
 
     static constraints = {
         leftOSD unique: ['rightOSD', 'type']
     }
 
     static mapping = {
-        cache true
         table('relations')
         version 'obj_version'
         leftOSD column: 'left_id'
@@ -85,21 +84,6 @@ class Relation implements Serializable  {
         result = 31 * result + (metadata != null ? metadata.hashCode() : 0)
         return result
     }
-//    // get/set leftOSD/rightOSD added as Grails/Hibernate seems to need this.
-//    public ObjectSystemData getLeftOSD() {
-//        return leftOSD;
-//    }
-//
-//    public void setLeftOSD(ObjectSystemData leftOSD) {
-//        this.leftOSD = leftOSD;
-//    }
-//
-//    public ObjectSystemData getRightOSD() {
-//        return rightOSD;
-//    }
-//
-//    public void setRightOSD(ObjectSystemData rightOSD) {
-//        this.rightOSD = rightOSD;
-//    }
+
 
 }
