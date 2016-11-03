@@ -7,24 +7,22 @@ import org.dom4j.DocumentHelper
 import cinnamon.utils.ParamParser
 import cinnamon.utils.security.HashMaker
 
-class UserAccount  implements Serializable {
-    
-    static def infoService
-    
-    static hasMany = [groupUsers:CmnGroupUser]
+class UserAccount implements Serializable {
+
+    static hasMany = [groupUsers: CmnGroupUser]
     static mapping = {
         table 'users'
         version 'obj_version'
     }
     static constraints = {
-        name unique: true, size: 1..Constants.NAME_LENGTH, validator: {val, obj ->
+        name unique: true, size: 1..Constants.NAME_LENGTH, validator: { val, obj ->
             val.trim().length() != 0
         }
-        pwd validator: {val, obj, errors ->
-            if(val == null){
+        pwd validator: { val, obj, errors ->
+            if (val == null) {
                 errors.rejectValue('pwd', 'userAccount.pwd.nullable.error')
             }
-            else if(val.length() < Constants.MINIMUM_PASSWORD_LENGTH){
+            else if (val.length() < Constants.MINIMUM_PASSWORD_LENGTH) {
                 errors.rejectValue('pwd', 'error.password.too.short', [Constants.MINIMUM_PASSWORD_LENGTH] as Object[], "Password too short")
             }
         }
@@ -34,7 +32,7 @@ class UserAccount  implements Serializable {
     }
 
     private transient Boolean userIsSuperuser = null;
-    
+
     String name
     String pwd
     String fullname
@@ -43,37 +41,37 @@ class UserAccount  implements Serializable {
     Boolean sudoer = false
     Boolean sudoable = false
     Boolean changeTracking = true
-    
+
     Boolean accountExpired = false
     Boolean accountLocked = false
     Boolean passwordExpired = false
-    
+
     Date tokenAge = new Date(0L)
     Integer tokensToday = 0
     String token = UUID.randomUUID().toString()
-    
+
     String email
     UiLanguage language
 
-    public UserAccount(){
+    public UserAccount() {
     }
 
-    public UserAccount(Map<String, String> cmd){
+    public UserAccount(Map<String, String> cmd) {
         setName(cmd.get("name"));
         setPwd(cmd.get("pwd"));
         fullname = cmd.get("fullname");
         description = cmd.get("description");
         email = cmd.get("email");
         language = UiLanguage.getDefaultLanguage();
-        if(cmd.containsKey("sudoable")){
+        if (cmd.containsKey("sudoable")) {
             sudoable = cmd.get("sudoable").equals("true");
         }
-        if(cmd.containsKey("sudoer")){
+        if (cmd.containsKey("sudoer")) {
             sudoer = cmd.get("sudoer").equals("true");
         }
     }
 
-    public UserAccount(String name, String pwd, String fullname, String description){
+    public UserAccount(String name, String pwd, String fullname, String description) {
         setName(name);
         setPwd(pwd);
         this.fullname = fullname;
@@ -85,48 +83,34 @@ class UserAccount  implements Serializable {
     }
 
     def beforeUpdate() {
-        if (isDirty('pwd')) {            
+        if (isDirty('pwd')) {
             encodePassword()
         }
     }
 
-    protected void encodePassword() {        
-        if( infoService.config.encryptPasswords){
-            pwd = HashMaker.createDigest(pwd)
-        }       
+    protected void encodePassword() {
+        pwd = HashMaker.createDigest(pwd)
     }
-    
-    public Boolean verifySuperuserStatus(){
-        if(userIsSuperuser != null){
+
+    public Boolean verifySuperuserStatus() {
+        if (userIsSuperuser != null) {
             return userIsSuperuser;
         }
         CmnGroup adminGroup = CmnGroup.findByName(Constants.GROUP_SUPERUSERS);
-        if(adminGroup == null){
+        if (adminGroup == null) {
             log.debug("Superuser-CmnGroup was not found.");
             return false;
         }
         Set<CmnGroupUser> adminGroupUsers = new HashSet<CmnGroupUser>();
         adminGroupUsers.addAll(adminGroup.getGroupUsers());
-        // debug code:
-//		log.debug("groupUsers for admin-group: "+adminGroupUsers);
-//		log.debug("groupUsers for user: "+getGroupUsers());
-//		for(CmnGroupUser gu : adminGroupUsers){
-//            if(getGroupUsers().contains(gu)){
-//                log.debug(getGroupUsers() + " contains "+gu);
-//            }
-//            else{
-//                log.debug(getGroupUsers() + " does not contain "+gu);
-//            }
-//        }
         userIsSuperuser = adminGroupUsers.removeAll(getGroupUsers());
-        log.debug("superuserStatus: "+getName()+" == "+userIsSuperuser);
-        log.debug("adminGroupUsers: "+adminGroupUsers);
+        log.debug("superuserStatus: " + getName() + " == " + userIsSuperuser);
+        log.debug("adminGroupUsers: " + adminGroupUsers);
         return userIsSuperuser;
     }
 
 
-
-    Set<CmnGroup> findAllGroups(){
+    Set<CmnGroup> findAllGroups() {
         Set<CmnGroup> groups = new HashSet<CmnGroup>();
         for (CmnGroupUser gu : getGroupUsers()) {
             groups.add(gu.cmnGroup);
@@ -137,9 +121,8 @@ class UserAccount  implements Serializable {
     }
 
 
-
-    public String toString(){
-        return "UserAccount #"+id+" "+name;
+    public String toString() {
+        return "UserAccount #" + id + " " + name;
     }
 
     boolean equals(o) {
@@ -173,7 +156,7 @@ class UserAccount  implements Serializable {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (pwd != null ? pwd.hashCode() : 0)      
+        result = 31 * result + (pwd != null ? pwd.hashCode() : 0)
         return result
     }
 
@@ -184,7 +167,7 @@ class UserAccount  implements Serializable {
      * @param user the user object which will be serialized
      * @return the new dom4j element.
      */
-     static public Element asElement(String elementName, UserAccount user) {
+    static public Element asElement(String elementName, UserAccount user) {
         if (user != null) {
             Element e = DocumentHelper.createElement(elementName);
             e.addElement("id").addText(String.valueOf(user.getId()));
