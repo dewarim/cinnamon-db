@@ -37,7 +37,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        compile(':spring-security-core:2.0-RC5') // needed for CinnamonPasswordEncoder
+        compile(':spring-security-core:2.0.0') // needed for CinnamonPasswordEncoder
         compile ":rest-client-builder:2.1.1"
         build(":tomcat:7.0.42"){
             export=false
