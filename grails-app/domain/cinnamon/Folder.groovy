@@ -90,7 +90,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
         log.debug("trying to find parent folder with id " + parentId);
 
-        if (parentId == 0) {
+        if (parentId == 0L) {
             this.parent = folderService.findRootFolder();
             log.debug("got root folder:  " + parent);
         }
@@ -110,7 +110,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         }
         Long folderTypeId = ParamParser.parseLong(cmd.get("typeid"), "error.param.type_id");
 
-        if (folderTypeId == 0) {
+        if (folderTypeId == 0L) {
             this.type = FolderType.findByName(Constants.FOLDER_TYPE_DEFAULT);
         }
         else {
