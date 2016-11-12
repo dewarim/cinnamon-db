@@ -19,11 +19,6 @@ import org.dom4j.Node
 
 import cinnamon.interfaces.IMetasetJoin
 import org.hibernate.Hibernate
-import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
-import org.apache.commons.compress.archivers.ArchiveStreamFactory
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
-import org.apache.commons.compress.utils.IOUtils
-import cinnamon.utils.ZippedFolder
 
 class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetasetOwner, Accessible {
 
@@ -622,104 +617,6 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
     public Boolean hasXmlContent() {
         return false;
-    }
-
-    /**
-     * Create a zipped folder containing those OSDs and subfolders (recursively) which the
-     * validator allows. <br/>
-     * Zip file encoding compatibility is difficult to achieve.<br/>
-     * Using Cp437 as encoding will generate zip archives which can be unpacked with MS Windows XP
-     * system utilities and also with the Linux unzip tool v6.0 (although the unzip tool will list them
-     * as corrupted filenames with "?" in place for the special characters, it should unpack them
-     * correctly). In tests, 7zip was unable to unpack those archives without messing up the filenames
-     * - it requires UTF8 as encoding, as far as I can tell.<br/>
-     * see: http://commons.apache.org/compress/zip.html#encoding<br/>
-     * to manually test this, use: https://github.com/dewarim/GrailsBasedTesting
-     * @param latestHead if set to true, only add objects with latestHead=true, if set to false include only
-     *                   objects with latestHead=false, if set to null: include everything regardless of
-     *                   latestHead status.
-     * @param latestBranch if set to true, only add objects with latestBranch=true, if set to false include only
-     *                   objects with latestBranch=false, if set to null: include everything regardless of
-     *                     latestBranch status.
-     * @param validator a Validator object which should be configured for the current user to check if access
-     *                  to objects and folders inside the given folder is allowed. The content of this folder
-     *                  will be filtered before it is added to the archive.
-     * @param repositoryName the repository (database name) where the data is stored, used to 
-     *                  compute the file system path.
-     * @return the zip archive of the given folder
-     */
-    public ZippedFolder createZippedFolder(Boolean latestHead, Boolean latestBranch,
-                                           Validator validator, String repositoryName) {
-        final File sysTempDir = new File(System.getProperty("java.io.tmpdir"));
-        File tempFolder = new File(sysTempDir, UUID.randomUUID().toString());
-        if (!tempFolder.mkdirs()) {
-            throw new CinnamonException(("error.create.tempFolder.fail"));
-        }
-
-        List<Folder> folders = new ArrayList<Folder>();
-        folders.add(this);
-        folders.addAll(fetchSubfolders(true));
-        folders = validator.filterUnbrowsableFolders(folders);
-        log.debug("# of folders found: " + folders.size());
-        // create zip archive:
-        ZippedFolder zippedFolder;
-        try {
-            File zipFile = File.createTempFile("cinnamonArchive", "zip");
-            zippedFolder = new ZippedFolder(zipFile, this);
-
-            final OutputStream out = new FileOutputStream(zipFile);
-            ZipArchiveOutputStream zos = (ZipArchiveOutputStream) new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP, out);
-            String encoding = grailsApplication.config.zipFileEncoding ?: "Cp437"
-
-            log.debug("current file.encoding: " + System.getProperty("file.encoding"));
-            log.debug("current Encoding for ZipArchive: " + zos.getEncoding() + "; will now set: " + encoding);
-            zos.setEncoding(encoding);
-            zos.setFallbackToUTF8(true);
-            zos.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
-
-            for (Folder folder : folders) {
-
-                String path = folder.fetchPath().replace(fetchPath(), name);
-                // do not include the parent folders up to root.
-                log.debug("zipFolderPath: " + path);
-                File currentFolder = new File(tempFolder, path);
-                if (!currentFolder.mkdirs()) {
-                    // log.warn("failed  to create folder for: "+currentFolder.getAbsolutePath());
-                }
-                List<ObjectSystemData> osds = validator.filterUnbrowsableObjects(
-                        folder.fetchFolderContent(false, latestHead, latestBranch));
-                log.debug("objects found (filtered): ${osds.size()}")
-                if (osds.size() > 0) {
-                    zippedFolder.addToFolders(folder); // do not add empty folders as they are excluded automatically.
-                }
-                for (ObjectSystemData osd : osds) {
-                    if (osd.contentSize == null) {
-                        log.debug("osd ${osd.id} ${osd.name} is empty - skip.")
-                        continue;
-                    }
-                    zippedFolder.addToObjects(osd);
-                    File outFile = osd.createFilenameFromName(currentFolder);
-                    // the name in the archive should be the path without the temp folder part prepended.
-                    String zipEntryPath = outFile.getAbsolutePath().replace(tempFolder.getAbsolutePath(), "");
-                    if (zipEntryPath.startsWith(File.separator)) {
-                        zipEntryPath = zipEntryPath.substring(1);
-                    }
-                    log.debug("zipEntryPath: " + zipEntryPath);
-
-                    zipEntryPath = zipEntryPath.replaceAll("\\\\", "/");
-                    zos.putArchiveEntry(new ZipArchiveEntry(zipEntryPath));
-                    String contentFileName = osd.getFullContentPath()
-                    log.debug("copy data from ${contentFileName} into archive.")
-                    IOUtils.copy(new FileInputStream(contentFileName), zos);
-                    zos.closeArchiveEntry();
-                }
-            }
-            zos.close();
-        } catch (Exception e) {
-            log.debug("Failed to create zipFolder:", e);
-            throw new CinnamonException("error.zipFolder.fail", e);
-        }
-        return zippedFolder;
     }
 
     public void updateIndex(){
