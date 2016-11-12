@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory
 import cinnamon.interfaces.IMetasetOwner
 import cinnamon.interfaces.IMetasetJoin
 
-import cinnamon.global.PermissionName
-import cinnamon.exceptions.CinnamonException
 
 /**
  * Collected methods for metaset treatment
@@ -15,7 +13,7 @@ import cinnamon.exceptions.CinnamonException
 @Transactional
 public class MetasetService {
 
-    Logger log = LoggerFactory.getLogger(this.getClass());
+    static Logger log = LoggerFactory.getLogger(MetasetService.class);
 
     /**
      * If more than one item references this metaset, create a new branch for the current owner.
@@ -42,43 +40,6 @@ public class MetasetService {
         } else {
             metaset.setContent(content);
         }
-    }
-
-    /**
-     * Try to delete all references to this metaset, then this metaset itself. Throws a CinnamonException if there
-     * are any ACL problems.
-     *
-     * @param type         the type of Metaset to delete
-     * @param currentOwner an item that references this metaset.
-     * @param deletePolicy the policy for deletions, determines for example if an exception is thrown if not all
-     *                     references can be deleted.
-     * @param validator    a validator object to check the ACLs if deletion is allowed.
-     *                     Delete metaset requires WRITE_METADATA permission.
-     */
-    public Collection<IMetasetOwner> deleteMetaset(IMetasetOwner currentOwner, MetasetType type, Validator validator, DeletePolicy deletePolicy) {
-        List<IMetasetOwner> affectedOwners = new ArrayList<IMetasetOwner>();
-        for (IMetasetOwner owner : fetchOwners(currentOwner, type)) {
-            Acl acl = owner.getAcl();
-            try {
-                if (currentOwner instanceof ObjectSystemData) {
-                    validator.validatePermission(acl, PermissionName.WRITE_OBJECT_CUSTOM_METADATA);
-                } else {
-                    validator.validatePermission(acl, PermissionName.EDIT_FOLDER);
-                }
-            } catch (Exception e) {
-                log.debug("Not allowed to remove metaset reference:" + e.getLocalizedMessage());
-                if (deletePolicy.equals(DeletePolicy.COMPLETE)) {
-                    throw new CinnamonException(e);
-                } else {
-                    // policy: ALLOWED == continue with next item.
-                    continue;
-                }
-            }
-            IMetasetJoin metasetJoin = owner.fetchMetasetJoin(type);
-            metasetJoin.doDelete();
-            affectedOwners.add(owner);
-        }
-        return affectedOwners;
     }
 
     public Collection<IMetasetOwner> fetchOwners(IMetasetOwner owner, MetasetType type) {
