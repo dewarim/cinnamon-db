@@ -14,7 +14,6 @@ class AclEntry implements Serializable  {
         acl unique: ['group']
     }
 
-    static hasMany = [aePermissions: AclEntryPermission]
     CmnGroup group
     Acl acl
 
@@ -25,6 +24,10 @@ class AclEntry implements Serializable  {
     public AclEntry(Acl acl, CmnGroup group){
         this.acl = acl;
         this.group = group;
+    }
+    
+    List<AclEntryPermission> getAePermissions(){
+        AclEntryPermission.findAllByAclEntry(this)
     }
     
     /**

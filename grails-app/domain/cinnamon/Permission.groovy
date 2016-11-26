@@ -35,11 +35,13 @@ class Permission  implements Serializable {
         table "permissions"
         version 'obj_version'
     }
-
-    static hasMany = [aePermissions:AclEntryPermission]
-
+    
     String name
 
+    List<AclEntryPermission> getAePermissions(){
+        AclEntryPermission.findAllByPermission(this)
+    }
+    
     void toXmlElement(Element root){
         Element permission = root.addElement("permission");
         permission.addElement("id").addText(String.valueOf(getId()) );

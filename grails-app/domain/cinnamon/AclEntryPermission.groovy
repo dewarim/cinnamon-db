@@ -20,9 +20,6 @@ class AclEntryPermission implements Serializable  {
     public AclEntryPermission(AclEntry aclEntry, Permission permission) {
         this.aclEntry = aclEntry;
         this.permission = permission;
-
-        aclEntry.getAePermissions().add(this);
-        permission.getAePermissions().add(this);
     }
 
     boolean equals(o) {
