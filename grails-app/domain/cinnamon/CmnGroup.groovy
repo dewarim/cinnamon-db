@@ -13,8 +13,6 @@ class CmnGroup implements Serializable  {
         parent column: 'parent_id'
     }
 
-    static hasMany = [groupUsers:CmnGroupUser, aclEntries:AclEntry]
-
     static constraints = {
         name unique: true , size: 1..Constants.NAME_LENGTH
         parent nullable: true
@@ -38,6 +36,14 @@ class CmnGroup implements Serializable  {
         this.parent = parent;
     }
 
+    List<CmnGroupUser> getGroupUsers(){
+        CmnGroupUser.findAllByCmnGroup(this)
+    }
+    
+    List<AclEntry> getAclEntries(){
+        AclEntry.findAllByGroup(this)
+    }
+    
     public Set<CmnGroup> findAncestors(){
         HashSet<CmnGroup> ancestors = new HashSet<CmnGroup>();
         while(getParent() != null && ! ancestors.contains(getParent())){

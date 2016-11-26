@@ -25,11 +25,8 @@ class AclEntry implements Serializable  {
     public AclEntry(Acl acl, CmnGroup group){
         this.acl = acl;
         this.group = group;
-        // Guarantee referential integrity
-        acl.getAclEntries().add(this);
-        group.getAclEntries().add(this);
     }
-
+    
     /**
      * Check all Permissions of this AclEntry if one of them matches the required permission.
      * @param permission the permission whose applicability to this AclEntry you want to check

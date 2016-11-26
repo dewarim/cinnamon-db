@@ -16,7 +16,7 @@ class Acl  implements Serializable {
         name unique: true, blank: false, size: 1..Constants.NAME_LENGTH
     }
 
-    static hasMany = [aclEntries: AclEntry, customTables: CustomTable]
+    static hasMany = [customTables: CustomTable]
     private transient Map<UserAccount, List<AclEntry>> userEntries = new HashMap<UserAccount, List<AclEntry>>();
 
     String name
@@ -25,13 +25,17 @@ class Acl  implements Serializable {
     }
 
     public Acl(Map<String, String> cmd) {
-        name = cmd.get("name");
+        name = cmd["name"];
     }
 
     public Acl(String name) {
         this.name = name;
     }
 
+    List<AclEntry> getAclEntries(){
+        return AclEntry.findAllByAcl(this)
+    }
+    
     /**
      * Add the folder as XML Element "acl" to the parameter Element.
      * @param root the root element to which the acl node will be added.
