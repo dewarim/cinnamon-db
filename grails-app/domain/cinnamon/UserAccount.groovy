@@ -9,7 +9,6 @@ import cinnamon.utils.security.HashMaker
 
 class UserAccount implements Serializable {
 
-    static hasMany = [groupUsers: CmnGroupUser]
     static mapping = {
         table 'users'
         version 'obj_version'
@@ -109,10 +108,9 @@ class UserAccount implements Serializable {
         return userIsSuperuser;
     }
 
-
     Set<CmnGroup> findAllGroups() {
         Set<CmnGroup> groups = new HashSet<CmnGroup>();
-        for (CmnGroupUser gu : getGroupUsers()) {
+        for (CmnGroupUser gu : groupUsers) {
             groups.add(gu.cmnGroup);
             groups.addAll(gu.cmnGroup.findAncestors());
 
@@ -120,7 +118,10 @@ class UserAccount implements Serializable {
         return groups;
     }
 
-
+    List<CmnGroupUser> getGroupUsers(){
+        CmnGroupUser.findAllByUserAccount(this)
+    }
+    
     public String toString() {
         return "UserAccount #" + id + " " + name;
     }
