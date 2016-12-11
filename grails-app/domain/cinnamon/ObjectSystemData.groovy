@@ -941,7 +941,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     }
 
     public Set<Metaset> fetchMetasets() {
-        OsdMetaset.findAll("from OsdMetaset om where om.osd=:osd", [osd: this]).collect { it.metaset }
+        OsdMetaset.findAllByOsd(this).collect { it.metaset }
     }
 
     public Metaset fetchMetaset(String name) {
