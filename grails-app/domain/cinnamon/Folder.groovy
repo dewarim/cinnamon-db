@@ -9,6 +9,7 @@ import cinnamon.interfaces.Ownable
 import cinnamon.index.Indexable
 import cinnamon.interfaces.XmlConvertable
 import cinnamon.global.Constants
+import cinnamon.references.LinkType
 import cinnamon.utils.ParamParser
 import cinnamon.exceptions.CinnamonException
 import org.dom4j.Element
@@ -24,6 +25,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
 
     static def folderService
     static def metasetService
+    static def linkService
 
     static constraints = {
         name unique: ['parent'], size: 1..Constants.NAME_LENGTH
@@ -176,7 +178,7 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
         else {
             folder.addElement("parentId")
         }
-        if (folderService.getSubfolders(this).isEmpty()) {
+        if (folderService.getSubfolders(this).isEmpty() && linkService.findLinksIn(this, LinkType.FOLDER).isEmpty()) {
             folder.addElement("hasChildren").addText("false")
         }
         else {
