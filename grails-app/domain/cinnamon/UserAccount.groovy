@@ -190,7 +190,8 @@ class UserAccount implements Serializable {
             else {
                 e.addElement("language");
             }
-            return (Element) ParamParser.parseXml(e.asXML(), null);
+            // return (Element) ParamParser.parseXml(e.asXML(), null);
+            return e
         }
         else {
             return DocumentHelper.createElement(elementName);

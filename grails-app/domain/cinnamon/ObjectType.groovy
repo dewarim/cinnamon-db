@@ -47,7 +47,7 @@ class ObjectType implements Serializable  {
             e.addElement("name").addText( LocalMessage.loc(type.name))
             e.addElement("sysName").addText(type.name)
             e.addElement("config").addText(type.config)
-            e = (Element) ParamParser.parseXml(e.asXML(), null)
+            // e = (Element) ParamParser.parseXml(e.asXML(), null)
         }
         return e;
     }
