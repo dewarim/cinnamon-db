@@ -38,7 +38,7 @@ public class DefaultIndexer implements Indexer {
     public void indexObject(ContentContainer data, Document doc, String fieldname,
                             String searchString, Boolean multipleResults) {
 
-	// 	log.debug("trying to index the following data:\n"+data.asString()+"\n//end of data.");
+        // 	log.debug("trying to index the following data:\n"+data.asString()+"\n//end of data.");
         org.dom4j.Document indexObject = data.asDocument();
         List<Node> hits = new ArrayList<>();
 
@@ -58,11 +58,11 @@ public class DefaultIndexer implements Indexer {
         for (Node node : hits) {
             String nodeValue = convertNodeToString(node);
             if (nodeValue != null) {
-                log.debug("fieldname: " + fieldname + " value: " + nodeValue);
+                log.debug("fieldname: " + fieldname + " value: " + nodeValue + " stored:" + fieldType.stored());
                 doc.add(new Field(fieldname, nodeValue, fieldType));
             }
-            else{
-                log.debug("nodeValue for '"+searchString+"' is null");
+            else {
+                log.debug("nodeValue for '" + searchString + "' is null");
             }
         }
     }
@@ -98,6 +98,7 @@ public class DefaultIndexer implements Indexer {
 
     public void setStored(boolean stored) {
         this.stored = stored;
+        fieldType.setStored(stored);
     }
 
     public boolean isStored() {
