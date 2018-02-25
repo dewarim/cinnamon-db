@@ -128,6 +128,7 @@ class IndexItem implements Serializable  {
         log.debug("checkCondition returned true");
         log.debug("searchString: "+searchString);
         log.debug("fieldName: "+fieldname);
+        log.debug("storeField: "+storeField);
         if(forContent){
             indexType.indexContent(content, doc, fieldname, searchString, multipleResults, storeField);
         }
