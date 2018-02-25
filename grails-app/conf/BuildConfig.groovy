@@ -26,7 +26,7 @@ grails.project.dependency.resolution = {
 
         runtime('org.apache.commons:commons-compress:1.10')
         runtime 'postgresql:postgresql:9.1-901.jdbc4'
-        runtime('org.apache.lucene:lucene-core:6.2.0')
+        compile('org.apache.lucene:lucene-core:6.2.0')
         runtime('org.apache.lucene:lucene-queries:6.2.0')
         runtime 'org.mindrot:jbcrypt:0.3m'
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
