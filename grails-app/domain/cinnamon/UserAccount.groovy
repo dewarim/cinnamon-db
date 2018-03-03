@@ -1,5 +1,6 @@
 package cinnamon
 
+import cinnamon.authentication.LoginType
 import org.dom4j.Element
 import cinnamon.global.Constants
 import cinnamon.i18n.UiLanguage
@@ -51,6 +52,7 @@ class UserAccount implements Serializable {
 
     String email
     UiLanguage language
+    LoginType loginType = LoginType.CINNAMON
 
     public UserAccount() {
     }
@@ -67,6 +69,9 @@ class UserAccount implements Serializable {
         }
         if (cmd.containsKey("sudoer")) {
             sudoer = cmd.get("sudoer").equals("true");
+        }
+        if(cmd.containsKey("login_type")){
+            loginType = LoginType.valueOf(cmd.get('login_type'))
         }
     }
 
@@ -150,6 +155,7 @@ class UserAccount implements Serializable {
         if (tokenAge != user.tokenAge) return false
         if (tokensToday != user.tokensToday) return false
         if (userIsSuperuser != user.userIsSuperuser) return false
+        if (loginType != user.loginType) return false
 
         return true
     }
@@ -190,7 +196,7 @@ class UserAccount implements Serializable {
             else {
                 e.addElement("language");
             }
-            // return (Element) ParamParser.parseXml(e.asXML(), null);
+            e.addElement("loginType").addText(user.loginType.toString())
             return e
         }
         else {
