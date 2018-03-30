@@ -16,7 +16,6 @@ class Acl  implements Serializable {
         name unique: true, blank: false, size: 1..Constants.NAME_LENGTH
     }
 
-    static hasMany = [customTables: CustomTable]
     private transient Map<UserAccount, List<AclEntry>> userEntries = new HashMap<UserAccount, List<AclEntry>>();
 
     String name
