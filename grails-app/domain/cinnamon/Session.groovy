@@ -20,7 +20,6 @@ class Session implements Serializable {
     static mapping = {
         table 'sessions'
         version false // TODO: remove obj_version column in existing databases.
-        language column: 'ui_language_id'
     }
     
     static infoService
@@ -31,18 +30,16 @@ class Session implements Serializable {
     String username
     String machinename = 'unknown'
     String message = '-'
-    UiLanguage language
     UserAccount user
 
     public Session() {
     }
 
-    public Session(String repository, UserAccount user, String machinename, UiLanguage language) {
+    public Session(String repository, UserAccount user, String machinename) {
         long expirationTime = sessionExpirationTime(repository)
         ticket = UUID.randomUUID().toString() + "@" + repository;
         this.user = user;
         this.machinename = machinename;
-        this.language = language;
         username = user.getName(); // while we still have direct SQL queries.
         expires.setTime(expires.getTime() + expirationTime); // for testing
     }
@@ -66,7 +63,6 @@ class Session implements Serializable {
         Session session = (Session) o
 
         if (expires != session.expires) return false
-        if (language != session.language) return false
         if (lifetime != session.lifetime) return false
         if (machinename != session.machinename) return false
         if (message != session.message) return false
@@ -107,9 +103,7 @@ class Session implements Serializable {
         session.user = user;
         session.username = username;
         session.machinename = getMachinename();
-        session.language = session.getLanguage();
         session.expires.setTime(expires.getTime() + expirationTime );
-        session.language = language
         return session;
     }
   
