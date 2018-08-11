@@ -58,6 +58,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     String name
     String contentPath
     Long contentSize
+    String contentHash
     ObjectSystemData predecessor
     ObjectSystemData root
     UserAccount creator
@@ -163,8 +164,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         log.debug("set root");
         if (predecessor == null) {
             setRoot(this);
-        }
-        else {
+        } else {
             setRoot(predecessor.getRoot());
         }
 
@@ -191,20 +191,16 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 
             Long otId = ParamParser.parseLong((String) cmd.get("objtype_id"), "error.param.objtype_id");
             this.type = ObjectType.get(otId);
-        }
-        else if (cmd.containsKey("objtype")) {
+        } else if (cmd.containsKey("objtype")) {
             ObjectType objectType = ObjectType.findByName((String) cmd.get("objtype"));
             if (objectType == null) {
                 throw new CinnamonException("error.param.objtype");
-            }
-            else {
+            } else {
                 this.type = objectType;
             }
-        }
-        else if (predecessor != null) {
+        } else if (predecessor != null) {
             this.type = predecessor.getType();
-        }
-        else {
+        } else {
             this.type = ObjectType.findByName(Constants.OBJTYPE_DEFAULT);
         }
 
@@ -215,18 +211,15 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 parent = Folder.get(parent_id);
                 if (parent != null) {
                     setParent(parent);
-                }
-                else {
+                } else {
                     throw new CinnamonException("error.parent_folder.not_found");
                 }
 
-            }
-            else { // parent_id == 0
+            } else { // parent_id == 0
                 Folder rootFolder = folderService.findRootFolder();
                 setParent(rootFolder);
             }
-        }
-        else if (parent == null) {
+        } else if (parent == null) {
             // note: parent may be set from predecessor.
             throw new CinnamonException("error.parent_folder.not_found");
         }
@@ -236,8 +229,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             Long formatId = ParamParser.parseLong((String) cmd.get("format_id"), "error.param.format_id");
             Format format = Format.get(formatId);
             setFormat(format);
-        }
-        else if (cmd.containsKey("format")) {
+        } else if (cmd.containsKey("format")) {
             Format format = Format.findByName((String) cmd.get("format"));
             setFormat(format);
         }
@@ -248,8 +240,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             Long aclId = ParamParser.parseLong((String) cmd.get("acl_id"), "error.param.acl_id");
             Acl acl = Acl.get(aclId);
             setAcl(acl);
-        }
-        else {
+        } else {
             // if no sepcific acl is given, use the parent folder's acl
             log.debug("set acl to parent-folder's acl");
             setAcl(getParent().getAcl());
@@ -269,8 +260,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 throw new CinnamonException("error.param.language_id");
             }
             setLanguage(lang);
-        }
-        else if (getLanguage() == null) {
+        } else if (getLanguage() == null) {
             Language lang = Language.findByIsoCode("und");
             setLanguage(lang);
         }
@@ -426,8 +416,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             def fullcpLength = new File(fullcp).length()
             log.debug("fullCpLength: $fullcpLength")
             this.contentSize = contentPath.length() > 0 ? fullcpLength : 0;
-        }
-        else {
+        } else {
             this.contentSize = null;
         }
     }
@@ -449,8 +438,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                     metaElement.add(Metaset.asElement('metaset', metaset))
                 }
             }
-        }
-        else {
+        } else {
             // adding a '-' because jQuery or Firefox seems to have problems with parsing empty <meta/>-tag.
             metaElement.text = '-'
         }
@@ -500,29 +488,25 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         log.debug("nullChecks");
         if (getContentSize() != null) {
             data.addElement("contentsize").addText(String.valueOf(getContentSize()));
-        }
-        else {
+        } else {
             data.addElement("contentsize");
         }
 
         if (getParent() != null) {
             data.addElement("parentId").addText(String.valueOf(getParent().getId()));
-        }
-        else {
+        } else {
             data.addElement("parentId");
         }
 
         if (getPredecessor() != null) {
             data.addElement("predecessorId").addText(String.valueOf(getPredecessor().getId()));
-        }
-        else {
+        } else {
             data.addElement("predecessorId");
         }
 
         if (getRoot() != null) {
             data.addElement("rootId").addText(String.valueOf(getRoot().getId()));
-        }
-        else {
+        } else {
             data.addElement("rootId"); // TODO: prevent rootId==null on the db level.
         }
 
@@ -534,8 +518,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         log.debug("lifecycleSection");
         if (getState() == null) {
             data.addElement("lifeCycleState");
-        }
-        else {
+        } else {
             data.addElement("lifeCycleState").addText(String.valueOf(state.getId()));
         }
         if (includeSummary) {
@@ -596,6 +579,18 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         return fileContent;
     }
 
+    File getContentAsFile(String repositoryName) {
+        String filename = infoService.config.data_root + File.separator + repositoryName +
+                File.separator + contentPath
+        log.debug("getContent called for #${id} @ $filename")
+        File data = new File(filename)
+        if (!data.exists()) {
+            log.debug("could not find: $filename")
+            throw new RuntimeException('error.file.not.found')
+        }
+        return data
+    }
+
     @Override
     public String getSystemMetadata(Boolean withRelations, Boolean includeSummary) {
         log.debug("getsystemMeta");
@@ -647,8 +642,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             ObjectSystemData lastDescendant;
             if (versions.size() == 0) {
                 throw new NoResultException()
-            }
-            else {
+            } else {
                 lastDescendant = versions[0];
             }
             lastDescendantVersion = lastDescendant.getCmnVersion();
@@ -680,8 +674,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
     public int compareTo(XmlConvertable o) {
         if (getId() > o.getId()) {
             return 1;
-        }
-        else if (getId() < o.getId()) {
+        } else if (getId() < o.getId()) {
             return -1;
         }
         return 0;
@@ -727,14 +720,11 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         String versionPred;
         if (versions == null || versions.length() == 0 || versions.equals("head")) {
             versionPred = " and latestHead=true";
-        }
-        else if (versions.equals("all")) {
+        } else if (versions.equals("all")) {
             versionPred = "";
-        }
-        else if (versions.equals("branch")) {
+        } else if (versions.equals("branch")) {
             versionPred = " and latestBranch=true";
-        }
-        else {
+        } else {
             throw new CinnamonException("error.param.version");
         }
         return versionPred;
@@ -824,8 +814,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
             metasetNames.each { name ->
                 root.add(Metaset.asElement("metaset", this.fetchMetaset(name)))
             }
-        }
-        else {
+        } else {
             for (Metaset m : fetchMetasets()) {
                 root.add(Metaset.asElement("metaset", m));
             }
@@ -860,8 +849,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 getMetasets().collect { it.metaset }.each { Metaset metaset ->
                     metasetService.unlinkMetaset(this, metaset)
                 }
-            }
-            else {
+            } else {
                 Document doc = ParamParser.parseXmlToDocument(metadata, "error.param.metadata");
                 List<Node> sets = doc.selectNodes("//metaset");
                 if (sets.size() == 0) {
@@ -911,11 +899,9 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         log.debug("query for: " + type.name + " / osd: " + id + " returned #objects: " + metasetList.size());
         if (metasetList.size() == 0) {
             return null;
-        }
-        else if (metasetList.size() > 1) {
+        } else if (metasetList.size() > 1) {
             throw new CinnamonConfigurationException("Found two metasets of the same type in osd #" + getId());
-        }
-        else {
+        } else {
             def msj = metasetList[0]
             if (msj.isDirty()) {
                 // removing a metaset with unpersisted changes is problematic.
@@ -1043,8 +1029,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 }
             }
             latestHead = isHead
-        }
-        else {
+        } else {
             // target no children: it is latestBranch
             latestBranch = true
             if (cmnVersion.matches('^\\d+$')) {
@@ -1074,8 +1059,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 contentChanged = true
             }
             metadataChanged = true
-        }
-        else {
+        } else {
             log.debug("no user found for changeTracking updates or user does not track changes")
         }
     }
@@ -1097,12 +1081,10 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
                 if (dirtyProperties.size > 1) {
                     metadataChanged = true
                 }
-            }
-            else {
+            } else {
                 metadataChanged = true
             }
-        }
-        else {
+        } else {
             log.debug("no user found for changeTracking updates or user does not track changes")
         }
         return true
