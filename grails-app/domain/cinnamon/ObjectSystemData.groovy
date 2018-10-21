@@ -47,6 +47,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         procstate(size: 0..128, blank: true)
         cmnVersion(size: 1..128)
         state(nullable: true)
+        contentHash(nullable:true)
     }
 
     static mapping = {
