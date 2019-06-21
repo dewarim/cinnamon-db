@@ -47,7 +47,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         procstate(size: 0..128, blank: true)
         cmnVersion(size: 1..128)
         state(nullable: true)
-        contentHash(nullable:true)
+        contentHash(nullable: true)
     }
 
     static mapping = {
@@ -449,8 +449,19 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 
     public Element addRelationsToElement(Element root) {
         def data = root.addElement("relations")
+        // add fat relations:
         Relation.findAllByLeftOSDOrRightOSD(this, this).each { relation ->
             relation.toXmlElement(data, true)
+        }
+
+        // add slim relations for parent/child indexing:
+        def parents = data.addElement("parents")
+        Relation.findAllByRightOSD(this).each{ relation ->
+            parents.addElement("id").addText(relation.leftOSD.id.toString())
+        }
+        def children = data.addElement("children")
+        Relation.findAllByLeftOSD(this).each{ relation ->
+            children.addElement("id").addText(relation.rightOSD.id.toString())
         }
         return root
     }
@@ -535,8 +546,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 
     /**
      * Read the content of the OSD and return it as XML for indexing.
-     * @see cinnamon.index.Indexable
-     * @param repository The repository where the indexable object is located.
+     * @see cinnamon.index.Indexable* @param repository The repository where the indexable object is located.
      * @return A string containing the XML version of this object's content.
      */
     public String getContent(String repository) {
