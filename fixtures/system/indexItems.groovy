@@ -134,15 +134,4 @@ fixture {
             searchString: "/meta/metaset[@type='tika']/html/body", fieldname: Constants.FIELD_TIKA
     )
 
-    // Workflow:
-    activeWorkflow(IndexItem, name: Constants.INDEX_ACTIVE_WORKFLOW, indexType: booleanIndexer,
-            indexGroup: defGroup, forContent: false, forMetadata: true, forSysMeta: false,
-            searchString: "/meta/metaset[@type='workflow_template']/active_workflow", systemic: true,
-            fieldname: Constants.FIELD_ACTIVE_WORKFLOW
-    )
-    workflowTimer(IndexItem, name:Constants.INDEX_WORKFLOW_DEADLINE,indexType: dateTimeIndexer,
-            indexGroup: defGroup, forContent: false, forMetadata: true, forSysMeta: false,
-            searchString: "/meta/metaset[@type='task_definition' or @type='workflow_template']/deadline", 
-            systemic: true, fieldname: Constants.FIELD_WORKFLOW_DEADLINE
-    )
 }

@@ -104,10 +104,4 @@ public class PermissionName {
      */
     public static final String EXECUTE_QUERY = "_execute_query";
 
-    /**
-     * Permission to create an instance of a template object of some kind.
-     * Current use case is for workflow templates. If you have a create_instance
-     * permission on a workflow template, you may call create_workflow to instantiate a new workflow.
-     */
-    public static final String CREATE_INSTANCE = "_create_instance";
 }

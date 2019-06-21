@@ -32,7 +32,6 @@ public class Constants {
     /**
      * The name of the object type for workflow template objects.
      */
-    public static final String OBJTYPE_WORKFLOW_TEMPLATE = "_workflow_template";
     public static final String OBJTYPE_TASK_DEFINITION = "_task_definition";
     public static final String OBJTYPE_TASK = "_task";
     public static final String OBJTYPE_SEARCH = "_search";
@@ -56,15 +55,8 @@ public class Constants {
 
     public static final String ROOT_FOLDER_NAME = "root";
     public static final String SYSTEM_FOLDER_NAME = "system";
-    public static final String WORKFLOW_FOLDER_NAME = "workflows";
-    public static final String WORKFLOW_TEMPLATE_FOLDER_NAME = "templates";
-    public static final String WORKFLOW_TASK_DEFINITION_FOLDER_NAME = "task_definitions";
-    public static final String WORKFLOW_TASK_FOLDER_NAME = "tasks";
 
     public static final String RELATION_RESOLVER_FIXED = "FixedRelationResolver";
-    public static final String RELATION_TYPE_WORKFLOW_TO_START_TASK = "_workflow_start_task";
-    public static final String RELATION_TYPE_WORKFLOW_TO_TASK = "_workflow_task";
-    public static final String RELATION_TYPE_WORKFLOW_TO_DEADLINE_TASK = "_workflow_deadline_task";
     public static final String RELATION_TYPE_CHILD = "child_content";
     public static final String RELATION_TYPE_RENDITION = "rendition";
     public static final String RELATION_TYPE_TRANSLATION_SOURCE = "translation_source";
@@ -75,21 +67,13 @@ public class Constants {
 
     public static final String USER_SUPERADMIN_NAME = "admin";
 
-    public static final String WORKFLOW_FOLDER_PATH = "/root/system/workflows";
-    public static final String WORKFLOW_TEMPLATE_PATH = WORKFLOW_FOLDER_PATH + "/" + WORKFLOW_TEMPLATE_FOLDER_NAME;
-    public static final String WORKFLOW_TASK_PATH = WORKFLOW_FOLDER_PATH + "/" + WORKFLOW_TASK_FOLDER_NAME;
-    public static final String WORKFLOW_TASK_DEFINITION_PATH = WORKFLOW_FOLDER_PATH + "/" + WORKFLOW_TASK_DEFINITION_FOLDER_NAME;
-
     public static final String PROCSTATE_TASK_TODO = "todo";
     public static final String PROCSTATE_TASK_DONE = "done";
     public static final String PROCSTATE_TRANSITION_READY = "transition_ready";
     public static final String PROCSTATE_TRANSITION_FAILED = "transition_failed";
-    public static final String PROCSTATE_WORKFLOW_STARTED = "running";
-    public static final String PROCSTATE_WORKFLOW_FINISHED = "finished";
     public static final String PROCSTATE_REVIEW_OK = "review_ok";
 
     public static final String METASET_TASK_DEFINITION = "task_definition";
-    public static final String METASET_WORKFLOW_TEMPLATE = "workflow_template";
     public static final String METASET_LOG = "log";
     public static final String METASET_TRANSITION = "transition";
     public static final String METASET_RENDER_INPUT = "render_input";
@@ -204,9 +188,5 @@ public class Constants {
     public static final String FIELD_PATH = "folderpath";
     public static final String INDEX_TIKA = "index.tika";
     public static final String FIELD_TIKA = "content";
-    public static final String INDEX_ACTIVE_WORKFLOW = "index.workflow.active_workflow";
-    public static final String FIELD_ACTIVE_WORKFLOW = "active_workflow";
-    public static final String INDEX_WORKFLOW_DEADLINE = "index.workflow_deadline";
-    public static final String FIELD_WORKFLOW_DEADLINE = "workflow_deadline";
 
 }

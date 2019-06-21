@@ -35,17 +35,5 @@ fixture {
             leftobjectprotected: false, rightobjectprotected: true,
             leftResolver: fixedResolver, rightResolver: fixedResolver
     )
-    workflowToStartTask(RelationType, name: Constants.RELATION_TYPE_WORKFLOW_TO_START_TASK,
-            leftobjectprotected: true, rightobjectprotected: true,
-            leftResolver: fixedResolver, rightResolver: fixedResolver
-    ) 
-    workflowToDeadline(RelationType, name: Constants.RELATION_TYPE_WORKFLOW_TO_DEADLINE_TASK,
-            leftobjectprotected: true, rightobjectprotected: true,
-            leftResolver: fixedResolver, rightResolver: fixedResolver
-    )
-    workflowToTask(RelationType, name: Constants.RELATION_TYPE_WORKFLOW_TO_TASK,
-            leftobjectprotected: true, rightobjectprotected: true,
-            leftResolver: fixedResolver, rightResolver: fixedResolver
-    )
 
 }

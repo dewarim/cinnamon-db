@@ -237,25 +237,6 @@ public class Conf{
 		return xml.selectSingleNode("/cinnamon_config/repositories");
 	}
 	
-	/**
-	 * 
-	 * @return The name of the Cinnamon class to be used as a container for storing the 
-	 * parts of a workflow that are specific to the Cinnamon CMS.  
-	 */
-	public String getWorkflowServerUserName() {
-		String name=  null;
-		try {
-			 name = xml.selectSingleNode("//workflow_server_username")
-				.getText();
-		} catch (Exception e) {
-			log.debug("error.workflow_username.not_found.");
-		}
-
-		if (name == null) {
-			name = "WorkflowServer";
-		}
-		return name;
-	}
 
 	/**
 	 * <p>Getter for the configuration file element "logback_configuration_path". If the element is
