@@ -456,12 +456,16 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
 
         // add slim relations for parent/child indexing:
         def parents = data.addElement("parents")
-        Relation.findAllByRightOSD(this).each{ relation ->
-            parents.addElement("id").addText(relation.leftOSD.id.toString())
+        Relation.findAllByRightOSD(this).each { relation ->
+            parents.addElement("id")
+                    .addAttribute("type", relation.type.name)
+                    .addText(relation.leftOSD.id.toString())
         }
         def children = data.addElement("children")
-        Relation.findAllByLeftOSD(this).each{ relation ->
-            children.addElement("id").addText(relation.rightOSD.id.toString())
+        Relation.findAllByLeftOSD(this).each { relation ->
+            children.addElement("id")
+                    .addAttribute("type", relation.type.name)
+                    .addText(relation.rightOSD.id.toString())
         }
         return root
     }
