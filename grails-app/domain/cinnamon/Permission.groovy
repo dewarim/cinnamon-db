@@ -21,8 +21,6 @@ class Permission  implements Serializable {
 
         // misc:
         PermissionName.MOVE, PermissionName.SET_ACL,
-        PermissionName.QUERY_CUSTOM_TABLE,
-        PermissionName.CREATE_INSTANCE,
     ]
 
 

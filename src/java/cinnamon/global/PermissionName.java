@@ -94,11 +94,6 @@ public class PermissionName {
     public static final String SET_ACL = "_set_acl";
 
     /**
-     * Permission to execute queries against custom tables.
-     */
-    public static final String QUERY_CUSTOM_TABLE = "_query_custom_table";
-
-    /**
      * Permission to execute customized queries against the OSD-table.
      * Currently not used.
      */
