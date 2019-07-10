@@ -122,7 +122,12 @@ public class MetasetService {
             metasets.addAll(source.fetchMetasets())
         } else {
             def names = Arrays.asList(metasetNames.split(","))
-            names.forEach { name -> metasets.add(source.fetchMetaset(name)) }
+            names.forEach { name ->
+                def metaset = source.fetchMetaset(name)
+                if (metaset != null) {
+                    metasets.add(metaset)
+                }
+            }
         }
 
         for (Metaset m : metasets) {
