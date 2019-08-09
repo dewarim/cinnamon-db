@@ -99,4 +99,6 @@ public class PermissionName {
      */
     public static final String EXECUTE_QUERY = "_execute_query";
 
+
+    public static final String CHANGE_LIFECYCLE_STATE = "_change_lifecycle_state";
 }
