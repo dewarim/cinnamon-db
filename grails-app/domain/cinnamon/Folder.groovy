@@ -9,6 +9,7 @@ import cinnamon.interfaces.Ownable
 import cinnamon.index.Indexable
 import cinnamon.interfaces.XmlConvertable
 import cinnamon.global.Constants
+import cinnamon.references.Link
 import cinnamon.references.LinkType
 import cinnamon.utils.ParamParser
 import cinnamon.exceptions.CinnamonException
@@ -248,19 +249,32 @@ class Folder implements Ownable, Indexable, XmlConvertable, Serializable, IMetas
     }
 
     @Override
-    public String getSystemMetadata(Boolean withRelations, Boolean withSummary) {
+    public String getSystemMetadata(Boolean withRelations, Boolean withSummary, Boolean withLinks) {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("sysMeta");
         String className = getClass().getName();
         root.addAttribute("javaClass", className);
         root.addAttribute("hibernateId", String.valueOf(getId()));
         root.addAttribute("id", className + "@" + getId());
-        toXmlElement(root, withSummary);
+        def sysMeta = toXmlElement(root, withSummary);
         // note: Folders currently do not have relations, so the parameter is set to an empty node if required.
         if (withRelations) {
             ((Element) root.selectSingleNode('folder')).addElement('relations')
         }
+        if(withLinks){
+            addLinksToElement(sysMeta)
+        }
         return doc.asXML();
+    }
+
+    public Element addLinksToElement(Element root) {
+        def linkEl = root.addElement("links")
+        Link.findAllByFolder(this).each { link ->
+            linkEl.addElement("link")
+                    .addAttribute("type", link.type.name())
+                    .addText(link.folder.id.toString())
+        }
+        return root;
     }
 
     /**
