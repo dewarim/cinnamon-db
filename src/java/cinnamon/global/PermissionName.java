@@ -93,12 +93,10 @@ public class PermissionName {
      */
     public static final String SET_ACL = "_set_acl";
 
-    /**
-     * Permission to execute customized queries against the OSD-table.
-     * Currently not used.
-     */
-    public static final String EXECUTE_QUERY = "_execute_query";
-
+    public static final String ADD_CHILD_RELATION = "_add_child_relation";
+    public static final String REMOVE_CHILD_RELATION = "_remove_child_relation";
+    public static final String ADD_PARENT_RELATION = "_add_parent_relation";
+    public static final String REMOVE_PARENT_RELATION = "_remove_parent_relation";
 
     public static final String CHANGE_LIFECYCLE_STATE = "_change_lifecycle_state";
 }

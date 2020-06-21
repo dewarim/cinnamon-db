@@ -21,7 +21,13 @@ class Permission implements Serializable {
 
             // misc:
             PermissionName.MOVE, PermissionName.SET_ACL,
-            PermissionName.CHANGE_LIFECYCLE_STATE
+            PermissionName.CHANGE_LIFECYCLE_STATE,
+
+            // relations:
+            PermissionName.ADD_CHILD_RELATION,
+            PermissionName.REMOVE_CHILD_RELATION,
+            PermissionName.ADD_PARENT_RELATION,
+            PermissionName.REMOVE_PARENT_RELATION
     ]
 
 
