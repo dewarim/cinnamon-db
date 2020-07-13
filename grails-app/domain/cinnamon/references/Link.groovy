@@ -28,8 +28,9 @@ class Link {
     
     public Link(){}
     
-    public Link(LinkType type, UserAccount owner, Folder parent, Folder folder, ObjectSystemData osd, Acl acl) {
+    public Link(LinkType type, LinkResolver resolver, UserAccount owner, Folder parent, Folder folder, ObjectSystemData osd, Acl acl) {
         this.type = type;
+        this.resolver = resolver;
         this.owner = owner;
         this.parent = parent;
         this.folder = folder;
