@@ -4,10 +4,11 @@ import cinnamon.Acl
 import cinnamon.Folder
 import cinnamon.ObjectSystemData
 import cinnamon.UserAccount
+import cinnamon.interfaces.Ownable
 import org.dom4j.DocumentHelper
 import org.dom4j.Element
 
-class Link {
+class Link implements Ownable {
 
     static constraints = {
         osd nullable: true
