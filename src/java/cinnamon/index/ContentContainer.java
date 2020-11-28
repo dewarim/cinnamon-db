@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import cinnamon.exceptions.CinnamonException;
 import cinnamon.utils.ParamParser;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * A content container class which will load the content when needed - unless it was either supplied
  * at instantiation.
@@ -78,7 +80,7 @@ public class ContentContainer {
      */
     public String asString() throws CinnamonException{
         if(contentAsString == null){
-            contentAsString = new String(asBytes());
+            contentAsString = new String(asBytes(), StandardCharsets.UTF_8);
         }
         return contentAsString;
     }
