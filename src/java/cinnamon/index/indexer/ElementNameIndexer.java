@@ -16,13 +16,18 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Index the names of XML elements
  */
 public class ElementNameIndexer implements Indexer {
+
+    public static final String DOCTYPE_ENTITY = "(<!(?:DOCTYPE|ENTITY)[^>]*>)";
+    private static final Pattern DOCTYPE_OR_ENTITY_PATTERN = Pattern.compile(DOCTYPE_ENTITY);
 
     protected FieldType fieldType;
     boolean stored = true;
@@ -41,10 +46,11 @@ public class ElementNameIndexer implements Indexer {
     public void indexObject(ContentContainer data, Document doc, String fieldname,
                             String searchString, Boolean multipleResults) {
         try {
-            SAXParserFactory   factory     = SAXParserFactory.newInstance();
-            SAXParser          saxParser   = factory.newSAXParser();
-            ElementNameHandler nameHandler = new ElementNameIndexer.ElementNameHandler();
-            saxParser.parse(new ByteArrayInputStream(data.asBytes()), nameHandler);
+            SAXParserFactory   factory        = SAXParserFactory.newInstance();
+            SAXParser          saxParser      = factory.newSAXParser();
+            ElementNameHandler nameHandler    = new ElementNameHandler();
+            String             withoutDoctype = DOCTYPE_OR_ENTITY_PATTERN.matcher(data.asString()).replaceAll("");
+            saxParser.parse(new ByteArrayInputStream(withoutDoctype.getBytes(StandardCharsets.UTF_8)), nameHandler);
             Set<String> elementNames = nameHandler.getNames();
             elementNames.forEach(name -> {
                 log.debug("fieldname: " + fieldname + " value: " + name + " stored:" + fieldType.stored());

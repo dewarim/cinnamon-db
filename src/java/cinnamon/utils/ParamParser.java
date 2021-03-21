@@ -1,5 +1,6 @@
 package cinnamon.utils;
 
+import cinnamon.index.indexer.ElementNameIndexer;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -17,6 +18,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ParamParser {
+
+	private static final Pattern DOCTYPE_OR_ENTITY_PATTERN = Pattern.compile(ElementNameIndexer.DOCTYPE_ENTITY);
 
 	public static Long parseLong(String param, String message){
 		try {
@@ -58,11 +61,11 @@ public class ParamParser {
     }
 
 	public static Node parseXml(String xml, String message){
-		return ParamParser.parseXmlToDocument(xml, message).getRootElement().detach();	
+		return parseXmlToDocument(DOCTYPE_OR_ENTITY_PATTERN.matcher(xml).replaceAll(""), message).getRootElement().detach();
 	}
 
     public static Document parseXmlToDocument(String xml){
-        return parseXmlToDocument(xml, null);
+    	return parseXmlToDocument(DOCTYPE_OR_ENTITY_PATTERN.matcher(xml).replaceAll(""),null);
     }
 
     public static final Pattern bomReplacer = Pattern.compile("^(?:\\xEF\\xBB\\xBF|\uFEFF)");

@@ -515,6 +515,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         log.debug("nullChecks");
         if (getContentSize() != null) {
             data.addElement("contentsize").addText(String.valueOf(getContentSize()));
+            data.addElement("contentHash").addText(contentHash);
         } else {
             data.addElement("contentsize");
         }
@@ -554,6 +555,7 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         return data;
     }
 
+    // TODO: is this used? seems problematic with encoding=null
     String getContent() {
         String repository = infoService.repositoryName
         return getContent(repository, null)
@@ -1101,8 +1103,8 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         def user = ConfThreadLocal.conf.currentUser
         if (user && user.changeTracking) {
             def dirtyProperties = this.dirtyPropertyNames
-            if (dirtyProperties.size == 1 && dirtyProperties.contains('summary')) {
-                // just setting the summary does not set metadataChanged.
+            if (dirtyProperties.size == 1 && ( dirtyProperties.contains('summary')) || dirtyProperties.contains("contentHash")) {
+                // just setting the summary / updating contentHash does not set metadataChanged.
                 return true
             }
             if (dirtyProperties.contains('contentPath')) {
