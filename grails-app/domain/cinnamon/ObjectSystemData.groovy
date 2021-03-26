@@ -515,7 +515,10 @@ class ObjectSystemData implements Serializable, Ownable, Indexable, XmlConvertab
         log.debug("nullChecks");
         if (getContentSize() != null) {
             data.addElement("contentsize").addText(String.valueOf(getContentSize()));
-            data.addElement("contentHash").addText(contentHash);
+            Element contentHashEl = data.addElement("contentHash");
+            if(contentHash) {
+                contentHashEl.addText(contentHash);
+            }
         } else {
             data.addElement("contentsize");
         }
