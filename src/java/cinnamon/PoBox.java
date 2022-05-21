@@ -22,6 +22,7 @@ public class PoBox {
     public String controller;
     public String action;
     public Boolean endProcessing = false;
+    public Long lastInsertId = null;
 
     public PoBox() {
     }
